@@ -1,0 +1,27 @@
+.SearchBox{
+   position: absolute;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
+.SearchBox form{
+   display: flex;
+}
+.SearchBox h1{
+   color: #ffffff;
+   font-weight: bold;
+   font-size: 4rem;
+   margin-bottom: 2rem;
+   text-align: center;
+}
+.SearchBox input{
+   background-color: #ffffff;
+   border: none;
+   width: 400px;
+   padding: 0 1rem;
+}

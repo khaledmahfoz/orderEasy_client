@@ -1,0 +1,38 @@
+.SmallLoading:after {
+   content: " ";
+   display: block;
+   width: 25px;
+   height: 25px;
+   margin: 8px;
+   border-radius: 50%;
+   border: 3px solid #fff;
+   border-color: #fff transparent #fff transparent;
+   animation: SmallLoading 1.2s linear infinite;
+}
+@keyframes SmallLoading {
+   0% {
+     transform: rotate(0deg);
+   }
+   100% {
+     transform: rotate(360deg);
+   }
+}
+
+/*
+small loading
+   position: absolute;
+    top: 50%;
+    right: .5rem;
+    transform: translateY(-50%)
+after
+    width: 25px;
+    height: 25px;
+    margin: 8px;
+    border: 3px solid #f86932;
+    border-color: #f86932 transparent #f86932 transparent;
+
+search item
+   position: relative;
+    display: flex;
+*/
+

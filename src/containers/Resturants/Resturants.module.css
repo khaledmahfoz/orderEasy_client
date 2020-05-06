@@ -1,0 +1,8 @@
+.Resturant{
+   min-height: 70vh; /*need to be adjusted*/
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   padding: 2rem;
+}

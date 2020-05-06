@@ -1,0 +1,26 @@
+.OrderTutorialItem{
+   background-color: #ffffff;
+   width: 350px;
+   height: 350px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   margin: 1rem;
+   border-radius: 7px;
+   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+.OrderTutorialItem img{
+   height: 100px;
+}
+.OrderTutorialItem p{
+   color: #333333;
+   margin-top: 2rem;
+   font-size: 1.3rem;
+}
+/* @media only screen and (min-width: 780px) and (max-width: 1150px) {
+   .OrderTutorialItem{
+      width: 300px;
+      height: 300px;
+   }
+} */
