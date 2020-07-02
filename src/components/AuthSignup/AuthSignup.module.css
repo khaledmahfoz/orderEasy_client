@@ -1,0 +1,63 @@
+.AuthSignupForm {
+	width: 50%;
+	margin: 0 auto;
+}
+label,
+.imgFileLabel {
+	color: var(--blackColor);
+	font-size: 1.2rem;
+}
+.isResturant {
+	margin: 2rem 0;
+}
+.isResturantHead {
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+.isResturantHead p {
+	font-weight: bold;
+	margin-bottom: 0;
+	margin-right: 0.5rem;
+	color: var(--blackColor);
+	font-size: 1.2rem;
+}
+.isResturantCheck {
+	margin-bottom: 2rem;
+}
+.imgFileLabel {
+	margin-bottom: 1rem;
+}
+isResturantCheck label {
+	font-size: 1.1rem;
+}
+.isResturantCheck input {
+	margin-right: 0.5rem;
+}
+.divFile {
+	margin-bottom: 2rem;
+}
+.divFile > input {
+	display: none;
+}
+
+.divFile svg {
+	width: 6rem;
+	height: 6rem;
+	cursor: pointer;
+	color: var(--inputBorder);
+	border: 1px solid var(--inputBorder);
+	border-radius: 5px;
+	transition: 0.2s;
+}
+
+.divFile label:hover svg {
+	color: var(--blue);
+	border-color: var(--blue);
+}
+
+/* .divFile label {
+	display: block;
+	margin-bottom: 1rem;
+} */

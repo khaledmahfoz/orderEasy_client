@@ -1,26 +1,31 @@
-.Navbar{
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   padding: 0 2rem;
-   background-color: #fafafa;
+.Navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 2rem;
+	background-color: var(--greyColor1);
 }
-.Navbar a{
-   color: #2b2b2b;
+.Navbar a {
+	color: var(--blackColor);
 }
-.Navbar a:hover, .Navbar a:active{
-   text-decoration: none
+.Navbar a:hover,
+.Navbar a:active {
+	text-decoration: none;
 }
-.List{
-   width: 50%;
+.List {
+	width: 50%;
 }
-.List ul{
-   list-style: none;
-   display: flex;
-   padding: 1rem 0;
-   justify-content: flex-end;
-   margin: 0;
+.List button {
+	border: none;
+	background: var(--greyColor1);
 }
-.List ul li{
-   margin: 0 1rem
+.List ul {
+	list-style: none;
+	display: flex;
+	padding: 1rem 0;
+	justify-content: flex-end;
+	margin: 0;
+}
+.List ul li {
+	margin: 0 1rem;
 }

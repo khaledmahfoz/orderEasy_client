@@ -1,0 +1,28 @@
+.AuthLoginForm {
+	width: 100%;
+	padding: 1rem 4rem;
+}
+.LoginBtn {
+	background-color: var(--primeColor);
+	color: var(--whiteColor);
+	width: 100%;
+	padding: 0.6rem;
+	border-radius: 5px;
+	margin: 0.6rem 0 1rem;
+	font-size: 1.2rem;
+}
+.Signup {
+	color: var(--primeColor) !important;
+	background: none;
+	text-decoration: underline;
+	font-weight: bold;
+}
+.SignupInfo {
+	display: flex;
+	justify-content: left;
+	align-items: center;
+}
+.SignupInfo p {
+	margin: 0;
+	margin-right: 0.4rem;
+}

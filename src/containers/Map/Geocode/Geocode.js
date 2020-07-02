@@ -6,12 +6,12 @@ export const geocode = (address, cb) => {
       service.autosuggest({
          q: address,
          lang: 'ar-eg',
-         in: 'countryCode:egy',
+         // in: 'countryCode:egy',
          at: '26.8205528,30.8024979',
          limit: 5
          }, (result) => {
             cb(result)
-         }, alert);
+         }, (err) => console.log(err));
    }else{
       cb([])
    }

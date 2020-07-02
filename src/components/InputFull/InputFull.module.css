@@ -1,0 +1,13 @@
+.InputFull {
+	width: 100%;
+	padding: 0 5px;
+	margin-bottom: 0.5rem;
+}
+.InputFull input {
+	height: 40px;
+	width: 100%;
+	padding: 5px 10px;
+	border: 1px solid var(--inputBorder);
+	font-size: 14px;
+	border-radius: 3px;
+}

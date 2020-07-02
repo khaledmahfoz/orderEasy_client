@@ -1,104 +1,138 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
-import classes from './HomeSearch.module.css';
-import Background from '../../assets/images/background.jpg'
-
+import Hero from '../../components/Hero/Hero'
 import SearchBox from '../../components/SearchBox/SearchBox'
 import Modal from '../../components/UI/Modal/Modal'
 import OrderTutorial from '../../components/OrderTutorial/OrderTutorial'
 import Map from '../Map/Map'
-import {geocode} from '../Map/Geocode/Geocode'
 import Spinner from '../../components/UI/Spinner/Spinner'
+import * as actionTypes from '../../store/actions/actionTypes'
+import * as searchItemCreators from '../../store/actions/searchItem'
+import InputFull from '../../components/InputFull/InputFull'
+import SearchItem from '../../components/SearchBox/SearchItem/SearchItem'
 
-class homeSearch extends React.Component{
-   state = {
-      address: '',
-      coords: null,
-      suggested: [],
-      //ui
-      modal: false,
-      locate: false,
-      loading: false,
-      smallLoading: false
-   }
+class homeSearch extends React.Component {
+	// state = {
+	// 	address: '',
+	// 	coords: null,
+	// 	suggested: [],
+	// 	//ui
+	// 	// modal: false,
+	// 	locate: false,
+	// 	loading: false,
+	// 	smallLoading: false,
+	// }
 
-   openModal = () => {
-      this.setState({modal: true})
-   }
+	// openModal = () => {
+	// 	this.setState({ modal: true })
+	// }
 
-   closeModal = () => {
-      this.setState({modal: false})
-   }
+	// closeModal = () => {
+	// 	this.setState({ modal: false })
+	// }
 
-   createMap = (locate, coords) => {
-      this.setState({
-         locate: locate, 
-         coords: coords, 
-         suggested: null,
-         address: '', 
-         loading: false
-      })
-      this.openModal()
-   }
+	// createMap = (locate, coords) => {
+	// 	this.setState({
+	// 		locate: locate,
+	// 		coords: coords,
+	// 		suggested: null,
+	// 		address: '',
+	// 		loading: false,
+	// 	})
+	// 	this.props.onOpenModal()
+	// }
 
-   locateAddress = () => {
-      this.setState({loading: true})
-      const geo_success = position => {
-         this.createMap(true, position.coords)
-      }
-      const geo_error = () => {
-         this.createMap(false, null)
-      }
-      const geo_options = {
-         enableHighAccuracy: true,
-         maxAge: 0,
-         timeout: 30000
-      }
-      navigator.geolocation.getCurrentPosition(geo_success, geo_error, geo_options);
-   }
+	// locateAddress = () => {
+	// 	this.setState({ loading: true })
+	// 	const geo_success = position => {
+	// 		this.createMap(true, position.coords)
+	// 	}
+	// 	const geo_error = () => {
+	// 		this.createMap(false, null)
+	// 	}
+	// 	const geo_options = {
+	// 		enableHighAccuracy: true,
+	// 		maxAge: 0,
+	// 		timeout: 30000,
+	// 	}
+	// 	navigator.geolocation.getCurrentPosition(
+	// 		geo_success,
+	// 		geo_error,
+	// 		geo_options
+	// 	)
+	// }
 
-   suggestAddress = (e) => {
-      this.setState({address: e.target.value, smallLoading: true})
-      geocode(e.target.value, cb => {
-         this.setState({suggested: cb.items, smallLoading: false})
-      })   
-   }
+	// suggestAddress = e => {
+	// 	this.setState({ address: e.target.value, smallLoading: true })
+	// 	geocode(e.target.value, cb => {
+	// 		this.setState({ suggested: cb.items, smallLoading: false })
+	// 	})
+	// }
 
-   clearInput = (e) => {
-      console.log(e.target.tagName.toUpperCase())
-   }
+	clearInput = e => {
+		console.log(e.target.tagName.toUpperCase())
+	}
 
-   render(){
-      console.log(this.props.history)
-      return(
-         <React.Fragment>
-            <Modal show={this.state.modal} closeModal={this.closeModal}>
-               <React.Fragment>
-                  <input />
-                  {
-                     !this.state.locate ? 
-                     "sorry" : 
-                     <Map coords={this.state.coords}/>
-                  }
-               </React.Fragment>
-            </Modal>
-            <div className={classes.HomeSearch} 
-               style={{backgroundImage: `url(${Background})`}}>
-               <div className={classes.OverLay}></div>
-               <SearchBox
-                  suggestAddress={this.suggestAddress} 
-                  locateAddress={this.locateAddress}
-                  address={this.state.address}
-                  suggested={this.state.suggested}
-                  createMap={this.createMap}
-                  clearInput={this.clearInput}
-                  smallLoading={this.state.smallLoading}/>
-            </div>
-            <OrderTutorial />
-            {this.state.loading ? <Spinner /> : null}
-         </React.Fragment>
-      )
-   }
+	render() {
+		return (
+			<React.Fragment>
+				{/* <Modal
+					center
+					show={this.props.modal}
+					closeModal={this.props.onCloseModal}
+					title='Search using Map'>
+					<InputFull
+						suggestAddress={this.props.onSuggestAddress}
+						address={this.props.address}
+						suggested={this.props.suggested}
+						createMap={this.props.onLocateAddress}
+						clearInput={this.clearInput}
+						smallLoading={this.props.smallLoading}
+					/>
+					{!this.props.locate ? 'sorry' : <Map coords={this.props.coords} />}
+				</Modal> */}
+
+				<Hero height='80vh'>
+					{/* <SearchBox
+						suggestAddress={this.props.onSuggestAddress}
+						locateAddress={this.props.onLocateAddress}
+						address={this.props.address}
+						suggested={this.props.suggested}
+						createMap={this.props.onLocateAddress}
+						clearInput={this.clearInput}
+						smallLoading={this.props.smallLoading}
+					/> */}
+					<SearchBox />
+				</Hero>
+
+				<OrderTutorial />
+			</React.Fragment>
+		)
+	}
 }
 
-export default homeSearch
+const mapStateToProps = state => {
+	return {
+		modal: state.modal,
+		address: state.address,
+		coords: state.coords,
+		suggested: state.suggested,
+		//ui
+		locate: state.locate,
+		loading: state.loading,
+		smallLoading: state.smallLoading,
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onOpenModal: () => dispatch({ type: actionTypes.OPEN_MODAL }),
+		onCloseModal: () => dispatch({ type: actionTypes.CLOSE_MODAL }),
+		onLocateAddress: () => dispatch(searchItemCreators.locateAddress()),
+		onSuggestAddress: eventTarget =>
+			dispatch(searchItemCreators.suggestAddress(eventTarget)),
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(homeSearch)

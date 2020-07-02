@@ -1,0 +1,18 @@
+.Input,
+.Textarea {
+	border: 1px solid var(--inputBorder);
+	/* border-radius: 5px; */
+	/* width: 100%; */
+	/* padding: 0.6rem; */
+}
+.Input,
+.select {
+	margin-bottom: 2rem;
+}
+.Textarea {
+	max-height: 300px;
+	min-height: 100px;
+}
+.select {
+	border: 1px solid var(--inputBorder);
+}

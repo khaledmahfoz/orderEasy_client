@@ -1,5 +1,5 @@
-.Footer{
-   background-color: #f86932;
-   color: #ffffff;
-   height: 300px;
+.Footer {
+	background-color: var(--primeColor);
+	color: var(--whiteColor);
+	height: 300px;
 }

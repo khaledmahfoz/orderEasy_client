@@ -1,0 +1,9 @@
+.LoginBtn {
+	background-color: var(--primeColor);
+	color: var(--whiteColor);
+	width: 100%;
+	padding: 0.6rem;
+	border-radius: 5px;
+	margin: 0.6rem 0 1rem;
+	font-size: 1.2rem;
+}

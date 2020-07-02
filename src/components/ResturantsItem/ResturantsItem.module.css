@@ -1,8 +1,51 @@
-.Resturants_Item{
-   width: 1000px;
-   height: 300px;
-   background-color: #ffffff;
-   margin: 1rem;
-   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-   border-radius: 10px;
+.Resturants_Item {
+	display: grid;
+	height: 300px;
+	padding: 0 5rem;
+	/* width: 1000px; */
+	background-color: var(--whiteColor);
+	margin: 1rem;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+	border-radius: 10px;
+	grid-template-columns: repeat(3, auto);
+	gap: 0px 10rem;
+	grid-template-areas:
+		' image title rate '
+		' image description hours '
+		' image link payment ';
+	align-items: center;
+	justify-items: center;
+	align-content: center;
+}
+.Resturants_Image {
+	width: 300px;
+	height: 200px;
+	background-color: #eeeeee;
+	grid-area: image;
+}
+.Resturants_Title {
+	grid-area: title;
+}
+.Resturants_Description {
+	grid-area: description;
+}
+.Resturants_Link {
+	grid-area: link;
+}
+.Resturants_Rate {
+	grid-area: rate;
+}
+.Resturants_Payment {
+	grid-area: payment;
+}
+.Resturants_Link {
+	color: var(--whiteColor);
+	background-color: var(--greenColor);
+	padding: 5px 30px;
+	border-radius: 5px;
+	font-size: 1.3rem;
+}
+.Resturants_Link:hover {
+	text-decoration: none;
+	color: var(--whiteColor);
 }

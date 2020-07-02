@@ -1,22 +1,22 @@
-.OrderTutorial{
-   width: 100%;
-   background-color: #f5f5f5;
-   text-align: center;
-   padding: 10rem 0;
+.OrderTutorial {
+	width: 100%;
+	background-color: var(--greyColor2);
+	text-align: center;
+	padding: 10rem 0;
 }
-.OrderTutorial h1{
-   color: #2b2b2b;
-   margin-bottom: 5rem;
-   font-size: 3rem
+.OrderTutorial h1 {
+	color: var(--blackColor);
+	margin-bottom: 5rem;
+	font-size: 3rem;
 }
-.OrderTutorialItemsWrapper{
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   flex-wrap: wrap;
+.OrderTutorialItemsWrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
 }
 @media only screen and (max-width: 1162px) {
-   .OrderTutorialItemsWrapper{
-      flex-flow: column
-   }
+	.OrderTutorialItemsWrapper {
+		flex-flow: column;
+	}
 }

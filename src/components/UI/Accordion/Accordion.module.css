@@ -1,0 +1,30 @@
+.Accordion {
+	border: 3px solid var(--primeColor);
+	margin: 1rem 0;
+}
+.AccordionTag {
+	background-color: var(--primeColor);
+	color: var(--whiteColor);
+	font-weight: bold;
+	padding: 1rem 4rem;
+	cursor: pointer;
+	font-size: 1.2rem;
+}
+.AccordionList {
+	list-style: none;
+	margin: 0 !important;
+	padding: 0 4rem;
+}
+.AccordionList li {
+	padding: 2rem 0;
+	border-bottom: 2px solid var(--greyColor3);
+}
+.AccordionList li:last-of-type {
+	border: none;
+}
+.AccordionList li,
+.AccordionTag {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}

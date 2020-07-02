@@ -1,31 +1,39 @@
-.AddressInput{
-   position: relative;
-   display: flex;
+.AddressForm {
+	display: flex;
+	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
 }
-.AddressInput input{
-   outline: none
+.AddressInput {
+	position: relative;
+	display: flex;
 }
-.ResturantBtn{
-   background-color: #F86932;
-   color: #ffffff;
-   border: none;
-   font-size: 1.5rem;
-   padding: 8px 15px;
+.AddressInput input {
+	outline: none;
+	background-color: #ffffff;
+	border: none;
+	width: 400px;
+	padding: 0 1rem;
 }
-.ResturantBtn:hover{
-   text-decoration: none;
-   color: #ffffff
+.ResturantBtn {
+	background-color: #f86932;
+	color: #ffffff;
+	border: none;
+	font-size: 1.5rem;
+	padding: 8px 15px;
 }
-.LocateBtn{
-   position: absolute;
-   top: 50%;
-   right: 0;
-   width: 25px;
-   height: auto;
-   cursor: pointer;
-   transform: translate(-50%, -50%);
+.ResturantBtn:hover {
+	text-decoration: none;
+	color: #ffffff;
 }
-.LocateBtn img{
-   width: 100%;
-   height: auto;
+.LocateBtn {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	width: 25px;
+	height: auto;
+	cursor: pointer;
+	transform: translate(-50%, -50%);
+}
+.LocateBtn img {
+	width: 100%;
+	height: auto;
 }

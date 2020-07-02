@@ -1,0 +1,11 @@
+.ResturantBtn {
+	background-color: #f86932;
+	color: #ffffff;
+	border: none;
+	font-size: 1.5rem;
+	padding: 8px 15px;
+}
+.ResturantBtn:hover {
+	text-decoration: none;
+	color: #ffffff;
+}
