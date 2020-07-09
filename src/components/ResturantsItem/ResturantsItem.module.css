@@ -22,7 +22,10 @@
 	height: 200px;
 	background-color: #eeeeee;
 	grid-area: image;
+	background-size: cover;
+	background-position: center center;
 }
+
 .Resturants_Title {
 	grid-area: title;
 }

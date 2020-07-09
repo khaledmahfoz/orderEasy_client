@@ -2,6 +2,9 @@
 	width: 50%;
 	margin: 0 auto;
 }
+.AuthSignupForm > div{
+	margin-bottom: 2rem;
+}
 label,
 .imgFileLabel {
 	color: var(--blackColor);
@@ -10,11 +13,14 @@ label,
 .isResturant {
 	margin: 2rem 0;
 }
+.isResturant > div{
+	margin-bottom: 2rem;
+}
 .isResturantHead {
 	display: flex;
 	justify-content: left;
 	align-items: center;
-	margin-bottom: 0.5rem;
+	margin-bottom: 0.5rem !important;
 }
 .isResturantHead p {
 	font-weight: bold;
@@ -29,13 +35,13 @@ label,
 .imgFileLabel {
 	margin-bottom: 1rem;
 }
-isResturantCheck label {
+.isResturantCheck label {
 	font-size: 1.1rem;
 }
 .isResturantCheck input {
 	margin-right: 0.5rem;
 }
-.divFile {
+/* .divFile {
 	margin-bottom: 2rem;
 }
 .divFile > input {
@@ -55,7 +61,7 @@ isResturantCheck label {
 .divFile label:hover svg {
 	color: var(--blue);
 	border-color: var(--blue);
-}
+} */
 
 /* .divFile label {
 	display: block;

@@ -1,0 +1,11 @@
+.FilePickerBtn{
+   width: 100px;
+   height: 100px;
+   background-color: var(--whiteColor);
+   border: 2px dashed var(--inputBorder);
+   border-radius: 5px;
+   display: block;
+}
+.FilePickerBtn svg{
+   color: var(--greyColor3);
+}

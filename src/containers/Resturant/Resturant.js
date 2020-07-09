@@ -1,6 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Route, withRouter } from 'react-router-dom'
+import {connect} from 'react-redux'
+import {Route, withRouter} from 'react-router-dom'
 
 import classes from '../Resturant/Resturant.module.css'
 
@@ -46,6 +46,7 @@ class Resturant extends React.Component {
 	}
 
 	componentDidMount() {
+
 		//async code to get resturant data by id and reviews
 		this.setState({
 			resturant: testResturant,
@@ -55,52 +56,52 @@ class Resturant extends React.Component {
 	render() {
 		console.log(this.props)
 		return this.state.loading ? (
-			<div style={{ minHeight: 'calc(100vh - 358px)', position: 'relative' }}>
+			<div style={{minHeight: 'calc(100vh - 358px)', position: 'relative'}}>
 				<SectionSpinner />
 			</div>
 		) : (
-			<React.Fragment>
-				<header className={classes.Header}>
-					<Hero height='500px'></Hero>
-					<div className={classes.Lip_Section}>
-						<div className={classes.Lip_Content}>
-							<div className={classes.Resturant_Img}></div>
-							<h3 className={classes.Title}>{this.state.resturant.title}</h3>
-							<p className={classes.Desc}>{this.state.resturant.desc}</p>
-							<div className={classes.Rate}>{this.state.resturant.rate}</div>
-							<p className={classes.Main}>{this.state.resturant.main}</p>
-							<div className={classes.Hours}>
-								<p>open hours</p>
-								<p>{this.state.resturant.openHours}</p>
+				<React.Fragment>
+					<header className={classes.Header}>
+						<Hero height='500px'></Hero>
+						<div className={classes.Lip_Section}>
+							<div className={classes.Lip_Content}>
+								<div className={classes.Resturant_Img}></div>
+								<h3 className={classes.Title}>{this.state.resturant.title}</h3>
+								<p className={classes.Desc}>{this.state.resturant.desc}</p>
+								<div className={classes.Rate}>{this.state.resturant.rate}</div>
+								<p className={classes.Main}>{this.state.resturant.main}</p>
+								<div className={classes.Hours}>
+									<p>open hours</p>
+									<p>{this.state.resturant.openHours}</p>
+								</div>
+								<div className={classes.Payment}>
+									<p>payment Methods</p>
+									<div>{this.state.resturant.payment}</div>
+								</div>
 							</div>
-							<div className={classes.Payment}>
-								<p>payment Methods</p>
-								<div>{this.state.resturant.payment}</div>
-							</div>
+							{!this.state.menu ? (
+								<div className={classes.Lip_Search}>
+									<SearchItem
+										navigatePath={this.props.match.url + '?menu=true'}
+										btnValue='Menu'
+									/>
+								</div>
+							) : null}
 						</div>
-						{!this.state.menu ? (
-							<div className={classes.Lip_Search}>
-								<SearchItem
-									navigatePath={this.props.match.url + '?menu=true'}
-									btnValue='Menu'
-								/>
-							</div>
-						) : null}
-					</div>
-				</header>
-				{!this.state.menu ? (
-					<Route
-						path={this.props.match.url}
-						render={() => <ResturantReviews id={this.props.match.params.id} />}
-					/>
-				) : (
-					<Route
-						path={this.props.match.url}
-						render={() => <Menu id={this.props.match.params.id} />}
-					/>
-				)}
-			</React.Fragment>
-		)
+					</header>
+					{!this.state.menu ? (
+						<Route
+							path={this.props.match.url}
+							render={() => <ResturantReviews id={this.props.match.params.id} />}
+						/>
+					) : (
+							<Route
+								path={this.props.match.url}
+								render={() => <Menu id={this.props.match.params.id} />}
+							/>
+						)}
+				</React.Fragment>
+			)
 	}
 }
 
@@ -118,8 +119,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onOpenModal: () => dispatch({ type: actionTypes.OPEN_MODAL }),
-		onCloseModal: () => dispatch({ type: actionTypes.CLOSE_MODAL }),
+		onOpenModal: () => dispatch({type: actionTypes.OPEN_MODAL}),
+		onCloseModal: () => dispatch({type: actionTypes.CLOSE_MODAL}),
 		onLocateAddress: () => dispatch(searchItemCreators.locateAddress()),
 		onSuggestAddress: eventTarget =>
 			dispatch(searchItemCreators.suggestAddress(eventTarget)),

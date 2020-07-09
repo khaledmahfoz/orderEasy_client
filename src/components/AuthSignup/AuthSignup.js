@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 import classes from './AuthSignup.module.css'
 
@@ -6,13 +6,20 @@ import WrapperCard from '../UI/WrapperCard/WrapperCard'
 import Chevron from '../UI/Chevron/Chevron'
 import FormInput from '../UI/FormInput/FormInput'
 import AuthButton from '../UI/AuthButton/AuthButton'
+import SearchItem from '../SearchBox/SearchItem/SearchItem'
+import FilePicker from '../UI/FilePicker/FilePicker'
 
 class AuthSignup extends Component {
+	constructor(props) {
+		super(props)
+		this.fileRef = React.createRef()
+	}
 	state = {
 		showCheck: false,
 		isResturant: false,
 		formElem: {
 			fullName: {
+				name: 'title',
 				label: 'Full Name',
 				elemType: 'input',
 				value: '',
@@ -22,6 +29,7 @@ class AuthSignup extends Component {
 				},
 			},
 			email: {
+				name: 'email',
 				label: 'Email',
 				elemType: 'input',
 				value: '',
@@ -31,6 +39,7 @@ class AuthSignup extends Component {
 				},
 			},
 			password: {
+				name: 'password',
 				label: 'Password',
 				elemType: 'input',
 				value: '',
@@ -40,6 +49,7 @@ class AuthSignup extends Component {
 				},
 			},
 			confirmPassword: {
+				name: 'confirmPassword',
 				label: 'Confirm Password',
 				elemType: 'input',
 				value: '',
@@ -51,26 +61,73 @@ class AuthSignup extends Component {
 		},
 		resturantElem: {
 			catagory: {
+				name: 'catagory',
 				label: 'Catagory',
 				elemType: 'select',
 				value: '',
 				required: true,
 				config: {
 					options: [
-						{ value: 'italien cusine' },
-						{ value: 'french cusine' },
-						{ value: 'german cusine' },
+						{value: 'Mixed cusine'},
+						{value: 'Spanish cusine'},
+						{value: 'Moroccan cusine'},
+						{value: 'Japanese cusine'},
+						{value: 'Thai cusine'},
+						{value: 'Indian cusine'},
+						{value: 'Italian cusine'},
+						{value: 'French cusine'}
 					],
 				},
 			},
 			description: {
+				name: 'description',
 				label: 'Enter a brief description',
 				elemType: 'textarea',
 				value: '',
 				required: true,
 			},
+			selectedFile: null,
+			filename: ''
 		},
 	}
+	clickHandler = () => {
+		if (!this.state.isResturant) {
+			//some code
+		} else {
+			const formData = new FormData()
+			formData.append('title', this.state.formElem.fullName.value)
+			formData.append('email', this.state.formElem.email.value)
+			formData.append('password', this.state.formElem.password.value)
+			formData.append('description', this.state.resturantElem.description.value)
+			formData.append('imageUrl', this.state.resturantElem.selectedFile)
+			console.log(this.state.resturantElem.selectedFile)
+			fetch('http://localhost:8080/admin/add-resturant', {
+				method: 'POST',
+				body: formData
+			})
+				.then(response => response.json())
+				.then(data => {
+					console.log(data)
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		}
+	}
+	filePickerBtnHadler = () => {
+		this.fileRef.current.click()
+	}
+
+	filePickerHandler = (event) => {
+		console.log(event.target.files[0])
+		let updatedFormElem = {
+			...this.state.resturantElem
+		}
+		updatedFormElem.selectedFile = event.target.files[0]
+		this.setState({resturantElem: updatedFormElem})
+		event.target.files[0] ? this.setState({filename: event.target.files[0].name}) : this.setState({filename: null})
+	}
+
 	changeHandler = (value, identifier) => {
 		let updatedFormElem = {
 			...this.state.formElem,
@@ -80,8 +137,9 @@ class AuthSignup extends Component {
 		}
 		updatedElem.value = value
 		updatedFormElem[identifier] = updatedElem
-		this.setState({ formElem: updatedFormElem })
+		this.setState({formElem: updatedFormElem})
 	}
+
 	changeResturantHandler = (value, identifier) => {
 		let updatedFormElem = {
 			...this.state.resturantElem,
@@ -92,18 +150,21 @@ class AuthSignup extends Component {
 		console.log(updatedElem)
 		updatedElem.value = value
 		updatedFormElem[identifier] = updatedElem
-		this.setState({ resturantElem: updatedFormElem })
+		this.setState({resturantElem: updatedFormElem})
 	}
+
 	showCheckHandler = () => {
 		this.setState(prevState => {
-			return { showCheck: !prevState.showCheck }
+			return {showCheck: !prevState.showCheck}
 		})
 	}
+
 	isResturantHandler = () => {
 		this.setState(prevState => {
-			return { isResturant: !prevState.isResturant }
+			return {isResturant: !prevState.isResturant}
 		})
 	}
+
 	render() {
 		const chevron = this.state.showCheck ? 'bi-chevron-up' : 'bi-chevron-down'
 		console.log(this.state.isResturant)
@@ -148,24 +209,18 @@ class AuthSignup extends Component {
 						{!this.state.isResturant ? null : (
 							<React.Fragment>
 								<div className={classes.divFile}>
-									<div className={classes.imgFileLabel}>Resturant image</div>
-									<label htmlFor='file-input'>
-										<svg
-											viewBox='0 0 16 16'
-											className='bi bi-plus'
-											fill='currentColor'
-											xmlns='http://www.w3.org/2000/svg'>
-											<path
-												fillRule='evenodd'
-												d='M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z'
-											/>
-											<path
-												fillRule='evenodd'
-												d='M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z'
-											/>
-										</svg>
-									</label>
-									<input id='file-input' type='file' />
+									<label htmlFor='file-input'>Resturant image</label>
+									<FilePicker filePickerBtnHadler={this.filePickerBtnHadler} />
+									{this.state.filename ? <p style={{
+										textTransform: 'capitalize',
+										color: 'var(--greenColor)',
+										marginTop: '0.5rem'
+									}}>{this.state.filename}</p> : null}
+									<input style={{display: 'none'}} ref={this.fileRef} id='file-input' name="imageUrl" type='file' onChange={this.filePickerHandler} />
+								</div>
+								<div>
+									<label>Specify your location and delivery zone</label>
+									<SearchItem isResturant={this.state.isResturant} />
 								</div>
 								<div>
 									<label>{this.state.resturantElem.catagory.label}</label>
@@ -185,12 +240,12 @@ class AuthSignup extends Component {
 										elemType={this.state.resturantElem.description.elemType}
 										value={this.state.resturantElem.description.value}
 										changeHandler={this.changeResturantHandler}
-										// config={this.state.resturantElem.description.config}
+									// config={this.state.resturantElem.description.config}
 									/>
 								</div>
 							</React.Fragment>
 						)}
-						<AuthButton>Sign up</AuthButton>
+						<AuthButton clickHandler={this.clickHandler}>Sign up</AuthButton>
 					</div>
 				</form>
 			</WrapperCard>

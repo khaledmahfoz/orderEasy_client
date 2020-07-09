@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 
 import classes from './SearchItem.module.css'
 import LocateIcon from '../../../assets/images/locate_gps2.png'
@@ -9,9 +9,9 @@ import Map from '../../../containers/Map/Map'
 import InputFull from '../../InputFull/InputFull'
 import SearchList from '../SearchItem/SearchList/SearchList'
 import Spinner from '../../UI/Spinner/Spinner'
-import { geocode } from '../../../containers/Map/Geocode/Geocode'
-import { SmallLoadingMenu } from '../../UI/SmallLoading/SmallLoading'
-import { withRouter } from 'react-router-dom'
+import {geocode} from '../../../containers/Map/Geocode/Geocode'
+import {SmallLoadingMenu} from '../../UI/SmallLoading/SmallLoading'
+import {withRouter} from 'react-router-dom'
 
 class searchItem extends Component {
 	state = {
@@ -24,10 +24,10 @@ class searchItem extends Component {
 		suggestedAddressesList: null,
 	}
 	closeModal = () => {
-		this.setState({ showModal: false, loading: false })
+		this.setState({showModal: false, loading: false})
 	}
 	openModal = () => {
-		this.setState({ showModal: true, loading: false })
+		this.setState({showModal: true, loading: false})
 	}
 	showCoordsOnMap = (locateStatus, coords) => {
 		this.setState({
@@ -38,7 +38,7 @@ class searchItem extends Component {
 		this.openModal()
 	}
 	locateAddress = () => {
-		this.setState({ loading: true })
+		this.setState({loading: true})
 		const geo_success = position => {
 			this.showCoordsOnMap(true, position.coords)
 		}
@@ -57,9 +57,9 @@ class searchItem extends Component {
 		)
 	}
 	changeInputHandler = value => {
-		this.setState({ inputVal: value, inputLoading: true })
+		this.setState({inputVal: value, inputLoading: true})
 		geocode(value, cb => {
-			this.setState({ suggestedAddressesList: cb.items, inputLoading: false })
+			this.setState({suggestedAddressesList: cb.items, inputLoading: false})
 		})
 	}
 	render() {
@@ -80,10 +80,10 @@ class searchItem extends Component {
 						smallLoading={this.props.smallLoading}
 					/> */}
 					{this.state.locateStatus ? (
-						<Map coords={this.state.coords} />
+						<Map isResturant={this.props.isResturant ? this.props.isResturant : false} coords={this.state.coords} />
 					) : (
-						'sorry'
-					)}
+							'sorry'
+						)}
 				</Modal>
 				<form
 					className={classes.AddressForm}
@@ -98,10 +98,10 @@ class searchItem extends Component {
 						{this.state.inputLoading ? (
 							<SmallLoadingMenu color='#f86932' />
 						) : (
-							<a className={classes.LocateBtn} onClick={this.locateAddress}>
-								<img src={LocateIcon} alt='locate' draggable='false' />
-							</a>
-						)}
+								<a className={classes.LocateBtn} onClick={this.locateAddress}>
+									<img src={LocateIcon} alt='locate' draggable='false' />
+								</a>
+							)}
 
 						{this.state.inputVal ? (
 							<SearchList
@@ -111,9 +111,11 @@ class searchItem extends Component {
 						) : null}
 					</div>
 					{/* <button className={classes.ResturantBtn}>Find Resturants</button> */}
-					<Link className={classes.ResturantBtn} to={this.props.navigatePath}>
-						{this.props.btnValue}
-					</Link>
+					{!this.props.isResturant ? (
+						<Link className={classes.ResturantBtn} to={this.props.navigatePath}>
+							{this.props.btnValue}
+						</Link>
+					) : null}
 				</form>
 			</React.Fragment>
 		)

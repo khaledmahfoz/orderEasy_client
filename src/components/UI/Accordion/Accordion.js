@@ -26,7 +26,14 @@ class Accordion extends Component {
 				{this.state.show ? (
 					<ul className={classes.AccordionList}>
 						{this.props.value.map(data => {
-							return <AccordionItem key={data.title} data={data} />
+							return (
+								<AccordionItem
+									key={data.title}
+									data={data}
+									onAdd={this.props.onAdd}
+									onRemove={this.props.onRemove}
+								/>
+							)
 						})}
 					</ul>
 				) : null}

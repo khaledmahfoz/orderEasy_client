@@ -10,37 +10,20 @@ class Resturants extends React.Component {
 		loading: true,
 	}
 	componentDidMount() {
-		const arr = [
-			{
-				id: 1,
-				title: 'Resturant1',
-				desc: 'A description',
-				rate: '3',
-				payment: [1, 2],
-			},
-			{
-				id: 2,
-				title: 'Resturant2',
-				desc: 'A description',
-				rate: '3',
-				payment: [1, 2],
-			},
-			{
-				id: 3,
-				title: 'Resturant3',
-				desc: 'A description',
-				rate: '3',
-				payment: [1, 2],
-			},
-			{
-				id: 4,
-				title: 'Resturant4',
-				desc: 'A description',
-				rate: '3',
-				payment: [1, 2],
-			},
-		]
-		this.setState({ resturants: arr, loading: false })
+		fetch('http://localhost:8080/resturants', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(res => res.json())
+			.then(resturants => {
+				console.log(resturants)
+				this.setState({resturants: resturants, loading: false})
+			})
+			.catch(err => {
+				console.log(err)
+			})
 	}
 	render() {
 		let resturantsResult = <Spinner />

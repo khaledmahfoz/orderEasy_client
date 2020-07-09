@@ -3,10 +3,13 @@ import React from 'react'
 import classes from './Map.module.css'
 import Marker from '../../assets/images/marker.png'
 
-import { SmallLoading } from '../../components/UI/SmallLoading/SmallLoading'
+import {SmallLoading} from '../../components/UI/SmallLoading/SmallLoading'
 
-import { H, defaultLayers } from './Credentials/Credentials'
+import {H, defaultLayers} from './Credentials/Credentials'
 import reverseGeocode from './ReverseGeocode/ReverseGeocode'
+import createZone from './createZone/createZone'
+
+
 
 class Map extends React.Component {
 	constructor(props) {
@@ -18,6 +21,16 @@ class Map extends React.Component {
 		map: null,
 		addressTitle: null,
 		dragLoading: true,
+	}
+
+	dragEndHandler = (map, circleElem) => {
+		this.setState({dragLoading: true})
+		let coords = map.getCenter()
+		coords = {latitude: coords.lat, longitude: coords.lng}
+		{circleElem && circleElem.setCenter({lat: coords.latitude, lng: coords.longitude})}
+		reverseGeocode(coords, cb =>
+			this.setState({map, addressTitle: cb.title, dragLoading: false})
+		)
 	}
 
 	componentDidMount() {
@@ -33,37 +46,34 @@ class Map extends React.Component {
 				pixelRatio: window.devicePixelRatio || 1,
 			}
 		)
+		window.addEventListener('resize', () => map.getViewPort().resize(), {passive: true});
 
-		// window.addEventListener('resize', () => map.getViewPort().resize())
+		let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
 
-		map.addEventListener('dragend', event => {
-			console.log(map.getCenter())
-			this.setState({ dragLoading: true })
-			let coords = map.getCenter()
-			coords = { latitude: coords.lat, longitude: coords.lng }
-			reverseGeocode(coords, cb =>
-				this.setState({ map, addressTitle: cb.title, dragLoading: false })
-			)
-		})
+		let ui = H.ui.UI.createDefault(map, defaultLayers)
 
-		new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
-
-		H.ui.UI.createDefault(map, defaultLayers)
+		if (this.props.isResturant) {
+			let circleElem = createZone(map, this.props.coords.latitude, this.props.coords.longitude)
+			map.addObject(circleElem)
+			map.addEventListener('dragend', () => this.dragEndHandler(map, circleElem), {passive: false})
+		} else {
+			map.addEventListener('dragend', () => this.dragEndHandler(map), {passive: false})
+		}
 
 		reverseGeocode(this.props.coords, cb =>
-			this.setState({ map, addressTitle: cb.title, dragLoading: false })
+			this.setState({map, addressTitle: cb.title, dragLoading: false})
 		)
+
 	}
 
 	componentWillUnmount() {
 		if (this.state.map) {
 			this.state.map.dispose()
 		}
-		this.setState({ addressTitle: null })
+		this.setState({addressTitle: null})
 	}
 
 	render() {
-		console.log(this.state.addressTitle)
 		return (
 			<React.Fragment>
 				<div className={classes.Map} ref={this.mapRef}>
@@ -81,8 +91,8 @@ class Map extends React.Component {
 							<div>Detecting location</div>
 						</div>
 					) : (
-						'Deliver Here!'
-					)}
+							'Deliver Here!'
+						)}
 				</button>
 			</React.Fragment>
 		)

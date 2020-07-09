@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import classes from './Navbar.module.css'
 
@@ -26,7 +27,18 @@ class Navbar extends Component {
 	}
 
 	render() {
-		console.log(this.props)
+		let content
+		if (this.state.title === 'Sign in') {
+			content = <AuthLogin signupLinkHandler={this.signupLinkHandler} />
+		} else {
+			{
+				content = !this.props.cart.length ? (
+					<p>this cart is empty</p>
+				) : (
+					<p>here is your items</p>
+				)
+			}
+		}
 		return (
 			<React.Fragment>
 				<div className={classes.Navbar}>
@@ -53,7 +65,7 @@ class Navbar extends Component {
 					title={this.state.title}
 					show={this.state.showModal}
 					closeModal={this.closeModal}>
-					<AuthLogin signupLinkHandler={this.signupLinkHandler} />
+					{content}
 				</Modal>
 			</React.Fragment>
 		)
@@ -82,4 +94,12 @@ class Navbar extends Component {
 // 	)
 // }
 
-export default withRouter(Navbar)
+const mapStateToProps = state => {
+	return {
+		cart: state.cartReducer.cart,
+	}
+}
+
+// const mapDispatchToProps = dispatch => {}
+
+export default connect(mapStateToProps)(withRouter(Navbar))
