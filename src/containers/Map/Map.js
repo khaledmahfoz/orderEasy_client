@@ -20,6 +20,7 @@ class Map extends React.Component {
 	state = {
 		map: null,
 		addressTitle: null,
+		coords: this.props.coords,
 		dragLoading: true,
 	}
 
@@ -28,9 +29,9 @@ class Map extends React.Component {
 		let coords = map.getCenter()
 		coords = {latitude: coords.lat, longitude: coords.lng}
 		{circleElem && circleElem.setCenter({lat: coords.latitude, lng: coords.longitude})}
-		reverseGeocode(coords, cb =>
-			this.setState({map, addressTitle: cb.title, dragLoading: false})
-		)
+		reverseGeocode(coords, cb => {
+			this.setState({map, addressTitle: cb.title, dragLoading: false, coords: {...this.state.coords, ...coords}})
+		})
 	}
 
 	componentDidMount() {
@@ -46,7 +47,7 @@ class Map extends React.Component {
 				pixelRatio: window.devicePixelRatio || 1,
 			}
 		)
-		window.addEventListener('resize', () => map.getViewPort().resize(), {passive: true});
+		// window.addEventListener('resize', () => map.getViewPort().resize());
 
 		let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
 
@@ -57,12 +58,12 @@ class Map extends React.Component {
 			map.addObject(circleElem)
 			map.addEventListener('dragend', () => this.dragEndHandler(map, circleElem), {passive: false})
 		} else {
-			map.addEventListener('dragend', () => this.dragEndHandler(map), {passive: false})
+			map.addEventListener('dragend', () => this.dragEndHandler(map))
 		}
 
-		reverseGeocode(this.props.coords, cb =>
+		reverseGeocode(this.props.coords, cb => {
 			this.setState({map, addressTitle: cb.title, dragLoading: false})
-		)
+		})
 
 	}
 
@@ -84,15 +85,16 @@ class Map extends React.Component {
 						Deliver To: {this.state.addressTitle}
 					</p>
 				) : null}
-				<button className={classes.DeliverHere}>
-					{this.state.dragLoading ? (
-						<div className={classes.DragLoadingWrap}>
-							<SmallLoading color='#ffffff' />
-							<div>Detecting location</div>
-						</div>
-					) : (
-							'Deliver Here!'
-						)}
+				<button
+					onClick={() => this.props.locateAddressFinished(this.state.addressTitle, this.state.coords)} className={classes.DeliverHere}>
+					{this.state.dragLoading ?
+						(
+							<div className={classes.DragLoadingWrap}>
+								<SmallLoading color='#ffffff' />
+								<div>Detecting location</div>
+							</div>
+						) : this.props.btnValue
+					}
 				</button>
 			</React.Fragment>
 		)

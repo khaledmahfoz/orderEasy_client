@@ -2,9 +2,15 @@
 .select,
 .Textarea {
 	border: 1px solid var(--inputBorder);
+	height: auto;
+	padding: 0.7rem;
 }
 
 .Textarea {
 	max-height: 300px;
 	min-height: 100px;
+}
+
+.form-control{
+	height: auto !important;
 }

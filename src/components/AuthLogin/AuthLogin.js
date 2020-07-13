@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 
 import classes from '../../components/AuthLogin/AuthLogin.module.css'
 
@@ -38,7 +38,7 @@ class AuthLogin extends Component {
 		}
 		updatedElem.value = value
 		updatedFormElem[identifier] = updatedElem
-		this.setState({ formElem: updatedFormElem })
+		this.setState({formElem: updatedFormElem})
 	}
 	render() {
 		return (
@@ -47,14 +47,15 @@ class AuthLogin extends Component {
 				className={classes.AuthLoginForm}>
 				{Object.keys(this.state.formElem).map(elem => {
 					return (
-						<FormInput
-							key={elem}
-							identifier={elem}
-							elemType={this.state.formElem[elem].elemType}
-							config={this.state.formElem[elem].config}
-							value={this.state.formElem[elem].value}
-							changeHandler={this.changeHandler}
-						/>
+						<div key={elem}>
+							<FormInput
+								identifier={elem}
+								elemType={this.state.formElem[elem].elemType}
+								config={this.state.formElem[elem].config}
+								value={this.state.formElem[elem].value}
+								changeHandler={this.changeHandler}
+							/>
+						</div>
 					)
 				})}
 				<AuthButton>Login</AuthButton>

@@ -2,6 +2,9 @@
 	width: 100%;
 	padding: 1rem 4rem;
 }
+.AuthLoginForm div{
+	margin-bottom: 0.8rem;
+}
 .LoginBtn {
 	background-color: var(--primeColor);
 	color: var(--whiteColor);
@@ -21,6 +24,7 @@
 	display: flex;
 	justify-content: left;
 	align-items: center;
+	margin-bottom: 0 !important;
 }
 .SignupInfo p {
 	margin: 0;

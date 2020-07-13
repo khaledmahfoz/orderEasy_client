@@ -46,7 +46,6 @@ class Resturant extends React.Component {
 	}
 
 	componentDidMount() {
-
 		//async code to get resturant data by id and reviews
 		this.setState({
 			resturant: testResturant,
@@ -81,10 +80,15 @@ class Resturant extends React.Component {
 							</div>
 							{!this.state.menu ? (
 								<div className={classes.Lip_Search}>
-									<SearchItem
-										navigatePath={this.props.match.url + '?menu=true'}
-										btnValue='Menu'
-									/>
+									<form
+										className={classes.AddressForm}
+										onSubmit={e => e.preventDefault()}>
+										<SearchItem
+											btnValue={'Deliver Here'}
+											navigatePath={this.props.match.url + '?menu=true'}
+											btnValue='Menu'
+										/>
+									</form>
 								</div>
 							) : null}
 						</div>

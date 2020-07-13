@@ -1,5 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
+import {withRouter} from 'react-router-dom'
 
 import Hero from '../../components/Hero/Hero'
 import SearchBox from '../../components/SearchBox/SearchBox'
@@ -13,6 +14,9 @@ import InputFull from '../../components/InputFull/InputFull'
 import SearchItem from '../../components/SearchBox/SearchItem/SearchItem'
 
 class homeSearch extends React.Component {
+	state = {
+		choosenCoords: null
+	}
 	// state = {
 	// 	address: '',
 	// 	coords: null,
@@ -70,11 +74,27 @@ class homeSearch extends React.Component {
 	// 	})
 	// }
 
-	clearInput = e => {
-		console.log(e.target.tagName.toUpperCase())
+
+	choosenCoordsHandler = (coords) => {
+		if (this.state.choosenCoords && coords) {
+			this.setState({
+				choosenCoords: {
+					...this.state.choosenCoords,
+					...coords
+				}
+			})
+		} else {
+			this.setState({choosenCoords: coords})
+		}
+	}
+
+	findBtnHandler = () => {
+		console.log(this.props)
+		this.props.history.push('/resturants')
 	}
 
 	render() {
+		console.log(this.state.choosenCoords)
 		return (
 			<React.Fragment>
 				{/* <Modal
@@ -103,7 +123,7 @@ class homeSearch extends React.Component {
 						clearInput={this.clearInput}
 						smallLoading={this.props.smallLoading}
 					/> */}
-					<SearchBox />
+					<SearchBox findBtnHandler={this.findBtnHandler} choosenCoordsHandler={this.choosenCoordsHandler} />
 				</Hero>
 
 				<OrderTutorial />
@@ -127,12 +147,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onOpenModal: () => dispatch({ type: actionTypes.OPEN_MODAL }),
-		onCloseModal: () => dispatch({ type: actionTypes.CLOSE_MODAL }),
+		onOpenModal: () => dispatch({type: actionTypes.OPEN_MODAL}),
+		onCloseModal: () => dispatch({type: actionTypes.CLOSE_MODAL}),
 		onLocateAddress: () => dispatch(searchItemCreators.locateAddress()),
 		onSuggestAddress: eventTarget =>
 			dispatch(searchItemCreators.suggestAddress(eventTarget)),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(homeSearch)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(homeSearch))

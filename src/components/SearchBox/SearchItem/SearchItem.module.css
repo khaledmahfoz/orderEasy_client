@@ -1,17 +1,25 @@
-.AddressForm {
+/* .AddressForm {
 	display: flex;
 	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
-}
+} */
 .AddressInput {
 	position: relative;
 	display: flex;
 }
-.AddressInput input {
+.AddressInputStyle {
 	outline: none;
 	background-color: #ffffff;
 	border: none;
 	width: 400px;
 	padding: 0 1rem;
+}
+.AddressInputResturant{
+	outline: none;
+	background-color: #ffffff;
+	width: 100%;
+	border: 1px solid var(--inputBorder);
+	padding: 0.7rem;
+	border-radius: 5px;
 }
 .ResturantBtn {
 	background-color: #f86932;

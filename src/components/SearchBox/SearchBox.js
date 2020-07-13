@@ -3,7 +3,7 @@ import React from 'react'
 import classes from './SearchBox.module.css'
 
 import SearchItem from './SearchItem/SearchItem'
-import { withRouter } from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 
 const searchBox = props => {
 	return (
@@ -20,7 +20,11 @@ const searchBox = props => {
 				clickHandler={() => props.history.push('/resturants')}
 				btnValue='Find Resturants'
 			/> */}
-			<SearchItem navigatePath='/resturants' btnValue='Find Resturants' />
+			<form
+				className={classes.AddressForm}
+				onSubmit={e => e.preventDefault()}>
+				<SearchItem findBtnHandler={props.findBtnHandler} choosenCoordsHandler={props.choosenCoordsHandler} btnValue={'Deliver Here'} navigatePath='/resturants' btnValue='Find Resturants' />
+			</form>
 		</div>
 	)
 }

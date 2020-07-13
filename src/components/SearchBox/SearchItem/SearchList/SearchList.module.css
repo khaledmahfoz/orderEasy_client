@@ -1,7 +1,7 @@
 .SearchList {
 	position: absolute;
-	width: 400px;
-	top: 52px;
+	top: 100%;
+	width: 100%;
 	left: 0;
 	background-color: #fafafa;
 	list-style: none;

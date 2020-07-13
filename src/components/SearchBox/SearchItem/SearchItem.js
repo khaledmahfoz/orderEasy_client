@@ -9,6 +9,7 @@ import Map from '../../../containers/Map/Map'
 import InputFull from '../../InputFull/InputFull'
 import SearchList from '../SearchItem/SearchList/SearchList'
 import Spinner from '../../UI/Spinner/Spinner'
+import reverseGeocode from '../../../containers/Map/ReverseGeocode/ReverseGeocode'
 import {geocode} from '../../../containers/Map/Geocode/Geocode'
 import {SmallLoadingMenu} from '../../UI/SmallLoading/SmallLoading'
 import {withRouter} from 'react-router-dom'
@@ -20,6 +21,7 @@ class searchItem extends Component {
 		inputLoading: false,
 		loading: false,
 		locateStatus: false,
+		locked: false,
 		coords: null,
 		suggestedAddressesList: null,
 	}
@@ -31,16 +33,20 @@ class searchItem extends Component {
 	}
 	showCoordsOnMap = (locateStatus, coords) => {
 		this.setState({
-			// loading: true,
+			loading: true,
 			locateStatus: locateStatus,
 			coords: coords,
+			suggestedAddressesList: null,
+			inputVal: ''
 		})
 		this.openModal()
 	}
+
 	locateAddress = () => {
 		this.setState({loading: true})
 		const geo_success = position => {
-			this.showCoordsOnMap(true, position.coords)
+			let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude}
+			this.showCoordsOnMap(true, coords)
 		}
 		const geo_error = () => {
 			this.showCoordsOnMap(false, null)
@@ -56,13 +62,44 @@ class searchItem extends Component {
 			geo_options
 		)
 	}
+
+	locateAddressFinished = (address, coords) => {
+		this.setState({inputVal: address, locked: true})
+		this.props.choosenCoordsHandler(coords)
+		this.closeModal()
+	}
+
+	unlockInput = () => {
+		this.setState({locked: false, inputVal: '', coords: null})
+		this.props.choosenCoordsHandler(null)
+	}
+
 	changeInputHandler = value => {
+		if (this.state.locked) {
+			this.unlockInput()
+		}
 		this.setState({inputVal: value, inputLoading: true})
 		geocode(value, cb => {
 			this.setState({suggestedAddressesList: cb.items, inputLoading: false})
 		})
 	}
 	render() {
+		let indicator
+		if (this.state.locked) {
+			indicator = (
+				<a className={classes.LocateBtn} onClick={this.unlockInput}>
+					X
+				</a>
+			)
+		} else if (this.state.inputLoading) {
+			indicator = <SmallLoadingMenu color='#f86932' />
+		} else {
+			indicator = (
+				<a className={classes.LocateBtn} onClick={this.locateAddress}>
+					<img src={LocateIcon} alt='locate' draggable='false' />
+				</a>
+			)
+		}
 		return (
 			<React.Fragment>
 				{this.state.loading ? <Spinner /> : null}
@@ -80,43 +117,46 @@ class searchItem extends Component {
 						smallLoading={this.props.smallLoading}
 					/> */}
 					{this.state.locateStatus ? (
-						<Map isResturant={this.props.isResturant ? this.props.isResturant : false} coords={this.state.coords} />
+						<Map
+							choosenCoordsHandler={this.choosenCoordsHandler}
+							locateAddressFinished={this.locateAddressFinished}
+							btnValue={this.props.btnValue}
+							isResturant={this.props.isResturant ? this.props.isResturant : false}
+							coords={this.state.coords}
+						/>
 					) : (
-							'sorry'
+							<p>Please give access to your location</p>
 						)}
 				</Modal>
-				<form
-					className={classes.AddressForm}
-					onSubmit={e => e.preventDefault()}>
-					<div className={classes.AddressInput}>
-						<input
-							type='text'
-							placeholder='Please search for your location'
-							onChange={e => this.changeInputHandler(e.target.value)}
-							value={this.state.inputVal}
-						/>
-						{this.state.inputLoading ? (
-							<SmallLoadingMenu color='#f86932' />
-						) : (
-								<a className={classes.LocateBtn} onClick={this.locateAddress}>
-									<img src={LocateIcon} alt='locate' draggable='false' />
-								</a>
-							)}
 
-						{this.state.inputVal ? (
+				<div className={classes.AddressInput}>
+					<input
+						className={this.props.isResturant ? classes.AddressInputResturant : classes.AddressInputStyle}
+						type='text'
+						placeholder='Please search for your location'
+						onChange={e => this.changeInputHandler(e.target.value)}
+						value={this.state.inputVal}
+						disabled={this.state.locked ? true : false}
+					/>
+
+					{indicator}
+
+					{this.state.inputVal ? (
+						<React.Fragment>
 							<SearchList
 								createMap={this.showCoordsOnMap}
 								suggested={this.state.suggestedAddressesList}
 							/>
-						) : null}
-					</div>
-					{/* <button className={classes.ResturantBtn}>Find Resturants</button> */}
-					{!this.props.isResturant ? (
-						<Link className={classes.ResturantBtn} to={this.props.navigatePath}>
-							{this.props.btnValue}
-						</Link>
+						</React.Fragment>
 					) : null}
-				</form>
+				</div>
+				{
+					!this.props.isResturant ?
+						<button onClick={this.props.findBtnHandler} className={classes.ResturantBtn}>
+							{this.props.btnValue}
+						</button>
+						: null
+				}
 			</React.Fragment>
 		)
 	}

@@ -31,7 +31,7 @@ const formInput = props => {
 			break
 		case 'select':
 			inputElem = (
-				<select className={`custom-select ${classes.select}`}>
+				<select className={`custom-select ${classes.select}`} onChange={e => props.changeCatagory(e.target.value)}>
 					{props.config.options.map(elem => (
 						<option key={elem.value}>{elem.value}</option>
 					))}

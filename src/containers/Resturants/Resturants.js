@@ -10,7 +10,7 @@ class Resturants extends React.Component {
 		loading: true,
 	}
 	componentDidMount() {
-		fetch('http://localhost:8080/resturants', {
+		fetch('http://localhost:8080/all-resturants', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ class Resturants extends React.Component {
 		let resturantsResult = <Spinner />
 		if (!this.state.loading) {
 			resturantsResult = this.state.resturants.map(elem => (
-				<ResturantsItem {...elem} key={elem.id} />
+				<ResturantsItem {...elem} key={elem._id} />
 			))
 		}
 		return <div className={classes.Resturant}> {resturantsResult} </div>

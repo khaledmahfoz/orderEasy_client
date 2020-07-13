@@ -15,8 +15,8 @@ class AuthSignup extends Component {
 		this.fileRef = React.createRef()
 	}
 	state = {
-		showCheck: false,
-		isResturant: false,
+		showCheck: true,
+		isResturant: true,
 		formElem: {
 			fullName: {
 				name: 'title',
@@ -87,20 +87,42 @@ class AuthSignup extends Component {
 				required: true,
 			},
 			selectedFile: null,
-			filename: ''
+			filename: '',
+			choosenCoords: null,
 		},
+	}
+	choosenCoordsHandler = (coords) => {
+		console.log(coords)
+		let updatedFormElem = {
+			...this.state.resturantElem,
+		}
+		if (this.state.resturantElem.choosenCoords && coords) {
+			let updatedElem = {
+				...updatedFormElem.choosenCoords,
+			}
+			updatedElem.latitude = coords.latitude
+			updatedElem.longitude = coords.longitude
+			updatedFormElem.choosenCoords = updatedElem
+		} else {
+			updatedFormElem.choosenCoords = coords
+		}
+		this.setState({resturantElem: updatedFormElem})
 	}
 	clickHandler = () => {
 		if (!this.state.isResturant) {
 			//some code
 		} else {
+			console.log(this.state.resturantElem.choosenCoords)
+			let coords = {longitude: this.state.resturantElem.choosenCoords.longitude, latitude: this.state.resturantElem.choosenCoords.latitude}
 			const formData = new FormData()
 			formData.append('title', this.state.formElem.fullName.value)
 			formData.append('email', this.state.formElem.email.value)
 			formData.append('password', this.state.formElem.password.value)
-			formData.append('description', this.state.resturantElem.description.value)
 			formData.append('imageUrl', this.state.resturantElem.selectedFile)
-			console.log(this.state.resturantElem.selectedFile)
+			formData.append('location', JSON.stringify(coords))
+			formData.append('catagory', this.state.resturantElem.catagory.value)
+			formData.append('description', this.state.resturantElem.description.value)
+
 			fetch('http://localhost:8080/admin/add-resturant', {
 				method: 'POST',
 				body: formData
@@ -114,6 +136,7 @@ class AuthSignup extends Component {
 				})
 		}
 	}
+
 	filePickerBtnHadler = () => {
 		this.fileRef.current.click()
 	}
@@ -127,7 +150,17 @@ class AuthSignup extends Component {
 		this.setState({resturantElem: updatedFormElem})
 		event.target.files[0] ? this.setState({filename: event.target.files[0].name}) : this.setState({filename: null})
 	}
-
+	changeCatagory = option => {
+		let updatedFormElem = {
+			...this.state.resturantElem,
+		}
+		let updatedElem = {
+			...updatedFormElem.catagory,
+		}
+		updatedElem.value = option
+		updatedFormElem.catagory = updatedElem
+		this.setState({resturantElem: updatedFormElem})
+	}
 	changeHandler = (value, identifier) => {
 		let updatedFormElem = {
 			...this.state.formElem,
@@ -220,7 +253,11 @@ class AuthSignup extends Component {
 								</div>
 								<div>
 									<label>Specify your location and delivery zone</label>
-									<SearchItem isResturant={this.state.isResturant} />
+									<SearchItem
+										choosenCoordsHandler={this.choosenCoordsHandler}
+										btnValue={'Serve This Area'}
+										btnHandler={this.locateAddress}
+										isResturant={this.state.isResturant} />
 								</div>
 								<div>
 									<label>{this.state.resturantElem.catagory.label}</label>
@@ -230,6 +267,7 @@ class AuthSignup extends Component {
 										elemType={this.state.resturantElem.catagory.elemType}
 										config={this.state.resturantElem.catagory.config}
 										value={this.state.resturantElem.catagory.value}
+										changeCatagory={this.changeCatagory}
 									/>
 								</div>
 								<div>
