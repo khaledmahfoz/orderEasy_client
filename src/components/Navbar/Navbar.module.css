@@ -2,8 +2,10 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 0 2rem;
+	height: 4rem;
+	padding: 0 5rem;
 	background-color: var(--greyColor1);
+	/* position: relative; */
 }
 .Navbar a {
 	color: var(--blackColor);
@@ -14,6 +16,7 @@
 }
 .List {
 	width: 50%;
+	height: 100%;
 }
 .List button {
 	border: none;
@@ -22,9 +25,11 @@
 .List ul {
 	list-style: none;
 	display: flex;
-	padding: 1rem 0;
+	align-items: center;
+	padding: 0;
 	justify-content: flex-end;
 	margin: 0;
+	height: 100%;
 }
 .List ul li {
 	margin: 0 1rem;

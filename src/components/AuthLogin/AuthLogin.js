@@ -1,10 +1,18 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {withRouter} from 'react-router-dom'
 
 import classes from '../../components/AuthLogin/AuthLogin.module.css'
 
+import * as actionTypes from '../../store/actions/actionTypes'
+// import * as authCreators from '../../store/actions/authCreators'
+import {baseUrl} from '../../util/baseUrl'
+import {validateForm} from '../../util/validationSchema'
 import FormInput from '../UI/FormInput/FormInput'
 import AuthButton from '../UI/AuthButton/AuthButton'
+import SectionSpinner from '../UI/SectionSpinner/SectionSpinner'
+import ErrorMessage from '../UI/ErrorMessage/ErrorMessage'
+import {setCartAsync} from '../../store/actions/cartCreators'
 
 class AuthLogin extends Component {
 	state = {
@@ -12,64 +20,249 @@ class AuthLogin extends Component {
 			email: {
 				elemType: 'input',
 				value: '',
-				required: true,
 				config: {
 					type: 'email',
 					placeholder: 'Enter your email',
 				},
+				valid: false,
+				message: null,
+				validationConfig: {
+					required: {
+						value: true,
+						message: 'Please enter your email'
+					},
+					email: {
+						value: true,
+						message: 'Please enter a valid email'
+					}
+				}
 			},
 			password: {
 				elemType: 'input',
 				value: '',
-				required: true,
 				config: {
 					type: 'password',
 					placeholder: 'Enter your password',
 				},
+				valid: false,
+				message: null,
+				validationConfig: {
+					required: {
+						value: true,
+						message: 'Please enter your password'
+					},
+					minLength: {
+						value: 6,
+						message: 'Password should be atleast 6 characters'
+					},
+					maxLength: {
+						value: 15,
+						message: 'Password shouldn\'t exceed 15 characters'
+					}
+				}
 			},
 		},
+		isResturant: false,
+		formValidity: false,
 	}
+
 	changeHandler = (value, identifier) => {
+		this.props.errMessage && this.props.onAuthClear()
 		let updatedFormElem = {
 			...this.state.formElem,
 		}
+
 		let updatedElem = {
 			...updatedFormElem[identifier],
 		}
 		updatedElem.value = value
+		let validation = validateForm(value, updatedElem.validationConfig)
+		updatedElem.valid = validation.isValid
+		updatedElem.message = validation.message
 		updatedFormElem[identifier] = updatedElem
-		this.setState({formElem: updatedFormElem})
+
+		let formValidity = true
+		for (let identifier in updatedFormElem) {
+			formValidity = updatedFormElem[identifier].valid && formValidity
+		}
+		this.setState({formElem: updatedFormElem, formValidity: formValidity})
 	}
+
+	isResturantHandler = () => {
+		this.setState(prevState => ({isResturant: !prevState.isResturant}))
+		this.props.errMessage && this.props.onAuthClear()
+	}
+
+	loginHandler = () => {
+		if (this.state.formValidity && !this.props.errMessage) {
+			const data = {
+				email: this.state.formElem.email.value,
+				password: this.state.formElem.password.value,
+				isResturant: this.state.isResturant,
+				cart: JSON.parse(localStorage.getItem('cart'))
+			}
+			this.props.onAuthStart()
+			fetch(baseUrl + 'login', {
+				headers: {'Content-Type': 'application/json'},
+				method: 'POST',
+				body: JSON.stringify(data)
+			})
+				.then(res => {
+					return res.json()
+				})
+				.then(result => {
+					console.log(result.status)
+					if (result.status === 401) {
+						throw new Error(result.message)
+					}
+					if (result.status !== 200) {
+						throw new Error('can\'t login right now please try again later')
+					}
+					let {token, id, isResturant, title, cart} = result
+					console.log(JSON.stringify(cart))
+					this.props.onAuthSuccess(token, id, isResturant, title)
+					localStorage.setItem("token", token)
+					localStorage.setItem("id", id)
+					localStorage.setItem("isResturant", isResturant)
+					localStorage.setItem("title", title)
+					// localStorage.setItem("cart", JSON.stringify(cart))
+					console.log(this.props.checkSwap)
+					if (!this.props.checkSwap) {
+						this.props.showModalHandler()
+						if (isResturant) {
+							this.props.history.push('/my-resturant/' + id)
+						} else {
+							setCartAsync(cart)
+							localStorage.setItem('cart', JSON.stringify(cart))
+							this.props.history.push('/')
+						}
+					} else {
+						this.props.swipeContent(true)
+						this.props.checkSwapHandler()
+						this.props.showModalHandler()
+						if (isResturant) {
+							this.props.history.push('/my-resturant/' + id)
+						} else {
+							setCartAsync(cart)
+							localStorage.setItem('cart', JSON.stringify(cart))
+							this.props.history.push('/')
+						}
+					}
+				})
+				.catch(err => {
+					this.props.onAuthFailed(err.message)
+				})
+		} else {
+			let updatedFormElem = {
+				...this.state.formElem,
+			}
+			for (let identifier in updatedFormElem) {
+				let updatedElem = {
+					...updatedFormElem[identifier],
+				}
+				let validation = validateForm(updatedElem.value, updatedElem.validationConfig)
+				updatedElem.valid = validation.isValid
+				updatedElem.message = validation.message
+				updatedFormElem[identifier] = updatedElem
+			}
+			this.setState({formElem: updatedFormElem})
+		}
+	}
+
+	clearFields = () => {
+		let updatedFormElem = {
+			...this.state.formElem,
+		}
+		for (let identifier in updatedFormElem) {
+			let updatedElem = {
+				...updatedFormElem[identifier],
+			}
+			updatedElem.value = ''
+			updatedElem.message = null
+			updatedElem.valid = false
+			updatedFormElem[identifier] = updatedElem
+		}
+		this.setState({formElem: updatedFormElem, isResturant: false})
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.showModal !== this.props.showModal) {
+			this.props.errMessage && this.props.onAuthClear()
+			this.clearFields()
+		}
+	}
+
 	render() {
-		return (
-			<form
-				onSubmit={e => e.preventDefault()}
-				className={classes.AuthLoginForm}>
-				{Object.keys(this.state.formElem).map(elem => {
-					return (
-						<div key={elem}>
-							<FormInput
-								identifier={elem}
-								elemType={this.state.formElem[elem].elemType}
-								config={this.state.formElem[elem].config}
-								value={this.state.formElem[elem].value}
-								changeHandler={this.changeHandler}
-							/>
-						</div>
-					)
-				})}
-				<AuthButton>Login</AuthButton>
-				<div className={classes.SignupInfo}>
-					<p>Don't have an account?</p>
-					<button
-						className={classes.Signup}
-						onClick={this.props.signupLinkHandler}>
-						sign up
+		return this.props.loading ?
+			<div style={{height: '289px', position: 'relative'}}>
+				<SectionSpinner />
+			</div>
+			:
+			(
+				<form
+					onSubmit={e => e.preventDefault()}
+					className={classes.AuthLoginForm}>
+					{Object.keys(this.state.formElem).map(elem => {
+						return (
+							<div key={elem}>
+								<FormInput
+									identifier={elem}
+									elemType={this.state.formElem[elem].elemType}
+									config={this.state.formElem[elem].config}
+									value={this.state.formElem[elem].value}
+									changeHandler={this.changeHandler}
+								/>
+								{
+									!this.state.formElem[elem].valid ?
+										<ErrorMessage>
+											{this.state.formElem[elem].message}
+										</ErrorMessage>
+										: null
+								}
+							</div>
+						)
+					})}
+					{
+						this.props.errMessage ?
+							<ErrorMessage>{this.props.errMessage}</ErrorMessage>
+							: null
+					}
+					<div className={classes.isResturantCheck}>
+						<input type="checkbox" onChange={this.isResturantHandler} checked={this.state.isResturant} />
+						<label>I'm a resturant!</label>
+					</div>
+					<AuthButton isValid={this.state.formValidity && !this.props.errMessage} clickHandler={this.loginHandler}>
+						Login
+					</AuthButton>
+					<div className={classes.SignupInfo}>
+						<p>Don't have an account?</p>
+						<button
+							type="button"
+							className={classes.Signup}
+							onClick={this.props.signupLinkHandler}>
+							sign up
 					</button>
-				</div>
-			</form>
-		)
+					</div>
+				</form>
+			)
 	}
 }
 
-export default AuthLogin
+const mapStateToProps = state => {
+	return {
+		loading: state.authReducer.loading,
+		errMessage: state.authReducer.error
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onAuthClear: () => dispatch({type: actionTypes.AUTH_CLEAR}),
+		onAuthStart: () => dispatch({type: actionTypes.START_AUTH}),
+		onAuthSuccess: (token, id, isResturant, title) => dispatch({type: actionTypes.AUTH_SUCCESS, token, id, isResturant, title}),
+		onAuthFailed: (error) => dispatch({type: actionTypes.AUTH_FAILED, error})
+	}
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AuthLogin))

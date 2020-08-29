@@ -1,14 +1,14 @@
 import {H} from '../Credentials/Credentials'
 
-function createZone(map, latitude, longitude) {
+function createZone(latitude, longitude) {
 	let circle = new H.map.Circle(
 		{lat: latitude, lng: longitude}, //center
-		100, // Radius in meters
+		10000, // Radius in meters
 		{
 			style: {
-				strokeColor: 'rgba(248,105,50,.5)', // Color of the perimeter
+				strokeColor: 'rgba(248,105,50,0.5)', // Color of the perimeter
 				lineWidth: 3,
-				fillColor: 'rgba(248,105,50,.1)' // Color of the circle
+				fillColor: 'rgba(248,105,50,0.1)' // Color of the circle
 			}
 		}
 	);

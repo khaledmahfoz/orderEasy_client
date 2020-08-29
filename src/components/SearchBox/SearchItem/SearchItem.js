@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import classes from './SearchItem.module.css'
 import LocateIcon from '../../../assets/images/locate_gps2.png'
@@ -9,21 +9,28 @@ import Map from '../../../containers/Map/Map'
 import InputFull from '../../InputFull/InputFull'
 import SearchList from '../SearchItem/SearchList/SearchList'
 import Spinner from '../../UI/Spinner/Spinner'
-import reverseGeocode from '../../../containers/Map/ReverseGeocode/ReverseGeocode'
 import {geocode} from '../../../containers/Map/Geocode/Geocode'
 import {SmallLoadingMenu} from '../../UI/SmallLoading/SmallLoading'
 import {withRouter} from 'react-router-dom'
+import * as actionTypes from '../../../store/actions/actionTypes'
 
 class searchItem extends Component {
+	constructor(props) {
+		super(props)
+		console.log(this.props.coords)
+	}
 	state = {
 		showModal: false,
 		inputVal: '',
 		inputLoading: false,
 		loading: false,
 		locateStatus: false,
-		locked: false,
+		locked: this.props.coords ? true : false,
+		// locked: false,
 		coords: null,
+		choosenCoords: null,
 		suggestedAddressesList: null,
+		invalid: false
 	}
 	closeModal = () => {
 		this.setState({showModal: false, loading: false})
@@ -43,7 +50,7 @@ class searchItem extends Component {
 	}
 
 	locateAddress = () => {
-		this.setState({loading: true})
+		this.setState({loading: true, invalid: false})
 		const geo_success = position => {
 			let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude}
 			this.showCoordsOnMap(true, coords)
@@ -64,31 +71,58 @@ class searchItem extends Component {
 	}
 
 	locateAddressFinished = (address, coords) => {
-		this.setState({inputVal: address, locked: true})
-		this.props.choosenCoordsHandler(coords)
+		if (coords) {
+			this.setState({inputVal: address, locked: true, coords})
+			this.props.choosenCoordsHandler && this.props.choosenCoordsHandler(coords, address)
+		}
 		this.closeModal()
 	}
 
 	unlockInput = () => {
 		this.setState({locked: false, inputVal: '', coords: null})
-		this.props.choosenCoordsHandler(null)
+		// this.props.onSetCoords(null, '')
+		this.props.choosenCoordsHandler && this.props.choosenCoordsHandler(null, '')
 	}
 
 	changeInputHandler = value => {
 		if (this.state.locked) {
 			this.unlockInput()
 		}
-		this.setState({inputVal: value, inputLoading: true})
+		this.setState({inputVal: value, inputLoading: true, invalid: false})
 		geocode(value, cb => {
 			this.setState({suggestedAddressesList: cb.items, inputLoading: false})
 		})
 	}
+
+	findBtnHandler = () => {
+		if (this.props.coords) {
+			this.props.findBtnHandler()
+		} else {
+			this.setState({invalid: true})
+		}
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (prevProps.coords !== this.props.coords) {
+			this.setState({locked: this.props.coords ? true : false})
+		}
+	}
+
 	render() {
 		let indicator
 		if (this.state.locked) {
 			indicator = (
-				<a className={classes.LocateBtn} onClick={this.unlockInput}>
-					X
+				<a style={{textAlign: 'center'}} className={classes.LocateBtn} onClick={this.unlockInput}>
+					<svg style={{
+						width: '75%',
+						height: 'auto',
+						backgroundColor: '#959595',
+						color: 'white',
+						borderRadius: '50%'
+					}} width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+						<path fillRule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z" />
+						<path fillRule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z" />
+					</svg>
 				</a>
 			)
 		} else if (this.state.inputLoading) {
@@ -118,14 +152,16 @@ class searchItem extends Component {
 					/> */}
 					{this.state.locateStatus ? (
 						<Map
-							choosenCoordsHandler={this.choosenCoordsHandler}
 							locateAddressFinished={this.locateAddressFinished}
 							btnValue={this.props.btnValue}
 							isResturant={this.props.isResturant ? this.props.isResturant : false}
+							resturantId={this.props.resturantId ? this.props.resturantId : null}
 							coords={this.state.coords}
 						/>
 					) : (
-							<p>Please give access to your location</p>
+							<p style={{textAlign: 'center'}}>
+								Please give access to your location
+							</p>
 						)}
 				</Modal>
 
@@ -135,9 +171,19 @@ class searchItem extends Component {
 						type='text'
 						placeholder='Please search for your location'
 						onChange={e => this.changeInputHandler(e.target.value)}
-						value={this.state.inputVal}
+						value={this.props.address ? this.props.address : this.state.inputVal}
 						disabled={this.state.locked ? true : false}
 					/>
+					{this.state.invalid ?
+						<div className={classes.InvalidAddress}>
+							<p> please select a place </p>
+							<span onClick={() => this.setState({invalid: false})}>
+								<svg width="1.5rem" height="1.5rem" viewBox="0 0 16 16" className="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+									<path fillRule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z" />
+									<path fillRule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z" />
+								</svg>
+							</span>
+						</div> : null}
 
 					{indicator}
 
@@ -152,8 +198,8 @@ class searchItem extends Component {
 				</div>
 				{
 					!this.props.isResturant ?
-						<button onClick={this.props.findBtnHandler} className={classes.ResturantBtn}>
-							{this.props.btnValue}
+						<button type='button' onClick={this.findBtnHandler} className={classes.ResturantBtn}>
+							{this.props.selectBtnValue}
 						</button>
 						: null
 				}
@@ -161,34 +207,19 @@ class searchItem extends Component {
 		)
 	}
 }
-// const searchItem = props => {
-// 	return (
-// 		<form className={classes.AddressForm} onSubmit={e => e.preventDefault()}>
-// 			<div className={classes.AddressInput}>
-// 				<input
-// 					type='text'
-// 					placeholder='Please search for your location'
-// 					onChange={e => props.suggestAddress(e.target.value)}
-// 					onBlur={props.clearInput}
-// 					value={props.address}
-// 				/>
-// 				{props.smallLoading ? (
-// 					<SmallLoadingMenu color='#f86932' />
-// 				) : (
-// 					<a className={classes.LocateBtn} onClick={props.locateAddress}>
-// 						<img src={LocateIcon} alt='locate' draggable='false' />
-// 					</a>
-// 				)}
 
-// 				{props.address ? (
-// 					<SearchList createMap={props.createMap} suggested={props.suggested} />
-// 				) : null}
-// 			</div>
-// 			<button className={classes.ResturantBtn} onClick={props.clickHandler}>
-// 				{props.btnValue}
-// 			</button>
-// 		</form>
-// 	)
+// const mapStateToProps = state => {
+// 	return {
+// 		choosenCoords: state.coordsReducer.coords,
+// 		address: state.coordsReducer.address
+// 	}
 // }
 
+// const mapDispatchToProps = dispatch => {
+// 	return {
+// 		onSetCoords: (coords, address) => dispatch({type: actionTypes.SET_COORDS, coords: coords, address: address})
+// 	}
+// }
+
+// export default connect(mapStateToProps, mapDispatchToProps)(withRouter(searchItem))
 export default withRouter(searchItem)

@@ -1,11 +1,14 @@
 import React from 'react'
-
 import {Link} from 'react-router-dom'
 
 import classes from './ResturantsItem.module.css'
 
+import StarRatings from 'react-star-ratings'
+import Cash from '../UI/Cash/Cash'
+
 const resturantsItem = props => {
 	let imageUrl = 'http://localhost:8080/' + props.imgUrl
+	console.log(props)
 	return (
 		<div className={classes.Resturants_Item}>
 			<div
@@ -15,13 +18,28 @@ const resturantsItem = props => {
 			</div>
 			<h3 className={classes.Resturants_Title}>{props.title}</h3>
 			<p className={classes.Resturants_Description}>{props.description}</p>
-			<div className={classes.Resturants_Rate}>{props.rate}</div>
+			<div className={classes.Resturants_Rate}>
+				<StarRatings
+					rating={props.rate}
+					starRatedColor="var(--primeColor)"
+					starDimension="1.4rem"
+					starSpacing="1px"
+					numberOfStars={5}
+					name='makeRatings'
+				/>
+				<span>({props.reviewers})</span>
+			</div>
+			<div className={classes.Resturants_Hours}>
+				<p>open Hours</p>
+				<span>2 - 3</span>
+			</div>
 			<div className={classes.Resturants_Payment}>
-				{props.paymentMethod}
+				<p>Payment Methods</p>
+				<span><Cash /></span>
 			</div>
 			<Link
 				className={classes.Resturants_Link}
-				to={{pathname: `/resturant/${props.id}`}}>
+				to={{pathname: `/resturant/${props._id}`}}>
 				view
 			</Link>
 		</div>

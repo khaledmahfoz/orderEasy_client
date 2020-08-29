@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 import SectionSpinner from '../UI/SectionSpinner/SectionSpinner'
 import WrapperCard from '../UI/WrapperCard/WrapperCard'
@@ -36,30 +36,26 @@ const testReviews = [
 ]
 
 class ResturantReviews extends Component {
-	state = {
-		reviews: null,
-		loading: true,
-	}
-	componentDidMount() {
-		this.setState({ reviews: testReviews, loading: false })
-	}
 	render() {
-		let reviewsResult = !this.state.loading ? (
-			this.state.reviews.map(elem => {
-				const { name, rate, time, content } = elem
+		console.log(this.props.reviews)
+		let reviewsResult = this.props.reviews.length ? (
+			this.props.reviews.map(elem => {
+				console.log(elem)
+				const {userId, rate, createdAt, updatedAt, content} = elem
 				return (
 					<ReviewItem
-						key={elem.id}
-						name={name}
+						key={elem._id}
+						name={userId.title}
 						rate={rate}
-						time={time}
+						time={createdAt}
+						updated={updatedAt}
 						content={content}
 					/>
 				)
 			})
 		) : (
-			<SectionSpinner />
-		)
+				<p>no reviews yet</p>
+			)
 		return (
 			<WrapperCard cardTitle='Reviews of this resturant'>
 				{reviewsResult}

@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Route, withRouter} from 'react-router-dom'
+import StarRatings from 'react-star-ratings'
 
 import classes from '../Resturant/Resturant.module.css'
 
@@ -9,15 +10,17 @@ import SearchItem from '../../components/SearchBox/SearchItem/SearchItem'
 import SectionSpinner from '../../components/UI/SectionSpinner/SectionSpinner'
 import InputFull from '../../components/InputFull/InputFull'
 import * as actionTypes from '../../store/actions/actionTypes'
-import * as searchItemCreators from '../../store/actions/searchItem'
 import Modal from '../../components/UI/Modal/Modal'
 import Map from '../Map/Map'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import ResturantReviews from '../../components/ResturantReviews/ResturantReviews'
 import Menu from '../../components/Menu/Menu'
+import {baseUrl} from '../../util/baseUrl'
+import WrapperCard from '../../components/UI/WrapperCard/WrapperCard'
+import Cash from '../../components/UI/Cash/Cash'
 
 const testResturant = {
-	id: 1,
+	_id: 1,
 	title: 'Resturant1',
 	desc:
 		'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
@@ -28,32 +31,99 @@ const testResturant = {
 }
 
 class Resturant extends React.Component {
+	_isMounted = false;
+
 	state = {
 		resturant: null,
 		loading: true,
 		menu: false,
+		showReviews: false,
+		address: '',
+		coords: null,
+		reviews: null
 	}
 
-	static getDerivedStateFromProps(nextProps, prevState) {
-		const query = new URLSearchParams(nextProps.location.search)
-		const menuParam = query.get('menu')
-		if (menuParam !== prevState.menu) {
-			return {
-				menu: menuParam,
-			}
-		}
-		return null
+	// updatedReviewsFinishedHandler = (reviews) => {
+	// 	// this.setState({reviews: reviews})
+	// }
+
+	resturantHandler = () => {
+		fetch(baseUrl + 'resturant/' + this.props.match.params.id)
+			.then(res => {
+				if (res.status !== 200) {
+					this.props.history.replace('/404')
+				}
+				return res.json()
+			})
+			.then(resturant => {
+				console.log(resturant)
+				if (this.props.coords) {
+					fetch(baseUrl + "check-zone/" + this.props.match.params.id, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							coords: this.props.coords
+						})
+					})
+						.then(res => res.json())
+						.then(check => {
+							this.setState({
+								loading: false, resturant, reviews: resturant.reviews, menu: check,
+								coords: check ? this.props.coords : null,
+								address: check ? this.props.address : ''
+							})
+						})
+						.catch(err => console.log(err))
+				} else {
+					this.setState({loading: false, resturant, reviews: resturant.reviews, menu: false})
+				}
+
+			})
+			.catch(err => console.log(err))
 	}
 
 	componentDidMount() {
-		//async code to get resturant data by id and reviews
-		this.setState({
-			resturant: testResturant,
-			loading: false,
+		this.resturantHandler()
+		// this._isMounted = true;
+		// if (this._isMounted) {
+		// }
+	}
+
+	choosenCoordsHandler = (coords, address) => {
+		this.setState({coords, address})
+		this.props.onSetCoords(coords, address)
+	}
+
+	findBtnHandler = () => {
+		this.setState({menu: true})
+		console.log('Menu')
+	}
+
+	menuSwapContentHandler = () => {
+		this.setState(prevState => {
+			return {showReviews: !prevState.showReviews}
 		})
 	}
+
+	componentWillUnmount() {
+		this._isMounted = false;
+	}
+
 	render() {
-		console.log(this.props)
+		let menuSwapContent
+		if (!this.state.showReviews && this.state.menu) {
+			console.log(this.state.resturant)
+			menuSwapContent = (
+				<Menu menu={this.state.resturant.menu} resturantId={this.state.resturant._id} />
+			)
+		} else {
+			menuSwapContent = (
+				<ResturantReviews reviews={this.state.reviews} />
+			)
+		}
+		console.log(this.state.resturant)
 		return this.state.loading ? (
 			<div style={{minHeight: 'calc(100vh - 358px)', position: 'relative'}}>
 				<SectionSpinner />
@@ -62,20 +132,34 @@ class Resturant extends React.Component {
 				<React.Fragment>
 					<header className={classes.Header}>
 						<Hero height='500px'></Hero>
-						<div className={classes.Lip_Section}>
+						<div className={classes.Lip_Section} style={{height: !this.state.menu ? '300px' : 'auto'}}>
 							<div className={classes.Lip_Content}>
-								<div className={classes.Resturant_Img}></div>
+								<div className={classes.Resturant_Img} style={{backgroundImage: `url(${'http://localhost:8080/' + this.state.resturant.imgUrl})`}}>
+								</div>
 								<h3 className={classes.Title}>{this.state.resturant.title}</h3>
-								<p className={classes.Desc}>{this.state.resturant.desc}</p>
-								<div className={classes.Rate}>{this.state.resturant.rate}</div>
-								<p className={classes.Main}>{this.state.resturant.main}</p>
+								<p className={classes.Desc}>{this.state.resturant.description}</p>
+								<div className={classes.Rate}>
+									<StarRatings
+										rating={this.state.resturant.rate}
+										starRatedColor="var(--primeColor)"
+										starDimension="1.4rem"
+										starSpacing="1px"
+										numberOfStars={5}
+										name='makeRatings'
+									/>
+									<span>({this.state.resturant.reviewers})</span>
+									{/* {this.state.resturant.rate} */}
+								</div>
+								<p className={classes.Main}>{this.state.resturant.catagory}</p>
 								<div className={classes.Hours}>
 									<p>open hours</p>
-									<p>{this.state.resturant.openHours}</p>
+									<span>2 - 3</span>
+									{/* <p>{this.state.resturant.openHours}</p> */}
 								</div>
 								<div className={classes.Payment}>
 									<p>payment Methods</p>
-									<div>{this.state.resturant.payment}</div>
+									{/* <div>{this.state.resturant.payment}</div> */}
+									<span><Cash /></span>
 								</div>
 							</div>
 							{!this.state.menu ? (
@@ -85,25 +169,31 @@ class Resturant extends React.Component {
 										onSubmit={e => e.preventDefault()}>
 										<SearchItem
 											btnValue={'Deliver Here'}
-											navigatePath={this.props.match.url + '?menu=true'}
-											btnValue='Menu'
+											selectBtnValue='Menu'
+											choosenCoordsHandler={this.choosenCoordsHandler}
+											findBtnHandler={this.findBtnHandler}
+											resturantId={this.props.match.params.id}
+											address={this.state.address}
+											coords={this.state.coords}
 										/>
 									</form>
 								</div>
 							) : null}
 						</div>
 					</header>
-					{!this.state.menu ? (
-						<Route
-							path={this.props.match.url}
-							render={() => <ResturantReviews id={this.props.match.params.id} />}
-						/>
-					) : (
-							<Route
-								path={this.props.match.url}
-								render={() => <Menu id={this.props.match.params.id} />}
-							/>
-						)}
+					<div className='container' style={{marginTop: 'calc(150px + 4rem)'}}>
+						{!this.state.menu ? (
+							<ResturantReviews reviews={this.state.reviews} />
+						) : (
+								<React.Fragment>
+									<button onClick={this.menuSwapContentHandler}>
+										{!this.state.showReviews ? 'Swap to Reviews !' : 'Swap to Menu !'}
+									</button>
+									{menuSwapContent}
+								</React.Fragment>
+							)}
+
+					</div>
 				</React.Fragment>
 			)
 	}
@@ -111,66 +201,16 @@ class Resturant extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		modal: state.modal,
-		address: state.address,
-		coords: state.coords,
-		suggested: state.suggested,
-		locate: state.locate,
-		loading: state.loading,
-		smallLoading: state.smallLoading,
+		coords: state.coordsReducer.homeCoords,
+		address: state.coordsReducer.homeAddress,
+		// isResturant: state.authReducer.isResturant
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onOpenModal: () => dispatch({type: actionTypes.OPEN_MODAL}),
-		onCloseModal: () => dispatch({type: actionTypes.CLOSE_MODAL}),
-		onLocateAddress: () => dispatch(searchItemCreators.locateAddress()),
-		onSuggestAddress: eventTarget =>
-			dispatch(searchItemCreators.suggestAddress(eventTarget)),
+		onSetCoords: (coords, address) => dispatch({type: actionTypes.SET_HOME_COORDS, coords, address})
 	}
 }
 
-export default withRouter(Resturant)
-{
-	/* {this.props.loading ? <Spinner /> : null}
-				<Modal
-					center
-					show={this.props.modal}
-					closeModal={this.props.onCloseModal}
-					title='Search using Map'>
-					<React.Fragment>
-						<InputFull />
-						{!this.props.locate ? 'sorry' : <Map coords={this.props.coords} />}
-					</React.Fragment>
-				</Modal> */
-}
-{
-	/* <header className={classes.Header}>
-					<Hero height='500px'></Hero>
-					<div className={classes.Lip_Section}>
-					<div className={classes.Lip_Content}>
-							<div className={classes.Resturant_Img}></div>
-							<h3>{this.state.resturant.title}</h3>
-							<p>{this.state.resturant.desc}</p>
-							</div>
-						<div className={classes.Lip_Search}>
-						<SearchItem
-								suggestAddress={this.props.onSuggestAddress}
-								locateAddress={this.props.onLocateAddress}
-								address={this.props.address}
-								suggested={this.props.suggested}
-								createMap={this.props.onLocateAddress}
-								clearInput={this.clearInput}
-								smallLoading={this.props.smallLoading}
-								clickHandler={() => console.log('navigate to menu')}
-								btnValue='Menu'
-							/>
-							<SearchItem
-								clickHandler={() => console.log('navigate to menu')}
-								btnValue='Menu'
-							/>
-							</div>
-							</div>
-						</header> */
-}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Resturant))

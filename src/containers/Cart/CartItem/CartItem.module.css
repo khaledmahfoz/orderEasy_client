@@ -1,0 +1,67 @@
+.CartItem{
+   display: flex;
+   flex-direction: column;
+   margin-bottom: 2rem;
+   padding-bottom: 2rem;
+   border-bottom: 1px solid #ddd;
+}
+.CartItem div{
+   display: flex;
+}
+.CartItemHead {
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 1rem;
+}
+.CartItemHead p, .CartItemHead h6{
+   text-transform: capitalize;
+   margin-bottom: 0;
+   font-weight: bold;
+   color: var(--blackColor);
+}
+.CartItemControl{
+   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.CartItemControl div, .CartItemControl button{
+   background-color: var(--whiteColor);
+   border-color: #ddd;
+   border-style: solid;
+   width: calc(100% / 3);
+   height: 40px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   color: var(--blackColor);
+}
+.CartItemControl button{
+   width: 30%
+}
+.CartItemControl button:disabled{
+   opacity: 0.5;
+   cursor: not-allowed;
+}
+.CartItemControl button:first-of-type{
+   border-top-width: 1px;
+   border-bottom-width: 1px;
+   border-left-width: 1px;
+   border-right-width: 0.5px;
+   border-top-left-radius: 5px;
+   border-bottom-left-radius: 5px;
+}
+.CartItemControl button:last-of-type{
+   border-top-width: 1px;
+   border-bottom-width: 1px;
+   border-right-width: 1px;
+   border-left-width: 0.5px;
+   border-top-right-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+.CartItemControl div{
+   cursor: default;
+   font-size: 1.2rem;
+   width: 40%;
+   border-top-width: 1px;
+   border-bottom-width: 1px;
+   border-right-width: 0.5px;
+   border-left-width: 0.5px;
+}

@@ -1,0 +1,45 @@
+.controllBtn{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+.controllBtn span{
+   cursor: pointer;
+   font-size: 1.4rem;
+}
+
+.controllBtn span:first-child{
+   color: #ff9800;
+   /* color: var(--yellow); */
+   margin-right: 3rem;
+}
+
+.controllBtn span:last-child{
+   color: var(--red);
+}
+
+.BtnsWrapper{
+   display: flex;
+   align-items: center;
+}
+
+.BtnsWrapper button:disabled{
+   cursor: not-allowed;
+   opacity: 0.75;
+}
+.BtnsWrapper button{
+   width: 200px;
+   height: 50px;
+   margin-right: 1rem;
+   border-radius: 5px;
+   font-size: 1rem;
+}
+.BtnsWrapper button:first-of-type{
+   background-color: var(--greenColor);
+   color: var(--whiteColor);
+}
+.BtnsWrapper button:last-of-type{
+   background-color: var(--whiteColor);
+   color: var(--primeColor);
+   border: 1px solid var(--primeColor);
+}

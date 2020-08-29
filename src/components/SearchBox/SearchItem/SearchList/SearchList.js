@@ -15,6 +15,8 @@ const searchList = props => {
 				lat = elem.position.lat
 				lng = elem.position.lng
 			}
+			console.log(elem)
+			console.log(countryName, county, city)
 			// position: {lat: 30.78166, lng: 30.99566}
 			const coords = {
 				latitude: lat,
@@ -22,7 +24,7 @@ const searchList = props => {
 			}
 			let searchListResult = elem.position ? (
 				<li onClick={() => props.createMap(true, coords)} key={elem.id}>
-					<a onClick={() => props.createMap(true, coords)}>
+					<a>
 						<strong>{elem.title}</strong>
 						<div>
 							{countryName ? elem.address.countryName + ',' : null}
@@ -35,7 +37,7 @@ const searchList = props => {
 			return searchListResult
 		})
 	} else {
-		list = <li>can't find your address</li>
+		list = <li>No Results Found</li>
 	}
 	return props.suggested !== null ? (
 		<ul className={classes.SearchList}>{list}</ul>

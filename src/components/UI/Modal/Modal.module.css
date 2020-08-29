@@ -14,7 +14,7 @@
 	align-items: flex-start;
 	background-color: var(--whiteColor);
 	border-bottom: 2px solid var(--greyColor3);
-	margin-bottom: 1rem;
+	/* margin-bottom: 1rem; */
 }
 .Info button {
 	border: none;

@@ -8,12 +8,26 @@ const formInput = props => {
 		case 'input':
 			inputElem = (
 				<input
-					className={`form-control ${classes.Input}`}
+					className={'form-control ' + classes.Input}
 					type='input'
 					{...props.config}
 					value={props.value}
 					onChange={event =>
-						props.changeHandler(event.target.value, props.identifier)
+						props.changeHandler(event.target.value, props.identifier, props.formElem)
+					}
+				/>
+			)
+			break
+		case 'file':
+			inputElem = (
+				<input
+					name="imageUrl"
+					style={{display: 'none'}}
+					type='file'
+					filename={props.value}
+					ref={props.reference}
+					onChange={event =>
+						props.changeHandler(event.target.files[0] ? event.target.files[0] : null, props.identifier, props.formElem)
 					}
 				/>
 			)
@@ -23,15 +37,17 @@ const formInput = props => {
 				<textarea
 					className={`form-control ${classes.Textarea}`}
 					value={props.value}
+					{...props.config}
 					onChange={event =>
-						props.changeHandler(event.target.value, props.identifier)
+						props.changeHandler(event.target.value, props.identifier, props.formElem)
 					}
 				/>
 			)
 			break
 		case 'select':
 			inputElem = (
-				<select className={`custom-select ${classes.select}`} onChange={e => props.changeCatagory(e.target.value)}>
+				<select className={`custom-select ${classes.select}`} onChange={event =>
+					props.changeHandler(event.target.value, props.identifier, props.formElem)}>
 					{props.config.options.map(elem => (
 						<option key={elem.value}>{elem.value}</option>
 					))}
@@ -46,7 +62,7 @@ const formInput = props => {
 					{...props.config}
 					value={props.value}
 					onChange={event =>
-						props.changeHandler(event.target.value, props.identifier)
+						props.changeHandler(event.target.value, props.identifier, props.formElem)
 					}
 				/>
 			)

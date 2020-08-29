@@ -1,0 +1,25 @@
+.ControllBanel{
+   display: flex;
+   /* justify-content: center; */
+   align-items: center;
+}
+
+.AddBtn, .EditBtn{
+   width: 200px;
+   height: 50px;
+   margin-bottom: 1.5rem;
+   border-radius: 5px;
+   font-size: 1.2rem;
+}
+.AddBtn{
+   background: var(--greenColor);
+   border: 1px solid var(--greenColor);
+   color: var(--whiteColor);
+   margin-right: 1rem;
+}
+.EditBtn{
+   border: 1px solid var(--primeColor);
+   background-color: var(--whiteColor);
+   /* background: var(--primeColor); */
+   color: var(--primeColor);
+}

@@ -5,6 +5,18 @@
 .AuthLoginForm div{
 	margin-bottom: 0.8rem;
 }
+.isResturantCheck{
+	margin-top: 0.5rem !important;
+    margin-bottom: 0 !important;
+}
+.isResturantCheck label {
+	font-size: 1.1rem;
+	margin-bottom: 0;
+	color: var(--darkColor);
+}
+.isResturantCheck input {
+	margin-right: 0.5rem;
+}
 .LoginBtn {
 	background-color: var(--primeColor);
 	color: var(--whiteColor);

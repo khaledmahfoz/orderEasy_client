@@ -2,19 +2,15 @@
 	display: grid;
 	height: 300px;
 	padding: 0 5rem;
-	/* width: 1000px; */
-	background-color: var(--whiteColor);
-	margin: 1rem;
+	margin: 4rem 1rem;
 	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 	border-radius: 10px;
-	grid-template-columns: repeat(3, auto);
-	gap: 0px 10rem;
 	grid-template-areas:
 		' image title rate '
 		' image description hours '
 		' image link payment ';
 	align-items: center;
-	justify-items: center;
+	justify-items: left;
 	align-content: center;
 }
 .Resturants_Image {
@@ -28,9 +24,15 @@
 
 .Resturants_Title {
 	grid-area: title;
+	color: var(--blackColor);
+	font-weight: bold;
+	text-transform: capitalize;
 }
 .Resturants_Description {
 	grid-area: description;
+	color: #3c3c3c;
+	font-size: 1.1rem;
+	/* font-weight: bold; */
 }
 .Resturants_Link {
 	grid-area: link;
@@ -40,6 +42,23 @@
 }
 .Resturants_Payment {
 	grid-area: payment;
+	align-self: baseline;
+}
+
+.Resturants_Hours p, .Resturants_Payment p {
+	margin-bottom: 0.5rem;
+	font-weight: bold;
+	color: #555555
+}
+
+.Resturants_Hours {
+	grid-area: hours;
+}
+
+.Resturants_Payment svg{
+	width: 1.7rem;
+	height: auto;
+	color: var(--primeColor);
 }
 .Resturants_Link {
 	color: var(--whiteColor);

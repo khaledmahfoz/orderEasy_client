@@ -9,21 +9,10 @@ const searchBox = props => {
 	return (
 		<div className={classes.SearchBox}>
 			<h1>All the food you love in one place</h1>
-			{/* <SearchItem
-				suggestAddress={props.suggestAddress}
-				locateAddress={props.locateAddress}
-				address={props.address}
-				suggested={props.suggested}
-				createMap={props.createMap}
-				clearInput={props.clearInput}
-				smallLoading={props.smallLoading}
-				clickHandler={() => props.history.push('/resturants')}
-				btnValue='Find Resturants'
-			/> */}
 			<form
 				className={classes.AddressForm}
 				onSubmit={e => e.preventDefault()}>
-				<SearchItem findBtnHandler={props.findBtnHandler} choosenCoordsHandler={props.choosenCoordsHandler} btnValue={'Deliver Here'} navigatePath='/resturants' btnValue='Find Resturants' />
+				<SearchItem coords={props.coords} address={props.address} choosenCoordsHandler={props.choosenCoordsHandler} findBtnHandler={props.findBtnHandler} btnValue={'Deliver Here'} navigatePath='/resturants' selectBtnValue='Find Resturants' />
 			</form>
 		</div>
 	)

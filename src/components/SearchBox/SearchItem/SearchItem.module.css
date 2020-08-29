@@ -6,6 +6,24 @@
 	position: relative;
 	display: flex;
 }
+.InvalidAddress{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: var(--primeColor);
+	color: var(--whiteColor);
+	text-transform: capitalize;
+	padding: 0.5rem 1rem;
+	position: absolute;
+	top: 110%;
+	width: 100%;
+}
+.InvalidAddress p{
+	margin: 0;
+}
+.InvalidAddress span{
+	cursor: pointer;
+}
 .AddressInputStyle {
 	outline: none;
 	background-color: #ffffff;
@@ -27,6 +45,9 @@
 	border: none;
 	font-size: 1.5rem;
 	padding: 8px 15px;
+}
+.ResturantBtn:disabled{
+	background-color: #ec7a4c;
 }
 .ResturantBtn:hover {
 	text-decoration: none;

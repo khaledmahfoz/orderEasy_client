@@ -3,8 +3,8 @@ import React from 'react'
 const plus = props => {
 	return (
 		<svg
-			width='2.2rem'
-			height='2.2rem'
+			width={props.size}
+			height={props.size}
 			viewBox='0 0 16 16'
 			className='bi bi-plus'
 			fill='currentColor'

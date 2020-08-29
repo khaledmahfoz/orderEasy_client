@@ -1,0 +1,38 @@
+.MenuForm{
+   margin: 0;
+   padding: 2rem 0;
+}
+.MenuForm button:disabled{
+   cursor: not-allowed;
+   opacity: 0.75;
+}
+.MenuForm button, .customBtn{
+   width: 200px;
+   height: 50px;
+   margin-right: 1rem;
+   border-radius: 5px;
+   font-size: 1rem;
+}
+.MenuForm button:first-of-type, .greenBtn{
+   background-color: var(--greenColor);
+   color: var(--whiteColor);
+}
+.MenuForm button:last-of-type{
+   background-color: var(--whiteColor);
+   color: var(--primeColor);
+   border: 1px solid var(--primeColor);
+}
+.controllBtn{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.ReviewBlock{
+   margin-bottom: 1rem;
+}
+.ReviewBlock label{
+   font-size: 1.2rem;
+   display: block;
+   color: var(--blackColor);
+}

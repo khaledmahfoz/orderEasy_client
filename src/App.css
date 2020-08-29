@@ -1,5 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+/* ::-webkit-scrollbar {
+	width: 10px;
+ }
+ 
+ ::-webkit-scrollbar-track {
+	background: #f1f1f1; 
+ }
+  
+ ::-webkit-scrollbar-thumb {
+	background: #888; 
+ }
+ 
+ ::-webkit-scrollbar-thumb:hover {
+	background: #555; 
+ } */
+
 .App {
 	font-family: 'Roboto', sans-serif;
 }
@@ -11,6 +27,11 @@
 .App * {
 	border: none;
 }
+
+.App .pointer{
+	cursor: pointer;
+}
+
 :root {
 	--primeColor: #f86932;
 	--whiteColor: #ffffff;

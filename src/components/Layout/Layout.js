@@ -4,7 +4,7 @@ import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
 
 const layout = props => {
-   return(
+   return (
       <React.Fragment>
          <Navbar />
          <main>{props.children}</main>

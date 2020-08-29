@@ -4,19 +4,39 @@
 	border-radius: 5px;
 	margin-bottom: 2.5rem;
 	padding: 2rem;
-	min-height: 180px;
+	height: 210px;
+	overflow: auto;
+	word-break: break-all;
 }
+
+.ReviewItem::-webkit-scrollbar {
+	width: 10px;
+}
+
+.ReviewItem::-webkit-scrollbar-track {
+	background: var(--greyColor3);
+}
+
+.ReviewItem::-webkit-scrollbar-thumb {
+	border-radius: 5px;
+   background: var(--primeColor); 
+}
+
+
 .ReviewItem > div:first-child {
 	margin-bottom: 1rem;
+	font-weight: bold;
 }
-.ReviewItem > div:first-child > span:first-of-type {
-	margin-right: 1rem;
-	font-size: 1.3rem;
+.ReviewItem > div:first-child > p:first-of-type {
+	/* margin-right: 1rem; */
+	margin-bottom: 0.5rem;
+	font-size: 1.2rem;
 }
-.ReviewItem > div:first-child > span {
-	color: #777777;
+.ReviewItem > div:first-child > p {
+	color: var(--blackColor);
+	margin: 0;
 }
 .ReviewItem > div:last-child {
-	color: #2b2b2b;
-	font-size: 1.2rem;
+	color: var(--blackColor);
+	font-size: 1.1rem;
 }

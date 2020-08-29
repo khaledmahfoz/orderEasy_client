@@ -1,0 +1,36 @@
+.Cart, .CartEmpty{
+   padding: 2rem 3rem;
+   min-height: 200px;
+   max-height: 400px;
+   overflow-y: auto;
+}
+
+.Cart::-webkit-scrollbar {
+   width: 10px;
+}
+ 
+.Cart::-webkit-scrollbar-track {
+   background: #f1f1f1; 
+}
+
+.Cart::-webkit-scrollbar-thumb {
+   background: var(--primeColor); 
+}
+
+.CartEmpty{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   color: #afafaf;
+}
+
+.CartEmpty h4{
+   margin-bottom: 0 !important;
+}
+
+.CartEmpty svg{
+   width: 4rem;
+   height: auto;
+   margin-bottom: 1rem;
+}
