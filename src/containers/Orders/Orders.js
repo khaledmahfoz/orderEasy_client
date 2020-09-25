@@ -5,20 +5,15 @@ import {Link, Route} from 'react-router-dom'
 import MenuForm from '../MenuForm/MenuForm'
 import OrderItem from './OrderItem/OrderItem'
 import {baseUrl} from '../../util/baseUrl'
+import SectionSpinner from '../../components/UI/SectionSpinner/SectionSpinner'
+
+import classes from './Orders.module.css'
 
 class Order extends Component {
    state = {
       orders: null,
       loading: false,
-      // addReviewLoading: false
    }
-
-   // {!this.state.itemEditLoading
-   //    ? 'submit'
-   //    : <span className={classes.controllBtn}><SmallLoading color="var(--whiteColor)" /></span>
-   // }
-
-
 
    componentDidMount() {
       this.setState({loading: true})
@@ -31,20 +26,18 @@ class Order extends Component {
       })
          .then(res => res.json())
          .then(orders => {
-            console.log(orders)
             this.setState({loading: false, orders})
          })
          .catch(err => console.log(err))
 
    }
    render() {
-      let content = <div>No order here</div>
+      let content = <div style={{height: '100vh', minHeight: '300px', fontSize: '2rem'}} className="w-100 d-flex justify-content-center align-items-center">No orders here</div>
       if (this.state.orders && this.state.orders.length) {
          content = (
             <div className="container">
-               <ul>
+               <ul className={classes.OrdersList}>
                   {this.state.orders.map(elem => {
-                     console.log(elem)
                      return (
                         <OrderItem
                            key={elem._id}
@@ -65,7 +58,7 @@ class Order extends Component {
          <div>
             {
                this.state.loading
-                  ? <h2>Loading</h2>
+                  ? <div style={{height: '100vh', minHeight: '300px', position: 'relative'}}><SectionSpinner color="var(--primeColor)" /></div>
                   : content
             }
          </div>

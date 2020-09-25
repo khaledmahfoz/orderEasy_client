@@ -14,6 +14,7 @@ import cartReducer from './store/reducers/cart'
 import menuFormReducer from './store/reducers/MenuForm'
 import menuFormItemReducer from './store/reducers/MenuFormItem'
 import menuFormReviewReducer from './store/reducers/MenuFormReview'
+import errorHandlerReducer from './store/reducers/errorHandler'
 
 const rootReducer = combineReducers({
 	authReducer: authReducer,
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
 	cartReducer: cartReducer,
 	menuFormReducer: menuFormReducer,
 	menuFormItemReducer: menuFormItemReducer,
-	menuFormReviewReducer: menuFormReviewReducer
+	menuFormReviewReducer: menuFormReviewReducer,
+	errorHandlerReducer: errorHandlerReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

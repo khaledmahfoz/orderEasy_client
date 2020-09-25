@@ -1,0 +1,29 @@
+.SideNav{
+   position: fixed;
+   left: 0;
+   top: 0;
+   transform: translateX(-100%);
+   height: 100vh;
+   width: 70%;
+   background-color: var(--primeColor);
+   color: var(--whiteColor);
+   list-style: none;
+   z-index: 9999;
+   transition: 0.2s;
+   padding: 2rem;
+   max-width: 300px;
+}
+.SideNav li{
+   margin-bottom: 1rem;
+}
+.SideNav li a{
+   color: var(--whiteColor);
+}
+.SideNav li a:active, .SideNav li a:hover{
+   text-decoration: none;
+}
+.Title{
+   margin-bottom: 1.8rem;
+   font-size: 1.8rem;
+   font-weight: bold;
+}

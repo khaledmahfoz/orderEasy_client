@@ -130,6 +130,7 @@ class MenuForm extends Component {
                   console.log(res)
                   this.props.menuLoadingHandler()
                   this.props.closeEditHandler() //added
+                  this.props.alreadyReviewed()
                   // this.props.updatedFinishedHandler(res)
                   this.clearFields()
                })
@@ -204,7 +205,7 @@ class MenuForm extends Component {
                   </div>
                )
             })}
-            <div className="d-flex align-items-center">
+            <div className={classes.BtnsGroup}>
                {/* <button disabled={!this.state.formValidity}>
                   {
                      !this.props.review

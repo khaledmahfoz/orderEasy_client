@@ -41,6 +41,33 @@ label,
 .isResturantCheck input {
 	margin-right: 0.5rem;
 }
+
+@media(max-width: 575.85px){
+	.AuthSignupForm{
+		padding: 0 1rem;
+	}
+}
+
+@media(max-width: 767.85px){
+	.AuthSignupForm{
+		width: 100%;
+		margin: auto;
+		max-width: 500px;
+		padding: 0 2rem;
+	}
+	label,
+	.imgFileLabel,
+	.isResturantHead p {
+		font-size: 1rem;
+	}
+	.AuthSignupForm input, .AuthSignupForm select, .AuthSignupForm textArea{
+		padding: 0.5rem;
+	}
+	.AuthSignupForm {
+		font-size: 0.7rem;
+	}
+}
+
 /* .divFile {
 	margin-bottom: 2rem;
 }

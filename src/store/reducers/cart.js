@@ -2,11 +2,13 @@ import * as actionTypes from '../actions/actionTypes'
 
 let intialState = {
 	cart: [],
+	loading: false
 }
 
 const reducer = (state = intialState, action) => {
 	switch (action.type) {
 		case actionTypes.SET_CART:
+			console.log(action.cart)
 			// localStorage.setItem("cart", JSON.stringify(action.cart))
 			return {
 				...state,
@@ -57,6 +59,7 @@ const reducer = (state = intialState, action) => {
 			})
 			if (targetDel) {
 				let updatedCart = [...state.cart]
+				console.log(updatedCart[targetDelIndex].quantity)
 				if (updatedCart[targetDelIndex].quantity > 1) {
 					updatedCart[targetDelIndex].quantity -= 1
 					localStorage.setItem("cart", JSON.stringify(updatedCart))
@@ -71,6 +74,11 @@ const reducer = (state = intialState, action) => {
 			return {
 				...state,
 				cart: []
+			}
+		case actionTypes.CART_LOADING:
+			return {
+				...state,
+				loading: !state.loading
 			}
 		default:
 			return {

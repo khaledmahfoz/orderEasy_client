@@ -9,7 +9,6 @@ import Modal from '../UI/Modal/Modal'
 import AuthLogin from '../AuthLogin/AuthLogin'
 import Cart from '../../containers/Cart/Cart'
 import Dropdown from '../Dropdown/Dropdown'
-// import Bag from '../../assets/images/Bag.png'
 import Bag from '../UI/Bag/Bag'
 
 class Navbar extends Component {
@@ -18,7 +17,7 @@ class Navbar extends Component {
 		title: '',
 		checkSwap: false,
 		showDropdownMenu: false,
-		dropdownRef: null
+		dropdownRef: null,
 	}
 
 	openModal = title => {
@@ -27,11 +26,6 @@ class Navbar extends Component {
 
 	closeModal = () => {
 		this.setState({showModal: false})
-	}
-
-	signupLinkHandler = () => {
-		this.closeModal()
-		this.props.history.push('/signup')
 	}
 
 	logoutHandler = () => {
@@ -64,7 +58,6 @@ class Navbar extends Component {
 	closeDropdownMenu = (e) => {
 		let dropdownRef = this.state.dropdownRef
 		if (!dropdownRef.contains(e.target) && e.target.id.toString() !== 'menuBtn') {
-			// this.setState({showDropdownMenu: false})
 			this.forceCloseDropdownMenu()
 		}
 	}
@@ -83,19 +76,19 @@ class Navbar extends Component {
 
 	render() {
 		let content
-		if (this.state.title === 'Sign in') {
+		if (this.state.title === 'Sign in' && !this.props.Authenticated
+		) {
 			content = (
 				<AuthLogin
 					showModal={this.state.showModal}
-					signupLinkHandler={this.signupLinkHandler}
+					showModalHandler={this.showModalHandler}
 					swipeContent={this.swipeContent}
 					checkSwap={this.state.checkSwap}
 					checkSwapHandler={this.checkSwapHandler}
-					showModalHandler={this.showModalHandler}
 				/>
 			)
 		} else {
-			content = <Cart closeModal={this.closeModal} swipeContent={this.swipeContent} />
+			content = <Cart swipeContent={this.swipeContent} closeModal={this.closeModal} />
 		}
 		return (
 			<React.Fragment>
@@ -103,7 +96,7 @@ class Navbar extends Component {
 					<div className={classes.Logo}>
 						{
 							this.props.isResturant
-								? <Link to={`/my-resturant/${this.props.id}/`}>
+								? <Link to={'/my-resturant/' + this.props.id}>
 									My Resturant
 									</Link>
 								: <Link to='/'>Home</Link>
@@ -157,10 +150,6 @@ class Navbar extends Component {
 								&& (
 									<li>
 										<button onClick={() => this.openModal('Cart')}>
-											{/* <img src={Bag} style={{
-												width: '2rem',
-												height: 'auto'
-											}} /> */}
 											<Bag />
 										</button>
 									</li>
@@ -168,16 +157,23 @@ class Navbar extends Component {
 							}
 						</ul>
 					</div>
+					<div className={classes.BurgerIcon} onClick={this.props.toggleSideNav}>
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
 				</div>
 				{
 					!this.props.isResturant
 					&& (
-						<Modal
-							title={this.state.title}
-							show={this.state.showModal}
-							closeModal={this.closeModal}>
-							{content}
-						</Modal>
+						<div className={classes.ModalContent}>
+							<Modal
+								title={this.state.title}
+								show={this.state.showModal}
+								closeModal={this.closeModal}>
+								{content}
+							</Modal>
+						</div>
 					)
 				}
 			</React.Fragment>
@@ -191,7 +187,8 @@ const mapStateToProps = state => {
 		Authenticated: state.authReducer.token !== null,
 		isResturant: state.authReducer.isResturant,
 		title: state.authReducer.title,
-		id: state.authReducer.id
+		id: state.authReducer.id,
+		// cart: state.cartReducer.cart
 	}
 }
 

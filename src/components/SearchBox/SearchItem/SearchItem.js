@@ -17,7 +17,6 @@ import * as actionTypes from '../../../store/actions/actionTypes'
 class searchItem extends Component {
 	constructor(props) {
 		super(props)
-		console.log(this.props.coords)
 	}
 	state = {
 		showModal: false,

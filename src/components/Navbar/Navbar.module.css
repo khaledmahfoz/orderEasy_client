@@ -34,3 +34,38 @@
 .List ul li {
 	margin: 0 1rem;
 }
+
+.BurgerIcon{
+	display: none;
+}
+
+@media (max-width: 768px) { 
+	.Navbar{
+		padding: 0 2rem;
+	}
+	.List{
+		display: none;
+	}
+	.BurgerIcon{
+		display: block;
+		cursor: pointer;
+	}
+	.BurgerIcon span{
+		display: block;
+		width: 30px;
+ 	 	height: 3px;
+  		background-color: var(--primeColor);
+		margin: 5px 0;
+	}
+	.ModalContent{
+		display: none;
+	}	
+}
+ 
+ @media (max-width: 992px) { 
+ 
+  }
+ 
+ @media (max-width: 1200px) { 
+ 
+  }

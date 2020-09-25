@@ -36,3 +36,26 @@
    display: block;
    color: var(--blackColor);
 }
+form label{
+   font-weight: normal !important;
+}
+
+.BtnsGroup{
+   display: flex;
+   align-items: center;
+}
+
+@media(max-width: 575.85px){
+   .BtnsGroup{
+      justify-content: space-between;
+   }
+   .BtnsGroup button{
+      width: 50%;
+   }
+}
+
+@media(max-width: 767.85px){
+   .MenuForm{
+      padding: 1rem;
+   }
+}

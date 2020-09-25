@@ -1,58 +1,29 @@
 .Resturants_Item {
-	display: grid;
-	height: 300px;
-	padding: 0 5rem;
-	margin: 4rem 1rem;
 	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 	border-radius: 10px;
-	grid-template-areas:
-		' image title rate '
-		' image description hours '
-		' image link payment ';
-	align-items: center;
-	justify-items: left;
-	align-content: center;
 }
 .Resturants_Image {
 	width: 300px;
 	height: 200px;
 	background-color: #eeeeee;
-	grid-area: image;
 	background-size: cover;
 	background-position: center center;
 }
 
 .Resturants_Title {
-	grid-area: title;
 	color: var(--blackColor);
 	font-weight: bold;
 	text-transform: capitalize;
 }
 .Resturants_Description {
-	grid-area: description;
 	color: #3c3c3c;
 	font-size: 1.1rem;
-	/* font-weight: bold; */
-}
-.Resturants_Link {
-	grid-area: link;
-}
-.Resturants_Rate {
-	grid-area: rate;
-}
-.Resturants_Payment {
-	grid-area: payment;
-	align-self: baseline;
 }
 
 .Resturants_Hours p, .Resturants_Payment p {
 	margin-bottom: 0.5rem;
 	font-weight: bold;
 	color: #555555
-}
-
-.Resturants_Hours {
-	grid-area: hours;
 }
 
 .Resturants_Payment svg{
@@ -70,4 +41,101 @@
 .Resturants_Link:hover {
 	text-decoration: none;
 	color: var(--whiteColor);
+}
+
+@media (max-width: 575.98px) { 
+	.Resturants_Item{
+		padding: 1rem 0.5rem;
+	}
+}
+
+
+
+@media (max-width: 991.98px) { 
+	.Resturants_Item{
+		width: 100%;
+		max-width: 400px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding: 1rem 2rem;
+		margin: 2rem auto;
+	}
+	.Resturants_Link {
+		margin-top: 1rem;
+		width: 100%;
+		text-align: center;
+		font-size: 1.4rem;
+		height: 50px;
+		line-height: 40px;
+		align-self: center;
+	}
+	.Resturants_Image {
+		width: 100%;
+		max-width: 300px;
+		max-height: 300px;
+		align-self: center;
+	}
+	.Resturants_Description {
+		margin-bottom: 0 !important;
+	}
+	.Resturants_Hours p, .Resturants_Payment p {
+		font-weight: bold;
+		color: #555555
+	}
+	.Resturants_Rate {
+		margin-bottom: 1rem;
+	}
+	.Separator{
+		width: 100%;
+		height: 2px;
+		background-color: var(--greyColor3);
+		margin-bottom: 1rem;
+	}
+}
+
+
+@media (min-width: 992px){ 
+	.Resturants_Item {
+		display: grid;
+		width: 100%;
+		max-width: 1000px;
+		height: 300px;
+		/* padding: 0 5rem; */
+		margin: 4rem auto;
+		grid-template-areas:
+			' image title rate '
+			' image description hours '
+			' image link payment ';
+		align-items: center;
+		justify-items: left;
+		align-content: center;
+	}
+	.Resturants_Image {
+		width: 300px;
+		height: 200px;
+		grid-area: image;
+	}
+	
+	.Resturants_Title {
+		grid-area: title;
+	}
+	.Resturants_Description {
+		grid-area: description;
+		font-weight: bold;
+	}
+	.Resturants_Link {
+		grid-area: link;
+	}
+	.Resturants_Rate {
+		grid-area: rate;
+	}
+	.Resturants_Payment {
+		grid-area: payment;
+		align-self: baseline;
+	}
+	.Resturants_Hours {
+		grid-area: hours;
+	}
+	
 }

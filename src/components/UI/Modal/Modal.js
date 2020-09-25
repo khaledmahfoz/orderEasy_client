@@ -14,13 +14,19 @@ const ModalCenter = styled.div`
 	background-color: var(--whiteColor);
 	width: 600px;
 	z-index: 999;
+	@media (max-width: 768px) { 
+		width: 95%;
+		height: auto;
+		max-width: 600px;
+	}
+	
 `
 
 const ModalRight = styled.div`
 	position: absolute;
 	top: 0px;
 	right: 0;
-	transform: ${props => (props.show ? 'translateY(0)' : 'translateY(-100vh)')};
+	transform: ${props => (props.show ? 'translateY(0)' : 'translateY(-100%)')};
 	background-color: var(--whiteColor);
 	width: 450px;
 	z-index: 999;
@@ -35,7 +41,7 @@ const modal = props => {
 				<div className={classes.Info}>
 					<h3>{props.title}</h3>
 					<button onClick={props.closeModal}>
-						<img style={{ width: '20px' }} src={close} alt='close' />
+						<img style={{width: '20px'}} src={close} alt='close' />
 					</button>
 				</div>
 				{props.children}
@@ -49,7 +55,7 @@ const modal = props => {
 				<div className={classes.Info}>
 					<h3>{props.title}</h3>
 					<button onClick={props.closeModal}>
-						<img style={{ width: '20px' }} src={close} alt='close' />
+						<img style={{width: '20px'}} src={close} alt='close' />
 					</button>
 				</div>
 				{props.children}

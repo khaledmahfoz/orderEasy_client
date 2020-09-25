@@ -6,6 +6,7 @@ import Hero from '../../components/Hero/Hero'
 import SearchBox from '../../components/SearchBox/SearchBox'
 import OrderTutorial from '../../components/OrderTutorial/OrderTutorial'
 import * as actionTypes from '../../store/actions/actionTypes'
+import classes from './HomeSearch.module.css'
 
 class homeSearch extends React.Component {
 	// state = {
@@ -26,7 +27,7 @@ class homeSearch extends React.Component {
 		console.log(this.props.address, this.props.coords)
 		return (
 			<React.Fragment>
-				<Hero height='80vh'>
+				<Hero classes={classes.Hero_Config}>
 					<SearchBox choosenCoordsHandler={this.choosenCoordsHandler} findBtnHandler={this.findBtnHandler} address={this.props.address} coords={this.props.coords} />
 				</Hero>
 				<OrderTutorial />

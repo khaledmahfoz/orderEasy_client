@@ -16,6 +16,7 @@ const resturantsItem = props => {
 				style={{backgroundImage: `url(${imageUrl})`}}
 			>
 			</div>
+			<div className={classes.Separator}></div>
 			<h3 className={classes.Resturants_Title}>{props.title}</h3>
 			<p className={classes.Resturants_Description}>{props.description}</p>
 			<div className={classes.Resturants_Rate}>

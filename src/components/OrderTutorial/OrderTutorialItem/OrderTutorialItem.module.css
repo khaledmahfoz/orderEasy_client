@@ -1,7 +1,7 @@
 .OrderTutorialItem {
 	background-color: #ffffff;
-	width: 350px;
-	height: 350px;
+	width: 400px;
+	height: 400px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -18,9 +18,35 @@
 	margin-top: 2rem;
 	font-size: 1.3rem;
 }
-/* @media only screen and (min-width: 780px) and (max-width: 1150px) {
-   .OrderTutorialItem{
-      width: 300px;
-      height: 300px;
-   }
-} */
+
+@media (max-width: 575.85px) { 
+	.OrderTutorialItem{
+		width: 280px;
+		height: 280px;
+	}
+	.OrderTutorialItem img {
+		width: 90px;
+		height: auto;
+	}
+}
+
+@media (min-width: 576px) and (max-width: 991.85px) { 
+	.OrderTutorialItem{
+		width: 400px;
+		height: 400px;
+	}
+	.OrderTutorialItem img {
+		height: 80px;
+	} 
+}
+ 
+ @media (min-width: 992px) and (max-width: 1399.98px) { 
+	.OrderTutorialItem{
+		width: 270px;
+		height: 270px;
+	}
+	.OrderTutorialItem img {
+		height: 60px;
+	}
+}
+ 

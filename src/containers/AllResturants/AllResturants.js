@@ -42,9 +42,7 @@ class AllResturants extends React.Component {
             return <ResturantsItem {...elem} key={elem._id} />
          })
          resturantsResult = (
-            <div className="container" style={{
-               padding: '2rem'
-            }}>
+            <div className="container">
                {resturantsArr}
             </div>
          )

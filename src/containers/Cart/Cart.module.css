@@ -3,6 +3,8 @@
    min-height: 200px;
    max-height: 400px;
    overflow-y: auto;
+   /* max-width: 500px;
+   margin: auto; */
 }
 
 .Cart::-webkit-scrollbar {
@@ -33,4 +35,14 @@
    width: 4rem;
    height: auto;
    margin-bottom: 1rem;
+}
+
+.CartConfig{
+   width: 100%;
+   max-width: 500px;
+   margin: auto;
+   height: auto;
+   max-height: 100%;
+   overflow: hidden;
+   padding: 4rem 2rem;
 }

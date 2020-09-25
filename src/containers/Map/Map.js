@@ -83,14 +83,11 @@ class Map extends React.Component {
 			.catch(err => console.log(err))
 	}
 
-	dragEndHandler = (map, circleElem, marker) => {
+	dragEndHandler = (map, circleElem) => {
 		this.setState({dragLoading: true})
 		let coords = map.getCenter()
+		map.setCenter(coords)
 		coords = {latitude: coords.lat, longitude: coords.lng}
-
-		console.log(coords)
-
-		marker.setGeometry({lat: coords.latitude, lng: coords.longitude})
 
 		circleElem && circleElem.setCenter({lat: coords.latitude, lng: coords.longitude})
 
@@ -137,16 +134,6 @@ class Map extends React.Component {
 		circleElem = createZone(this.props.coords.latitude, this.props.coords.longitude)
 		map.addObject(circleElem)
 
-		// let pngIcon = new H.map.Icon("https://cdn0.iconfinder.com/data/icons/daily-boxes/150/phone-box-32.png");
-
-		let markerIcon = new H.map.Icon(Marker, {size: {w: 15, h: 30}});
-
-		let marker = new H.map.Marker({lat: this.props.coords.latitude, lng: this.props.coords.longitude}, {
-			icon: markerIcon
-		})
-
-		map.addObject(marker)
-
 		if (this.props.isResturant) {
 			reverseGeocode(this.props.coords, cb => {
 				if (!cb) {
@@ -162,19 +149,8 @@ class Map extends React.Component {
 		}
 
 		map.addEventListener('dragend', (evt) => {
-			this.dragEndHandler(map, circleElem, marker)
+			this.dragEndHandler(map, circleElem)
 		}, {passive: false})
-
-		// map.addEventListener('sync', () => {
-		// 	let 
-		// 	marker.setGeometry()
-		// })
-
-		// ondragleave: null
-		// ondragover
-		// map.addEventListener('ondragover', () => {
-		// 	behavior.enable(H.mapevents.Behavior.DRAGGING);
-		// })
 
 	}
 

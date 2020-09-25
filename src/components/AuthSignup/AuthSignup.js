@@ -14,6 +14,7 @@ import FilePicker from '../UI/FilePicker/FilePicker'
 import ErrorMessage from '../UI/ErrorMessage/ErrorMessage'
 import {baseUrl} from '../../util/baseUrl'
 import {validateForm} from '../../util/validationSchema'
+import SectionSpinner from '../UI/SectionSpinner/SectionSpinner'
 
 class AuthSignup extends Component {
 	constructor(props) {
@@ -21,8 +22,9 @@ class AuthSignup extends Component {
 		this.fileRef = React.createRef()
 	}
 	state = {
-		showCheck: true,
-		isResturant: true,
+		loading: false,
+		showCheck: false,
+		isResturant: false,
 		userValidity: false,
 		formValidity: false,
 		userFormElem: {
@@ -237,8 +239,10 @@ class AuthSignup extends Component {
 	}
 
 	clickHandler = () => {
+		this.props.onSetErrorOff()
 		if (!this.state.isResturant) {
 			if (this.state.userValidity) {
+				this.setState({loading: true})
 				const formData = new FormData()
 				formData.append('title', this.state.userFormElem.fullName.value)
 				formData.append('email', this.state.userFormElem.email.value)
@@ -250,6 +254,7 @@ class AuthSignup extends Component {
 				})
 					.then(response => response.json())
 					.then(data => {
+						this.setState({loading: false})
 						if (data.status === 422) {
 							this.validateFormHandler()
 						}
@@ -257,7 +262,7 @@ class AuthSignup extends Component {
 						this.props.history.push('/')
 					})
 					.catch(err => {
-						console.log(err)
+						this.props.onSetErrorOn(err.message)
 					})
 			} else {
 				let updatedFormElem = {
@@ -277,6 +282,7 @@ class AuthSignup extends Component {
 			}
 		} else {
 			if (this.state.userValidity && this.state.formValidity) {
+				this.setState({loading: true})
 				const formData = new FormData()
 				formData.append('title', this.state.userFormElem.fullName.value)
 				formData.append('email', this.state.userFormElem.email.value)
@@ -293,16 +299,16 @@ class AuthSignup extends Component {
 				})
 					.then(response => response.json())
 					.then(data => {
+						this.setState({loading: false})
 						if (data.status === 422) {
 							this.validateFormHandler()
 						}
 						this.props.history.push('/')
 					})
 					.catch(err => {
-						console.log('err' + err)
+						this.props.onSetErrorOn(err.message)
 					})
 			} else {
-				console.log('ssd' + this.state.resturantFormElem.file)
 				this.validateFormHandler()
 			}
 		}
@@ -311,55 +317,6 @@ class AuthSignup extends Component {
 	filePickerBtnHadler = () => {
 		this.fileRef.current.click()
 	}
-
-	// validateForm = (value, configs) => {
-	// 	let message = null
-	// 	let isValid = true
-
-	// 	if (configs.required && isValid) {
-	// 		if (value && value instanceof String) {
-	// 			isValid = value.trim() !== ''
-	// 		} else {
-	// 			isValid = value ? true : false
-	// 		}
-	// 		message = !isValid && configs.required.message
-	// 	}
-
-	// 	if (configs.imgType && isValid) {
-	// 		let fileTypeRegex = /(jpg|jpeg|png)$/i
-	// 		isValid = fileTypeRegex.test(value.type.split('/')[1])
-	// 		message = !isValid && configs.imgType.message
-	// 	}
-
-	// 	if (configs.requiredCoords && isValid) {
-	// 		isValid = value.coords !== null ? true : false
-	// 		console.log(isValid)
-	// 		message = !isValid && configs.requiredCoords.message
-	// 	}
-
-	// 	if (configs.minLength && isValid) {
-	// 		isValid = value.length >= configs.minLength.value
-	// 		message = !isValid && configs.minLength.message
-	// 	}
-
-	// 	if (configs.maxLength && isValid) {
-	// 		isValid = value.length <= configs.maxLength.value
-	// 		message = !isValid && configs.maxLength.message
-	// 	}
-
-	// 	if (configs.email && isValid) {
-	// 		let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-	// 		isValid = emailRegex.test(value)
-	// 		message = !isValid && configs.email.message
-	// 	}
-
-	// 	if (configs.match && isValid) {
-	// 		isValid = value.trim() === configs.match.value.trim()
-	// 		message = !isValid && configs.match.message
-	// 	}
-
-	// 	return {isValid, message}
-	// }
 
 	choosenCoordsHandler = (coords, address) => {
 		let data = {coords, address}
@@ -438,10 +395,6 @@ class AuthSignup extends Component {
 		})
 	}
 
-	// componentWillUnmount() {
-	// 	this.props.onSetCoords(null)
-	// }
-
 	render() {
 		let isValid = false
 		if (!this.state.isResturant) {
@@ -454,133 +407,138 @@ class AuthSignup extends Component {
 			}
 		}
 		const chevron = this.state.showCheck ? 'bi-chevron-up' : 'bi-chevron-down'
-		return (
-			<div className="container">
+		return this.state.loading
+			? (
+				<div style={{height: '90vh', minHeight: '300px', position: 'relative'}}>
+					<SectionSpinner color="var(--primeColor)" />
+				</div>
+			)
+			: (
+				<div className="container">
+					<WrapperCard cardTitle='Sign up' textAlign='center'>
+						<form
+							className={classes.AuthSignupForm}
+							onSubmit={e => e.preventDefault()} noValidate>
+							{Object.keys(this.state.userFormElem).map(elem => {
+								return (
+									<div key={elem}>
+										<label>{this.state.userFormElem[elem].label}</label>
+										<FormInput
+											elem={this.state.userFormElem}
+											identifier={elem}
+											formElem="userFormElem"
+											elemType={this.state.userFormElem[elem].elemType}
+											config={this.state.userFormElem[elem].config}
+											value={this.state.userFormElem[elem].value}
+											changeHandler={this.changeHandler}
+										/>
+										{
+											!this.state.userFormElem[elem].valid &&
+											<ErrorMessage>
+												{this.state.userFormElem[elem].message}
+											</ErrorMessage>
+										}
+									</div>
+								)
+							})}
+							<div className={classes.isResturant}>
+								<div className={classes.isResturantHead}>
+									<p>Want to join our resturants?</p>
+									<div onClick={this.showCheckHandler}>
+										{<Chevron chevron={chevron} />}
+									</div>
+								</div>
+								{this.state.showCheck ? (
+									<div className={classes.isResturantCheck}>
+										<input
+											type='checkbox'
+											checked={this.state.isResturant}
+											onChange={this.isResturantHandler}
+										/>
+										<label>Become a resturant</label>
+									</div>
+								) : null}
+								{!this.state.isResturant ? null : (
+									<React.Fragment>
+										<div className={classes.divFile}>
+											<label htmlFor='file-input'>Resturant image</label>
+											<FilePicker filePickerBtnHadler={this.filePickerBtnHadler} />
+											{this.state.resturantFormElem.file.filename ? <p style={{
+												textTransform: 'capitalize',
+												color: 'var(--greenColor)',
+												marginTop: '0.5rem'
+											}}>{this.state.resturantFormElem.file.filename}</p> : null}
 
-				<WrapperCard cardTitle='Sign up' textAlign='center'>
-					<form
-						className={classes.AuthSignupForm}
-						onSubmit={e => e.preventDefault()} noValidate>
-						{Object.keys(this.state.userFormElem).map(elem => {
-							return (
-								<div key={elem}>
-									<label>{this.state.userFormElem[elem].label}</label>
-									<FormInput
-										elem={this.state.userFormElem}
-										identifier={elem}
-										formElem="userFormElem"
-										elemType={this.state.userFormElem[elem].elemType}
-										config={this.state.userFormElem[elem].config}
-										value={this.state.userFormElem[elem].value}
-										changeHandler={this.changeHandler}
-									/>
-									{
-										!this.state.userFormElem[elem].valid &&
-										<ErrorMessage>
-											{this.state.userFormElem[elem].message}
-										</ErrorMessage>
-									}
-								</div>
-							)
-						})}
-						<div className={classes.isResturant}>
-							<div className={classes.isResturantHead}>
-								<p>Want to join our resturants?</p>
-								<div onClick={this.showCheckHandler}>
-									{<Chevron chevron={chevron} />}
-								</div>
-							</div>
-							{this.state.showCheck ? (
-								<div className={classes.isResturantCheck}>
-									<input
-										type='checkbox'
-										checked={this.state.isResturant}
-										onChange={this.isResturantHandler}
-									/>
-									<label>Become a resturant</label>
-								</div>
-							) : null}
-							{!this.state.isResturant ? null : (
-								<React.Fragment>
-									<div className={classes.divFile}>
-										<label htmlFor='file-input'>Resturant image</label>
-										<FilePicker filePickerBtnHadler={this.filePickerBtnHadler} />
-										{this.state.resturantFormElem.file.filename ? <p style={{
-											textTransform: 'capitalize',
-											color: 'var(--greenColor)',
-											marginTop: '0.5rem'
-										}}>{this.state.resturantFormElem.file.filename}</p> : null}
-										{/* <input style={{display: 'none'}} ref={this.fileRef} id='file-input' name="imageUrl" type='file' onChange={this.filePickerHandler} /> */}
-										<FormInput elem={this.state.resturantFormElem}
-											identifier='file'
-											formElem="resturantFormElem"
-											reference={this.fileRef}
-											elemType={this.state.resturantFormElem.file.elemType}
-											value={this.state.resturantFormElem.file.selectedFile}
-											changeHandler={this.changeHandler} />
-										{
-											!this.state.resturantFormElem.file.valid &&
-											<ErrorMessage>
-												{this.state.resturantFormElem.file.message}
-											</ErrorMessage>
-										}
-									</div>
-									<div>
-										<label>Specify your location and delivery zone</label>
-										<SearchItem
-											choosenCoordsHandler={this.choosenCoordsHandler}
-											btnValue={'Serve This Area'}
-											btnHandler={this.locateAddress}
-											isResturant={this.state.isResturant}
-											coords={this.props.coords}
-											address={this.props.address} />
-										{
-											!this.state.resturantFormElem.coords.valid &&
-											<ErrorMessage>
-												{this.state.resturantFormElem.coords.message}
-											</ErrorMessage>
-										}
-									</div>
-									<div>
-										<label>{this.state.resturantFormElem.catagory.label}</label>
-										<FormInput
-											elem={this.state.resturantFormElem}
-											identifier='catagory'
-											formElem="resturantFormElem"
-											elemType={this.state.resturantFormElem.catagory.elemType}
-											config={this.state.resturantFormElem.catagory.config}
-											value={this.state.resturantFormElem.catagory.value}
-											changeHandler={this.changeHandler}
-										/>
-									</div>
-									<div>
-										<label>{this.state.resturantFormElem.description.label}</label>
-										<FormInput
-											elem={this.state.resturantFormElem}
-											identifier='description'
-											formElem="resturantFormElem"
-											elemType={this.state.resturantFormElem.description.elemType}
-											value={this.state.resturantFormElem.description.value}
-											changeHandler={this.changeHandler}
-										/>
-										{
-											!this.state.resturantFormElem.description.valid &&
-											<ErrorMessage>
-												{this.state.resturantFormElem.description.message}
-											</ErrorMessage>
-										}
-									</div>
-								</React.Fragment>
-							)}
-							<AuthButton clickHandler={this.clickHandler}
-								isValid={true} >
-								Sign up
+											<FormInput elem={this.state.resturantFormElem}
+												identifier='file'
+												formElem="resturantFormElem"
+												reference={this.fileRef}
+												elemType={this.state.resturantFormElem.file.elemType}
+												value={this.state.resturantFormElem.file.selectedFile}
+												changeHandler={this.changeHandler} />
+											{
+												!this.state.resturantFormElem.file.valid &&
+												<ErrorMessage>
+													{this.state.resturantFormElem.file.message}
+												</ErrorMessage>
+											}
+										</div>
+										<div>
+											<label>Specify your location and delivery zone</label>
+											<SearchItem
+												choosenCoordsHandler={this.choosenCoordsHandler}
+												btnValue={'Serve This Area'}
+												btnHandler={this.locateAddress}
+												isResturant={this.state.isResturant}
+												coords={this.props.coords}
+												address={this.props.address} />
+											{
+												!this.state.resturantFormElem.coords.valid &&
+												<ErrorMessage>
+													{this.state.resturantFormElem.coords.message}
+												</ErrorMessage>
+											}
+										</div>
+										<div>
+											<label>{this.state.resturantFormElem.catagory.label}</label>
+											<FormInput
+												elem={this.state.resturantFormElem}
+												identifier='catagory'
+												formElem="resturantFormElem"
+												elemType={this.state.resturantFormElem.catagory.elemType}
+												config={this.state.resturantFormElem.catagory.config}
+												value={this.state.resturantFormElem.catagory.value}
+												changeHandler={this.changeHandler}
+											/>
+										</div>
+										<div>
+											<label>{this.state.resturantFormElem.description.label}</label>
+											<FormInput
+												elem={this.state.resturantFormElem}
+												identifier='description'
+												formElem="resturantFormElem"
+												elemType={this.state.resturantFormElem.description.elemType}
+												value={this.state.resturantFormElem.description.value}
+												changeHandler={this.changeHandler}
+											/>
+											{
+												!this.state.resturantFormElem.description.valid &&
+												<ErrorMessage>
+													{this.state.resturantFormElem.description.message}
+												</ErrorMessage>
+											}
+										</div>
+									</React.Fragment>
+								)}
+								<AuthButton clickHandler={this.clickHandler}
+									isValid={true} >
+									Sign up
 						</AuthButton>
-						</div>
-					</form>
-				</WrapperCard >
-			</div>
-		)
+							</div>
+						</form>
+					</WrapperCard >
+				</div>
+			)
 	}
 }
 const mapStateToProps = state => {
@@ -592,7 +550,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onSetCoords: (coords, address) => dispatch({type: actionTypes.SET_SIGNUP_COORDS, coords, address})
+		onSetCoords: (coords, address) => dispatch({type: actionTypes.SET_SIGNUP_COORDS, coords, address}),
+		onSetErrorOn: (msg) => dispatch({type: actionTypes.SET_ERROR_ON, msg}),
+		onSetErrorOff: () => dispatch({type: actionTypes.SET_ERROR_OFF})
 	}
 }
 

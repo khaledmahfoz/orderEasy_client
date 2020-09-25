@@ -23,3 +23,21 @@
    /* background: var(--primeColor); */
    color: var(--primeColor);
 }
+
+@media (max-width: 575.85px) { 
+	.ControllBanel{
+      width: 100%;
+      padding-right: 1rem;
+      margin: auto;
+      justify-content: space-between;
+   }
+   .ControllBanel button{
+      width: 50%;
+   }
+}
+
+@media (max-width: 767.85px){
+   .ControllBanel{
+      padding-left: 1rem;
+   }
+}

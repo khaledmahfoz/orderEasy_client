@@ -16,6 +16,7 @@ export const SET_RESTURANT_COORDS = 'SET_RESTURANT_COORDS'
 export const SET_SIGNUP_COORDS = 'SET_SIGNUP_COORDS'
 
 export const SET_CART = 'SET_CART'
+export const CART_LOADING = 'CART_LOADING'
 export const EMPTY_CART = 'EMPTY_CART'
 export const TOGGLE_ITEM = 'TOGGLE_ITEM'
 export const INC_ITEM = 'INC_ITEM'
@@ -25,6 +26,8 @@ export const GET_MENU_ITEM_FORM = 'GET_MENU_ITEM_FORM'
 export const GET_MENU_FORM = 'GET_MENU_FORM'
 export const GET_MENU_REVIEW_FORM = 'GET_MENU_REVIEW_FORM'
 
+export const SET_ERROR_ON = 'SET_ERROR_ON'
+export const SET_ERROR_OFF = 'SET_ERROR_OFF'
 
 // export const SET_MENU = 'SET_MENU'
 // export const ADD = 'ADD'

@@ -44,7 +44,6 @@ class MyResturant extends Component {
             return res.json()
          })
          .then(resturant => {
-            console.log(resturant.menu)
             this.setState({loading: false, resturant, menu: resturant.menu})
          })
          .catch(err => console.log(err))
@@ -83,9 +82,9 @@ class MyResturant extends Component {
       ) : (
             <React.Fragment>
                <header className={classes.Header}>
-                  <Hero height='500px'></Hero>
-                  <div className={classes.Lip_Section}>
-                     <div className={classes.Lip_Content}>
+                  <Hero classes={classes.Hero_Config}></Hero>
+                  <div className={`${classes.Lip_Section} ${this.state.menu && classes.Lip_Section_Config}`}>
+                     <div className={`${classes.Lip_Content} ${!this.state.menu && classes.Lip_Content_Config}`}>
                         <div className={classes.Resturant_Img} style={{backgroundImage: `url(${'http://localhost:8080/' + this.state.resturant.imgUrl})`}}>
                         </div>
                         <h3 className={classes.Title}>{this.state.resturant.title}</h3>
@@ -100,7 +99,6 @@ class MyResturant extends Component {
                               name='makeRatings'
                            />
                            <span>({this.state.resturant.reviewers})</span>
-                           {/* {this.state.resturant.rate} */}
                         </div>
                         <p className={classes.Main}>{this.state.resturant.catagory}</p>
                         <div className={classes.Hours}>
@@ -115,9 +113,9 @@ class MyResturant extends Component {
 
                   </div>
                </header>
-               <div className='container'>
+               <div className={classes.ResWrapper}>
                   <React.Fragment>
-                     <button onClick={this.menuSwapContentHandler}>
+                     <button className={classes.SwapBtn} onClick={this.menuSwapContentHandler}>
                         {!this.state.showReviews ? 'Swap to Reviews !' : 'Swap to Menu !'}
                      </button>
                      {menuSwapContent}

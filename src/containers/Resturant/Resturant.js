@@ -19,16 +19,6 @@ import {baseUrl} from '../../util/baseUrl'
 import WrapperCard from '../../components/UI/WrapperCard/WrapperCard'
 import Cash from '../../components/UI/Cash/Cash'
 
-const testResturant = {
-	_id: 1,
-	title: 'Resturant1',
-	desc:
-		'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
-	rate: '3',
-	main: 'Pizza and Burger',
-	payment: 'cash, credit',
-	openHours: '2 - 3',
-}
 
 class Resturant extends React.Component {
 	_isMounted = false;
@@ -131,9 +121,9 @@ class Resturant extends React.Component {
 		) : (
 				<React.Fragment>
 					<header className={classes.Header}>
-						<Hero height='500px'></Hero>
-						<div className={classes.Lip_Section} style={{height: !this.state.menu ? '300px' : 'auto'}}>
-							<div className={classes.Lip_Content}>
+						<Hero classes={classes.Hero_Config}></Hero>
+						<div className={`${classes.Lip_Section} ${this.state.menu && classes.Lip_Section_Config}`}>
+							<div className={`${classes.Lip_Content} ${!this.state.menu && classes.Lip_Content_Config}`}>
 								<div className={classes.Resturant_Img} style={{backgroundImage: `url(${'http://localhost:8080/' + this.state.resturant.imgUrl})`}}>
 								</div>
 								<h3 className={classes.Title}>{this.state.resturant.title}</h3>
@@ -181,12 +171,12 @@ class Resturant extends React.Component {
 							) : null}
 						</div>
 					</header>
-					<div className='container' style={{marginTop: 'calc(150px + 4rem)'}}>
+					<div className={classes.ResWrapper}>
 						{!this.state.menu ? (
 							<ResturantReviews reviews={this.state.reviews} />
 						) : (
 								<React.Fragment>
-									<button onClick={this.menuSwapContentHandler}>
+									<button className={classes.SwapBtn} onClick={this.menuSwapContentHandler}>
 										{!this.state.showReviews ? 'Swap to Reviews !' : 'Swap to Menu !'}
 									</button>
 									{menuSwapContent}

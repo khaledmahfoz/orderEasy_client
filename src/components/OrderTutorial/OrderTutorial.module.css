@@ -15,8 +15,31 @@
 	align-items: center;
 	flex-wrap: wrap;
 }
-@media only screen and (max-width: 1162px) {
-	.OrderTutorialItemsWrapper {
+/* @media only screen and (max-width: 1162px) {
+	
+} */
+/* 
+@media (max-width: 576px) { 
+} */
+
+@media (max-width: 768px) { 
+}
+
+
+@media (max-width: 992px) { 
+	.OrderTutorial{
+		padding: 10rem 1rem;
+	}
+	.OrderTutorial h1{
+		font-size: 2.5rem;
+	}
+	.OrderTutorialItemsWrapper{
 		flex-flow: column;
 	}
 }
+ 
+ @media (max-width: 1200px) { 
+	/* .OrderTutorialItemsWrapper {
+		flex-flow: column;
+	} */
+  }

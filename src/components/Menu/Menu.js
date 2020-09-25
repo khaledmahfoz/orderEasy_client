@@ -76,9 +76,13 @@ class Menu extends Component {
 													Add New
 												</button>
 											)}
-										<button className={classes.EditBtn} onClick={this.toggleEditHandler}>
-											{this.state.edit ? 'cancel' : 'Edit Menu'}
-										</button>
+										{
+											this.props.menu.length && (
+												<button className={classes.EditBtn} onClick={this.toggleEditHandler}>
+													{this.state.edit ? 'cancel' : 'Edit Menu'}
+												</button>
+											)
+										}
 									</div>
 								}
 
@@ -125,7 +129,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		// onToggleItem: item => dispatch({type: actionTypes.TOGGLE_ITEM, item})
-		onToggleItem: (item, Authenticated, token) => dispatch(toggleItemAsync(item, Authenticated, token))
+		onToggleItem: (item, Authenticated, token, startLoading, stopLoading) => dispatch(toggleItemAsync(item, Authenticated, token, startLoading, stopLoading))
 
 	}
 }

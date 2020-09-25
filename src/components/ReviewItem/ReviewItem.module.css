@@ -19,7 +19,7 @@
 
 .ReviewItem::-webkit-scrollbar-thumb {
 	border-radius: 5px;
-   background: var(--primeColor); 
+   background: var(--primeColor);
 }
 
 
@@ -39,4 +39,22 @@
 .ReviewItem > div:last-child {
 	color: var(--blackColor);
 	font-size: 1.1rem;
+}
+
+@media(max-width: 767.85px){
+	.ReviewItem{
+		margin: 0 1rem 2.5rem;
+		padding: 1.5rem;
+		height: auto;
+	}
+	.ReviewItem > div:first-child {
+		font-size: 0.9rem;
+	}
+	.ReviewItem > div:first-child > p:first-of-type {
+		font-size: 1.1rem;
+	}
+	.ReviewItem > div:last-child {
+		font-size: 1rem;
+	}
+	
 }

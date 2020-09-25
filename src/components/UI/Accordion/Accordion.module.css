@@ -62,3 +62,39 @@
 	height: 25px;
 	color: var(--whiteColor) !important;
 }
+
+.AccordionList li h5{
+	font-weight: bold;
+	font-size: 1.1rem;
+}
+.AccordionList li p{
+	font-weight: normal !important;
+}
+.AccordionList li div:nth-of-type(2){
+	font-weight: bold;
+}
+
+@media (max-width: 575.85px){
+	.AccordionTag, .AccordionList{
+		padding: 1rem;
+	}
+	.AccordionList li h5{
+		font-size: 1rem;
+	}
+	.AccordionList li p{
+		font-size: 0.9rem;
+	}
+	.AccordionList li div:nth-of-type(2){
+		font-size: 0.9rem;
+	}
+}
+
+@media (min-width: 576px) and (max-width: 991.85px){
+	.AccordionTag, .AccordionList{
+		padding: 1rem 2rem;
+	}
+}
+
+
+/* @media (max-width: 767.85px){
+} */

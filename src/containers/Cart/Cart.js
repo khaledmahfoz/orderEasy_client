@@ -21,10 +21,11 @@ class Cart extends Component {
    }
 
    clickHandler = () => {
-      console.log(this.props.cart)
+      // console.log(this.props.Authenticated)
       if (!this.props.Authenticated) {
          this.setState({valid: false})
       } else {
+         console.log(this.props.cart)
          fetch(baseUrl + 'post-order', {
             method: "POST",
             headers: {
@@ -34,13 +35,9 @@ class Cart extends Component {
             body: JSON.stringify({cart: this.props.cart})
          })
             .then(res => {
-               // if (res.status === 401) {
-               //    throw new Error("You need to login first")
-               // }
                return res.json()
             })
-            .then(res => {
-               console.log(res)
+            .then(() => {
                this.props.closeModal()
                this.props.onEmptyCart()
                this.props.history.push("/orders")
@@ -48,6 +45,29 @@ class Cart extends Component {
             .catch(err => console.log(err))
       }
    }
+
+   // shouldComponentUpdate(nextProps, nextState) {
+   //    if (nextProps.showModal) {
+   //       console.log('will update')
+   //       return true;
+   //    }
+   //    return false;
+   // }
+
+
+   // componentDidMount() {
+   //    console.log(this.props.cart)
+   // }
+
+
+
+   // static getDerivedStateFromProps(nextProps, prevState) {
+   //    if (nextProps.showModal) {
+   //       return {
+   //          cart: nextProps.cart
+   //       }
+   //    }
+   // }
 
    render() {
       let content = (
@@ -69,7 +89,8 @@ class Cart extends Component {
                   onDecItem={this.props.onDecItem}
                   onToggleItem={this.props.onToggleItem}
                   token={this.props.token}
-                  Authenticated={this.props.Authenticated} />
+                  Authenticated={this.props.Authenticated}
+                  cartLoading={this.props.cartLoading} />
             )
          })
          let totalPrice = priceArr.reduce((acc, curr) => acc + curr, 0)
@@ -79,7 +100,7 @@ class Cart extends Component {
                <div className={classes.CartInfo}>
                   <h5>Total Price: {totalPrice}$</h5>
                   <AuthButton
-                     isValid={true}
+                     isValid={!this.props.cartLoading}
                      clickHandler={this.clickHandler}
                      color="var(--greenColor)"
                   >
@@ -92,27 +113,21 @@ class Cart extends Component {
                            <p>Please login to continue</p>
                            <button
                               className={classes2.Signup}
-                              onClick={() => this.props.swipeContent(false)}>
+                              onClick={() => {
+                                 this.props.swipeContent ? this.props.swipeContent(false) : this.props.history.push('/login')
+                              }}>
                               Login
                            </button>
                         </div>
-                        {/* <ErrorMessage>
-                           Please login to continue
-                        </ErrorMessage>
-                        <button
-                           onClick={() => this.props.swipeContent(false)}
-                        >
-                           Login
-                        </button> */}
                      </div>
                      : null
                   }
                </div>
-            </React.Fragment >
+            </React.Fragment>
          )
       }
       return (
-         <div className={this.props.cart.length ? classes.Cart : classes.CartEmpty}>
+         <div className={`${this.props.cart.length ? classes.Cart : classes.CartEmpty} ${this.props.custom && classes.CartConfig}`}>
             {content}
          </div>
       )
@@ -124,15 +139,16 @@ const mapStateToProps = state => {
    return {
       cart: state.cartReducer.cart,
       token: state.authReducer.token,
-      Authenticated: state.authReducer.token !== null ? true : false
+      Authenticated: state.authReducer.token !== null ? true : false,
+      cartLoading: state.cartReducer.loading
    }
 }
 
 const mapDispatchToProps = dispatch => {
    return {
-      onToggleItem: (item, Authenticated, token) => dispatch(toggleItemAsync(item, Authenticated, token)),
-      onIncItem: (_id, Authenticated, token) => dispatch(incItemAsync(_id, Authenticated, token)),
-      onDecItem: (_id, Authenticated, token) => dispatch(decItemAsync(_id, Authenticated, token)),
+      onToggleItem: (item, Authenticated, token, startLoading, stopLoading) => dispatch(toggleItemAsync(item, Authenticated, token, startLoading, stopLoading)),
+      onIncItem: (_id, Authenticated, token, startLoading, stopLoading) => dispatch(incItemAsync(_id, Authenticated, token, startLoading, stopLoading)),
+      onDecItem: (_id, Authenticated, token, startLoading, stopLoading) => dispatch(decItemAsync(_id, Authenticated, token, startLoading, stopLoading)),
       onEmptyCart: () => dispatch({type: actionTypes.EMPTY_CART})
    }
 }

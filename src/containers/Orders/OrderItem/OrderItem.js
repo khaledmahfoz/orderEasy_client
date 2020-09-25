@@ -26,6 +26,10 @@ class OrderItem extends Component {
    // }
 
 
+   alreadyReviewed = () => {
+      this.setState({canReview: false})
+   }
+
    reviewHandler = () => {
       this.setState(prevState => {
          return {
@@ -47,12 +51,12 @@ class OrderItem extends Component {
       return (
          <React.Fragment>
             <li style={{margin: '2rem 0'}}>
-               <h3>Meal name: {elem.meal}</h3>
-               <h4>Your name: {elem.userId.title}</h4>
-               <h5>Resturant title: {elem.resturantId.title}</h5>
-               <p>Meal description: {elem.description}</p>
-               <p>Price: {elem.price}</p>
-               <h6>Time of order: {elem.createdAt}</h6>
+               <p>Meal name: <span>{elem.meal}</span></p>
+               <p>Your name: <span>{elem.userId.title}</span></p>
+               <p>Resturant title: <span>{elem.resturantId.title}</span></p>
+               <p>Meal description: <span>{elem.description}</span></p>
+               <p>Price: <span>{elem.price}</span></p>
+               <p>Time of order: <span>{elem.createdAt}</span></p>
                {
                   !this.props.isResturant
                      &&
@@ -63,11 +67,12 @@ class OrderItem extends Component {
                         <button
                            onClick={this.reviewHandler}
                            className={`${classes.greenBtn} ${classes.customBtn}`}
+                           style={{width: '120px', height: '40px'}}
                         >
                            Add review
                         </button>
                      )
-                     : <p>Reviewed</p>
+                     : <span className="badge badge-primary">Reviewed</span>
                }
 
                {
@@ -84,6 +89,7 @@ class OrderItem extends Component {
                         closeEditHandler={this.closeCanReviewHandler}
                         token={this.props.token}
                         orderItemId={elem._id}
+                        alreadyReviewed={this.alreadyReviewed}
                      // itemId={elem.itemId}
                      />
                   )

@@ -1,12 +1,3 @@
-/* .Modal {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: #fafafa;
-	width: 600px;
-	z-index: 999;
-} */
 .Info {
 	padding: 1rem 2rem;
 	display: flex;
@@ -14,7 +5,6 @@
 	align-items: flex-start;
 	background-color: var(--whiteColor);
 	border-bottom: 2px solid var(--greyColor3);
-	/* margin-bottom: 1rem; */
 }
 .Info button {
 	border: none;
@@ -25,3 +15,24 @@
 .Info h3 {
 	margin: 0;
 }
+
+@media (max-width: 768px) { 
+	.Info{
+		padding: 1rem;
+	} 
+	.Info h3{
+		font-size: 1.4rem;
+	}
+	.Info button{
+		width: 28px;
+		 height: 28px;
+		 display: flex;
+		 align-items: center;
+	}
+	.Info button img{
+		width: 100% !important;
+		height: auto;
+	}
+ 
+  }
+ 

@@ -1,6 +1,17 @@
 .AuthLoginForm {
 	width: 100%;
 	padding: 1rem 4rem;
+	max-width: 500px;
+	margin: auto;
+}
+.AuthLoginForm h3{
+	display: none;
+}
+.AuthLoginFormConfig h3{
+	display: block;
+	text-align: center;
+	margin-bottom: 2rem;
+	font-size: 3rem;
 }
 .AuthLoginForm div{
 	margin-bottom: 0.8rem;
@@ -41,4 +52,16 @@
 .SignupInfo p {
 	margin: 0;
 	margin-right: 0.4rem;
+}
+
+@media (max-width: 767.85px){
+	.AuthLoginFormConfig{
+		padding: 4rem 1rem;
+	}
+}
+
+@media(min-width: 768px){
+	.AuthLoginFormConfig{
+		padding: 6rem 1rem;
+	}
 }

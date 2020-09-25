@@ -5,14 +5,12 @@ import {withRouter} from 'react-router-dom'
 import classes from '../../components/AuthLogin/AuthLogin.module.css'
 
 import * as actionTypes from '../../store/actions/actionTypes'
-// import * as authCreators from '../../store/actions/authCreators'
 import {baseUrl} from '../../util/baseUrl'
 import {validateForm} from '../../util/validationSchema'
 import FormInput from '../UI/FormInput/FormInput'
 import AuthButton from '../UI/AuthButton/AuthButton'
 import SectionSpinner from '../UI/SectionSpinner/SectionSpinner'
 import ErrorMessage from '../UI/ErrorMessage/ErrorMessage'
-import {setCartAsync} from '../../store/actions/cartCreators'
 
 class AuthLogin extends Component {
 	state = {
@@ -66,6 +64,11 @@ class AuthLogin extends Component {
 		formValidity: false,
 	}
 
+	signupLinkHandler = () => {
+		this.props.showModalHandler && this.props.showModalHandler()
+		this.props.history.push('/signup')
+	}
+
 	changeHandler = (value, identifier) => {
 		this.props.errMessage && this.props.onAuthClear()
 		let updatedFormElem = {
@@ -100,7 +103,9 @@ class AuthLogin extends Component {
 				password: this.state.formElem.password.value,
 				isResturant: this.state.isResturant,
 				cart: JSON.parse(localStorage.getItem('cart'))
+				// cart: this.props.cart 
 			}
+			// console.log(JSON.parse(localStorage.getItem('cart')))
 			this.props.onAuthStart()
 			fetch(baseUrl + 'login', {
 				headers: {'Content-Type': 'application/json'},
@@ -119,31 +124,31 @@ class AuthLogin extends Component {
 						throw new Error('can\'t login right now please try again later')
 					}
 					let {token, id, isResturant, title, cart} = result
-					console.log(JSON.stringify(cart))
-					this.props.onAuthSuccess(token, id, isResturant, title)
+					console.log(cart)
 					localStorage.setItem("token", token)
 					localStorage.setItem("id", id)
 					localStorage.setItem("isResturant", isResturant)
 					localStorage.setItem("title", title)
-					// localStorage.setItem("cart", JSON.stringify(cart))
-					console.log(this.props.checkSwap)
+
+					this.props.onAuthSuccess(token, id, isResturant, title)
+
 					if (!this.props.checkSwap) {
-						this.props.showModalHandler()
+						this.props.showModalHandler && this.props.showModalHandler()
 						if (isResturant) {
 							this.props.history.push('/my-resturant/' + id)
 						} else {
-							setCartAsync(cart)
+							this.props.setCart && this.props.setCart(cart)
 							localStorage.setItem('cart', JSON.stringify(cart))
 							this.props.history.push('/')
 						}
 					} else {
-						this.props.swipeContent(true)
-						this.props.checkSwapHandler()
-						this.props.showModalHandler()
 						if (isResturant) {
 							this.props.history.push('/my-resturant/' + id)
 						} else {
-							setCartAsync(cart)
+							// this.props.showModalHandler()
+							this.props.swipeContent(true)
+							this.props.checkSwapHandler()
+							this.props.setCart(cart)
 							localStorage.setItem('cart', JSON.stringify(cart))
 							this.props.history.push('/')
 						}
@@ -192,6 +197,10 @@ class AuthLogin extends Component {
 		}
 	}
 
+	// componentDidMount() {
+	// 	console.log(this.props.cart)
+	// }
+
 	render() {
 		return this.props.loading ?
 			<div style={{height: '289px', position: 'relative'}}>
@@ -201,7 +210,8 @@ class AuthLogin extends Component {
 			(
 				<form
 					onSubmit={e => e.preventDefault()}
-					className={classes.AuthLoginForm}>
+					className={`${classes.AuthLoginForm} ${this.props.custom && classes.AuthLoginFormConfig}`}>
+					<h3>Login</h3>
 					{Object.keys(this.state.formElem).map(elem => {
 						return (
 							<div key={elem}>
@@ -239,7 +249,7 @@ class AuthLogin extends Component {
 						<button
 							type="button"
 							className={classes.Signup}
-							onClick={this.props.signupLinkHandler}>
+							onClick={this.signupLinkHandler}>
 							sign up
 					</button>
 					</div>
@@ -251,7 +261,10 @@ class AuthLogin extends Component {
 const mapStateToProps = state => {
 	return {
 		loading: state.authReducer.loading,
-		errMessage: state.authReducer.error
+		errMessage: state.authReducer.error,
+		token: state.authReducer.token,
+		Authenticated: state.authReducer.token !== null,
+		cart: state.cartReducer.cart,
 	}
 }
 
@@ -260,6 +273,7 @@ const mapDispatchToProps = dispatch => {
 		onAuthClear: () => dispatch({type: actionTypes.AUTH_CLEAR}),
 		onAuthStart: () => dispatch({type: actionTypes.START_AUTH}),
 		onAuthSuccess: (token, id, isResturant, title) => dispatch({type: actionTypes.AUTH_SUCCESS, token, id, isResturant, title}),
+		setCart: (cart) => dispatch({type: actionTypes.SET_CART, cart: cart}),
 		onAuthFailed: (error) => dispatch({type: actionTypes.AUTH_FAILED, error})
 	}
 }

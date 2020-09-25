@@ -11,7 +11,6 @@ const Hero = styled.div`
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	min-height: ${props => props.height};
 	background-image: url(${Background});
 	background-position: center center;
 	background-repeat: no-repeat;
@@ -21,7 +20,7 @@ const Hero = styled.div`
 
 const hero = props => {
 	return (
-		<Hero height={props.height}>
+		<Hero className={props.classes ? props.classes : ''}>
 			<div className={classes.OverLay}></div>
 			{props.children}
 		</Hero>

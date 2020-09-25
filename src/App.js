@@ -15,9 +15,12 @@ import Resturants from './containers/Resturants/Resturants'
 import Resturant from './containers/Resturant/Resturant'
 import AuthSignup from './components/AuthSignup/AuthSignup'
 import Orders from './containers/Orders/Orders'
+import Cart from './containers/Cart/Cart'
 import {setCartAsync} from './store/actions/cartCreators'
+import AuthLogin from './components/AuthLogin/AuthLogin'
 
 class App extends Component {
+
 	componentDidMount() {
 		const token = localStorage.getItem("token")
 		const id = localStorage.getItem("id")
@@ -33,7 +36,7 @@ class App extends Component {
 			this.props.onAutoCoords(coords, address)
 		}
 		if (cart) {
-			this.props.onAutoCart(cart, this.props.Authenticated, this.props.token)
+			this.props.onAutoCart(cart, false, this.props.token)
 		}
 	}
 	render() {
@@ -48,10 +51,7 @@ class App extends Component {
 								{
 									this.props.isResturant
 									&& (
-										<React.Fragment>
-											{/* <Route path="/admin" component={Admin} /> */}
-											<Route path="/my-resturant/:id" component={MyResturant} />
-										</React.Fragment>
+										<Route path="/my-resturant/:id" component={MyResturant} />
 									)
 								}
 							</React.Fragment>
@@ -61,6 +61,7 @@ class App extends Component {
 						&& (
 							<React.Fragment>
 								<Route path='/signup' component={AuthSignup} />
+								<Route path='/login' component={() => <AuthLogin custom={true} />} />
 							</React.Fragment>
 						)
 					}
@@ -72,6 +73,7 @@ class App extends Component {
 								<Route path='/resturant/:id' component={Resturant} />
 								<Route path='/all-resturants' exact component={AllResturants} />
 								<Route path='/resturants' exact component={Resturants} />
+								<Route path='/Cart' component={() => <Cart custom={true} />} />
 							</React.Fragment>
 						)
 					}
@@ -85,7 +87,7 @@ const mapStateToProps = state => {
 	return {
 		token: state.authReducer.token,
 		Authenticated: state.authReducer.token !== null,
-		isResturant: state.authReducer.isResturant
+		isResturant: state.authReducer.isResturant,
 	}
 }
 

@@ -15,10 +15,11 @@ import {validateForm} from '../../../../util/validationSchema'
 class AccordionItem extends Component {
 	state = {
 		cart: this.props.cart,
-		inCart: this.props.cart.find(elem => elem._id === this.props.data._id) ? true : false,
+		inCart: this.props.cart.find(elem => elem.itemId === this.props.data.itemId) ? true : false,
 		itemLoading: false,
 		itemEdit: false,
 		itemEditLoading: false,
+		loading: false,
 		formElem: {
 			meal: {
 				elemType: 'input',
@@ -92,6 +93,14 @@ class AccordionItem extends Component {
 	}
 
 
+	startLoading = () => {
+		this.setState({loading: true})
+	}
+
+	stopLoading = () => {
+		this.setState({loading: false})
+	}
+
 	toggleItemEdit = () => {
 		this.clearFields()
 		this.setState(prevState => {
@@ -106,7 +115,7 @@ class AccordionItem extends Component {
 		if (this.state.formValidity) {
 			let data = {
 				menuId: this.props.menuId,
-				itemId: this.props.data._id,
+				itemId: this.props.data.itemId,
 				meal: this.state.formElem.meal.value,
 				description: this.state.formElem.description.value,
 				price: this.state.formElem.price.value
@@ -168,7 +177,7 @@ class AccordionItem extends Component {
 
 	componentDidUpdate(prevProps, prevState) {
 		if (prevState.cart !== this.props.cart) {
-			let check = this.props.cart.find(elem => elem._id === this.props.data._id) ? true : false
+			let check = this.props.cart.find(elem => elem.itemId === this.props.data.itemId) ? true : false
 			this.setState({cart: this.props.cart, inCart: check})
 		}
 	}
@@ -213,8 +222,8 @@ class AccordionItem extends Component {
 
 	toggleItem = (target) => {
 		let {Authenticated, token} = this.props
-		this.props.onToggleItem(target, Authenticated, token)
-		let check = this.state.cart.find(elem => elem._id === target._id) ? true : false
+		this.props.onToggleItem(target, Authenticated, token, this.startLoading, this.stopLoading)
+		let check = this.state.cart.find(elem => elem.itemId === target._id) ? true : false
 		this.setState({inCart: check})
 	}
 
@@ -222,10 +231,19 @@ class AccordionItem extends Component {
 		let controllBtn = null
 		if (!this.props.isResturant) {
 			controllBtn = (
-				<div style={{width: '25%', textAlign: 'right'}}>
-					<span onClick={() => this.toggleItem({...this.props.data, menuId: this.props.menuId})}>
-						<PlusCircle inCart={this.state.inCart} />
-					</span>
+				<div className="d-flex justify-content-end">
+					{
+						this.state.loading
+							? (
+								<SmallLoading color="var(--primeColor)" />
+								// <span></span>
+							)
+							: (
+								<span onClick={() => this.toggleItem({...this.props.data, menuId: this.props.menuId})}>
+									<PlusCircle inCart={this.state.inCart} />
+								</span>
+							)
+					}
 				</div>
 			)
 		} else if (this.props.isResturant && this.props.edit) {
@@ -299,11 +317,11 @@ class AccordionItem extends Component {
 						)
 						: (
 							<React.Fragment>
-								<div style={{width: '50%', paddingRight: '1.4rem'}}>
+								<div style={{width: 'calc(100% / 3)', paddingRight: '1.4rem'}}>
 									<h5>{meal}</h5>
 									<p style={{margin: '0', fontWeight: 'bold'}}>{description}</p>
 								</div>
-								<div style={{width: '25%'}}>{price}$</div>
+								<div style={{width: 'calc(100% / 3)', textAlign: 'center'}}>{price}$</div>
 								{controllBtn}
 							</React.Fragment>
 						)

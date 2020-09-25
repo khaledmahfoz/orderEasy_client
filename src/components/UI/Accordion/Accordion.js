@@ -271,12 +271,13 @@ class Accordion extends Component {
 							}
 
 							{this.props.value.map(data => {
+								console.log(data)
 								return (
 									<AccordionItem
 										key={data._id}
 										token={this.props.token}
 										itemLoading={this.state.itemLoading}
-										data={{...data, resturantId: this.props.resturantId}}
+										data={{...data, itemId: data._id, resturantId: this.props.resturantId}}
 										onToggleItem={this.props.onToggleItem}
 										cart={this.props.cart}
 										isResturant={this.props.isResturant}
@@ -285,6 +286,7 @@ class Accordion extends Component {
 										removeMenuItemHandler={this.removeMenuItemHandler}
 										menuId={this.props.menuId}
 										Authenticated={this.props.Authenticated}
+									// cartLoading={this.props.cartLoading}
 									/>
 								)
 							})}
@@ -300,7 +302,8 @@ const mapStateToProps = state => {
 	return {
 		formElem: state.menuFormItemReducer.formElem,
 		formValidity: state.menuFormItemReducer.formValidity,
-		Authenticated: state.authReducer.token !== null
+		Authenticated: state.authReducer.token !== null,
+		// cartLoading: state.cartReducer.loading
 	}
 }
 

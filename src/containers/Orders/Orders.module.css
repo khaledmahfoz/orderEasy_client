@@ -1,0 +1,24 @@
+.OrdersList{
+   padding: 0;
+   list-style: none;
+}
+.OrdersList li{
+   /* margin: 2rem 0 !important; */
+   padding: 0 0 2rem;
+   border-bottom: 2px solid #ccc;
+}
+.OrdersList li:last-of-type{
+   border-bottom: 0;
+}
+.OrdersList li p{
+   font-weight: bold;
+   font-size: 1rem;
+   margin-bottom: 0.6rem;
+   color: #000;
+}
+.OrdersList li p span{
+   font-weight: normal;
+}
+.OrdersList li > div{
+   padding: 1rem 0;
+}
