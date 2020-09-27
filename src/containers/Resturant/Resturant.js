@@ -33,20 +33,19 @@ class Resturant extends React.Component {
 		reviews: null
 	}
 
-	// updatedReviewsFinishedHandler = (reviews) => {
-	// 	// this.setState({reviews: reviews})
-	// }
-
 	resturantHandler = () => {
+		this.props.onSetErrorOff()
 		fetch(baseUrl + 'resturant/' + this.props.match.params.id)
 			.then(res => {
+				if (res.status === 404) {
+					return this.props.history.replace('/404')
+				}
 				if (res.status !== 200) {
-					this.props.history.replace('/404')
+					throw new Error('something went wrong')
 				}
 				return res.json()
 			})
 			.then(resturant => {
-				console.log(resturant)
 				if (this.props.coords) {
 					fetch(baseUrl + "check-zone/" + this.props.match.params.id, {
 						method: 'POST',
@@ -57,7 +56,12 @@ class Resturant extends React.Component {
 							coords: this.props.coords
 						})
 					})
-						.then(res => res.json())
+						.then(res => {
+							if (res.status !== 200) {
+								throw new Error('something went wrong')
+							}
+							return res.json()
+						})
 						.then(check => {
 							this.setState({
 								loading: false, resturant, reviews: resturant.reviews, menu: check,
@@ -65,20 +69,23 @@ class Resturant extends React.Component {
 								address: check ? this.props.address : ''
 							})
 						})
-						.catch(err => console.log(err))
+						.catch(err => {
+							this.setState({loading: false})
+							this.props.onSetErrorOn(err.message)
+						})
 				} else {
 					this.setState({loading: false, resturant, reviews: resturant.reviews, menu: false})
 				}
 
 			})
-			.catch(err => console.log(err))
+			.catch(err => {
+				this.setState({loading: false})
+				this.props.onSetErrorOn(err.message)
+			})
 	}
 
 	componentDidMount() {
 		this.resturantHandler()
-		// this._isMounted = true;
-		// if (this._isMounted) {
-		// }
 	}
 
 	choosenCoordsHandler = (coords, address) => {
@@ -88,7 +95,6 @@ class Resturant extends React.Component {
 
 	findBtnHandler = () => {
 		this.setState({menu: true})
-		console.log('Menu')
 	}
 
 	menuSwapContentHandler = () => {
@@ -97,14 +103,10 @@ class Resturant extends React.Component {
 		})
 	}
 
-	componentWillUnmount() {
-		this._isMounted = false;
-	}
 
 	render() {
 		let menuSwapContent
 		if (!this.state.showReviews && this.state.menu) {
-			console.log(this.state.resturant)
 			menuSwapContent = (
 				<Menu menu={this.state.resturant.menu} resturantId={this.state.resturant._id} />
 			)
@@ -113,7 +115,6 @@ class Resturant extends React.Component {
 				<ResturantReviews reviews={this.state.reviews} />
 			)
 		}
-		console.log(this.state.resturant)
 		return this.state.loading ? (
 			<div style={{minHeight: 'calc(100vh - 358px)', position: 'relative'}}>
 				<SectionSpinner />
@@ -124,7 +125,7 @@ class Resturant extends React.Component {
 						<Hero classes={classes.Hero_Config}></Hero>
 						<div className={`${classes.Lip_Section} ${this.state.menu && classes.Lip_Section_Config}`}>
 							<div className={`${classes.Lip_Content} ${!this.state.menu && classes.Lip_Content_Config}`}>
-								<div className={classes.Resturant_Img} style={{backgroundImage: `url(${'http://localhost:8080/' + this.state.resturant.imgUrl})`}}>
+								<div className={classes.Resturant_Img} style={{backgroundImage: `url(${baseUrl + this.state.resturant.imgUrl})`}}>
 								</div>
 								<h3 className={classes.Title}>{this.state.resturant.title}</h3>
 								<p className={classes.Desc}>{this.state.resturant.description}</p>
@@ -138,17 +139,14 @@ class Resturant extends React.Component {
 										name='makeRatings'
 									/>
 									<span>({this.state.resturant.reviewers})</span>
-									{/* {this.state.resturant.rate} */}
 								</div>
 								<p className={classes.Main}>{this.state.resturant.catagory}</p>
 								<div className={classes.Hours}>
 									<p>open hours</p>
-									<span>2 - 3</span>
-									{/* <p>{this.state.resturant.openHours}</p> */}
+									<span>9AM - 5PM</span>
 								</div>
 								<div className={classes.Payment}>
 									<p>payment Methods</p>
-									{/* <div>{this.state.resturant.payment}</div> */}
 									<span><Cash /></span>
 								</div>
 							</div>
@@ -193,13 +191,14 @@ const mapStateToProps = state => {
 	return {
 		coords: state.coordsReducer.homeCoords,
 		address: state.coordsReducer.homeAddress,
-		// isResturant: state.authReducer.isResturant
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onSetCoords: (coords, address) => dispatch({type: actionTypes.SET_HOME_COORDS, coords, address})
+		onSetCoords: (coords, address) => dispatch({type: actionTypes.SET_HOME_COORDS, coords, address}),
+		onSetErrorOn: (msg) => dispatch({type: actionTypes.SET_ERROR_ON, msg}),
+		onSetErrorOff: () => dispatch({type: actionTypes.SET_ERROR_OFF})
 	}
 }
 

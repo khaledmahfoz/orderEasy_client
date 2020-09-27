@@ -1,13 +1,12 @@
 import React, {Component} from 'react'
-import {Route} from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 import {connect} from 'react-redux'
 import * as actionTypes from './store/actions/actionTypes'
 
 import './App.css'
 
-// import Admin from './containers/Admin/Admin'
 import MyResturant from './containers/MyResturant/MyResturant'
-
+import NotFound from './components/NotFound/NotFound'
 import Layout from './components/Layout/Layout'
 import HomeSearch from './containers/HomeSearch/HomeSearch'
 import AllResturants from './containers/AllResturants/AllResturants'
@@ -44,10 +43,24 @@ class App extends Component {
 			<div className='App'>
 				<Layout>
 					{
+						!this.props.isResturant
+						&& (
+							<React.Fragment>
+								<Route path='/resturant/:id' component={Resturant} />
+								<Route path='/all-resturants' exact component={AllResturants} />
+								<Route path='/resturants' exact component={Resturants} />
+								<Route path='/Cart' exact component={() => <Cart custom={true} />} />
+								<Route path='/' exact component={HomeSearch} />
+							</React.Fragment>
+
+						)
+					}
+
+					{
 						this.props.Authenticated
 						&& (
 							<React.Fragment>
-								<Route path='/orders' component={Orders} />
+								<Route path='/orders' exact component={Orders} />
 								{
 									this.props.isResturant
 									&& (
@@ -57,26 +70,17 @@ class App extends Component {
 							</React.Fragment>
 						)
 					}
+
 					{!this.props.Authenticated
 						&& (
 							<React.Fragment>
-								<Route path='/signup' component={AuthSignup} />
-								<Route path='/login' component={() => <AuthLogin custom={true} />} />
+								<Route path='/signup' exact component={AuthSignup} />
+								<Route path='/login' exact component={() => <AuthLogin custom={true} />} />
 							</React.Fragment>
+
 						)
 					}
-					{
-						!this.props.isResturant
-						&& (
-							<React.Fragment>
-								<Route path='/' exact component={HomeSearch} />
-								<Route path='/resturant/:id' component={Resturant} />
-								<Route path='/all-resturants' exact component={AllResturants} />
-								<Route path='/resturants' exact component={Resturants} />
-								<Route path='/Cart' component={() => <Cart custom={true} />} />
-							</React.Fragment>
-						)
-					}
+
 				</Layout>
 			</div>
 		)

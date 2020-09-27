@@ -1,5 +1,14 @@
 .Footer {
 	background-color: var(--primeColor);
 	color: var(--whiteColor);
-	height: 300px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1.5rem 1rem;
+}
+.Footer p{
+	margin-bottom: 0;
+}
+.Footer span{
+	color: var(--danger);
 }

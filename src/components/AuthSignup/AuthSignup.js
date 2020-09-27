@@ -184,7 +184,6 @@ class AuthSignup extends Component {
 				}
 			},
 			coords: {
-				// choosenCoords: this.props.choosenCoords,
 				choosenCoords: this.props.coords,
 				address: this.props.address,
 				valid: false,
@@ -224,7 +223,6 @@ class AuthSignup extends Component {
 			if (identifier === 'file') {
 				validation = validateForm(updatedElem.selectedFile, updatedElem.validationConfig)
 			} else if (identifier === 'coords') {
-				console.log(updatedElem.choosenCoords, updatedElem.validationConfig)
 				let data = {coords: this.props.coords, address: this.props.address}
 				validation = validateForm(data, updatedElem.validationConfig)
 			} else {
@@ -248,20 +246,25 @@ class AuthSignup extends Component {
 				formData.append('email', this.state.userFormElem.email.value)
 				formData.append('password', this.state.userFormElem.password.value)
 				formData.append('confirmPassword', this.state.userFormElem.confirmPassword.value)
-				fetch(`${baseUrl}add-user`, {
+				fetch(baseUrl + 'add-user', {
 					method: 'POST',
 					body: formData
 				})
-					.then(response => response.json())
+					.then(response => {
+						if (response.status !== 201) {
+							throw new Error('something went wrong')
+						}
+						return response.json()
+					})
 					.then(data => {
 						this.setState({loading: false})
 						if (data.status === 422) {
 							this.validateFormHandler()
 						}
-						console.log(data)
 						this.props.history.push('/')
 					})
 					.catch(err => {
+						this.setState({loading: false})
 						this.props.onSetErrorOn(err.message)
 					})
 			} else {
@@ -272,7 +275,6 @@ class AuthSignup extends Component {
 					let updatedElem = {
 						...updatedFormElem[identifier],
 					}
-					console.log(updatedElem, identifier)
 					let validation = validateForm(updatedElem.value, updatedElem.validationConfig)
 					updatedElem.valid = validation.isValid
 					updatedElem.message = validation.message
@@ -293,11 +295,16 @@ class AuthSignup extends Component {
 				formData.append('catagory', this.state.resturantFormElem.catagory.value)
 				formData.append('description', this.state.resturantFormElem.description.value)
 
-				fetch(`${baseUrl}add-resturant`, {
+				fetch(baseUrl + 'add-resturant', {
 					method: 'POST',
 					body: formData
 				})
-					.then(response => response.json())
+					.then(response => {
+						if (response.status !== 201) {
+							throw new Error('something went wrong')
+						}
+						return response.json()
+					})
 					.then(data => {
 						this.setState({loading: false})
 						if (data.status === 422) {
@@ -320,7 +327,6 @@ class AuthSignup extends Component {
 
 	choosenCoordsHandler = (coords, address) => {
 		let data = {coords, address}
-		console.log(data)
 		this.changeHandler(data, 'coords', 'resturantFormElem')
 	}
 
@@ -332,7 +338,6 @@ class AuthSignup extends Component {
 			...updatedFormElem[identifier],
 		}
 		if (identifier === 'file') {
-			console.log(value)
 			updatedElem.selectedFile = value
 		} else if (identifier === 'coords') {
 			this.props.onSetCoords(value.coords, value.address)
@@ -557,4 +562,3 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AuthSignup))
-//this.state.formValidity && this.state.userValidity

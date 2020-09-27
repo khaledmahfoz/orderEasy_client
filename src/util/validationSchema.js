@@ -1,7 +1,6 @@
 export const validateForm = (value, configs) => {
    let message = null
    let isValid = true
-   console.log(configs, value)
    if (configs.required && isValid) {
       if (value && value instanceof String) {
          isValid = value.trim() !== ''
@@ -19,7 +18,6 @@ export const validateForm = (value, configs) => {
 
    if (configs.requiredCoords && isValid) {
       isValid = value.coords !== null ? true : false
-      console.log(isValid)
       message = !isValid && configs.requiredCoords.message
    }
 

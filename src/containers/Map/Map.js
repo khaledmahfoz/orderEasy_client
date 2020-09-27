@@ -23,7 +23,8 @@ class Map extends React.Component {
 		dragLoading: true,
 		searchResult: true,
 		zoneResult: true,
-		result: true
+		result: true,
+		error: false
 	}
 
 	checkResturants = (coords) => {
@@ -36,10 +37,17 @@ class Map extends React.Component {
 				coords: coords
 			})
 		})
-			.then(res => res.json())
+			.then(res => {
+				if (res.status !== 200) {
+					throw new Error('something went wrong')
+				}
+				return res.json()
+			})
 			.then(resturants => {
 				reverseGeocode(coords, cb => {
-					if (!cb) {
+					if (cb instanceof Error) {
+						this.setState({error: true, coords: null, dragLoading: false, result: false})
+					} else if (!cb) {
 						this.setState({addressTitle: '', coords: null, dragLoading: false, result: false})
 					} else {
 						this.setState({addressTitle: cb.title, dragLoading: false, result: true})
@@ -51,7 +59,9 @@ class Map extends React.Component {
 					}
 				})
 			})
-			.catch(err => console.log(err))
+			.catch(err => {
+				this.setState({addressTitle: err.message, coords: null, dragLoading: false, result: false})
+			})
 	}
 
 	checkResturantZone = (coords) => {
@@ -64,10 +74,17 @@ class Map extends React.Component {
 				coords: coords
 			})
 		})
-			.then(res => res.json())
+			.then(res => {
+				if (res.status !== 200) {
+					throw new Error('something went wrong')
+				}
+				return res.json()
+			})
 			.then(check => {
 				reverseGeocode(coords, cb => {
-					if (!cb) {
+					if (cb instanceof Error) {
+						this.setState({error: true, coords: null, dragLoading: false, result: false})
+					} else if (!cb) {
 						this.setState({addressTitle: '', dragLoading: false, result: false, coords: null})
 					} else {
 						this.setState({addressTitle: cb.title, dragLoading: false, result: true})
@@ -80,7 +97,9 @@ class Map extends React.Component {
 					}
 				})
 			})
-			.catch(err => console.log(err))
+			.catch(err => {
+				this.setState({addressTitle: err.message, dragLoading: false, result: false, coords: null})
+			})
 	}
 
 	dragEndHandler = (map, circleElem) => {
@@ -93,7 +112,9 @@ class Map extends React.Component {
 
 		if (this.props.isResturant) {
 			reverseGeocode(coords, cb => {
-				if (!cb) {
+				if (cb instanceof Error) {
+					this.setState({error: true, coords: null, dragLoading: false, result: false})
+				} else if (!cb) {
 					this.setState({map, coords: null, addressTitle: '', dragLoading: false, result: false})
 				} else {
 					this.setState({map, coords, addressTitle: cb.title, dragLoading: false, result: true})
@@ -108,10 +129,6 @@ class Map extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log(this.props)
-		if (!H) {
-			throw new Error('stop')
-		}
 		const map = new H.Map(
 			this.mapRef.current,
 			defaultLayers.vector.normal.map,
@@ -120,7 +137,7 @@ class Map extends React.Component {
 					lat: this.props.coords.latitude,
 					lng: this.props.coords.longitude,
 				},
-				zoom: 18,
+				zoom: 14,
 				pixelRatio: window.devicePixelRatio || 1,
 			}
 		)
@@ -131,12 +148,16 @@ class Map extends React.Component {
 		let ui = H.ui.UI.createDefault(map, defaultLayers)
 
 		let circleElem
-		circleElem = createZone(this.props.coords.latitude, this.props.coords.longitude)
-		map.addObject(circleElem)
+		if (this.props.isResturant) {
+			circleElem = createZone(this.props.coords.latitude, this.props.coords.longitude)
+			map.addObject(circleElem)
+		}
 
 		if (this.props.isResturant) {
 			reverseGeocode(this.props.coords, cb => {
-				if (!cb) {
+				if (cb instanceof Error) {
+					this.setState({error: true, coords: null, dragLoading: false, result: false})
+				} else if (!cb) {
 					this.setState({map, addressTitle: '', dragLoading: false, result: false})
 				} else {
 					this.setState({map, addressTitle: cb.title, dragLoading: false, result: true})
@@ -158,7 +179,7 @@ class Map extends React.Component {
 		if (this.state.map) {
 			this.state.map.dispose()
 		}
-		this.setState({addressTitle: null})
+		this.setState({addressTitle: null, error: false})
 	}
 
 	render() {
@@ -179,17 +200,26 @@ class Map extends React.Component {
 				btnContent = this.props.btnValue
 			}
 		}
+		console.log(this.state.addressTitle)
 		return (
 			<React.Fragment>
 				<div>
 					<div className={classes.Map} ref={this.mapRef}>
 						<img src={Marker} alt='marker' draggable='false' />
 					</div>
-					{this.state.addressTitle ? (
-						<p className={classes.AddressTitle}>
-							Deliver To: {this.state.addressTitle}
-						</p>
-					) : null}
+					{
+						this.state.error
+							? (
+								<p className={classes.ErrorTitle}>something went wrong</p>
+							)
+							: this.state.addressTitle
+								? (
+									<p className={classes.AddressTitle}>
+										Deliver To: {this.state.addressTitle}
+									</p>
+								) : null
+					}
+
 					<button
 						className={classes.DeliverHere}
 						onClick={() => this.props.locateAddressFinished(this.state.addressTitle, this.state.coords)}

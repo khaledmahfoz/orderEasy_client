@@ -7,22 +7,6 @@ import Shop from '../UI/Shop/Shop'
 import Logout from '../UI/Logout/Logout'
 
 class Dropdown extends Component {
-   // state = {
-   //    dropdownRef: null
-   // }
-
-   // switchMenu = () => {
-   //    this.setState(prevState => {
-   //       return {
-   //          showMenu: !prevState.showMenu
-   //       }
-   //    })
-   // }
-
-   // setDropdownRef = (elem) => {
-   //    this.setState({dropdownRef: elem})
-   // }
-
    componentDidMount() {
       document.body.addEventListener('click', this.props.closeDropdownMenu)
    }

@@ -1,33 +1,29 @@
 import {H} from '../Credentials/Credentials'
 
 function createZone(latitude, longitude) {
-	let circle = new H.map.Circle(
-		{lat: latitude, lng: longitude}, //center
-		10000, // Radius in meters
-		{
-			style: {
-				strokeColor: 'rgba(248,105,50,0.5)', // Color of the perimeter
-				lineWidth: 3,
-				fillColor: 'rgba(248,105,50,0.1)' // Color of the circle
+	let circle
+	if (H) {
+		circle = new H.map.Circle(
+			{lat: latitude, lng: longitude},
+			10000,
+			{
+				style: {
+					strokeColor: 'rgba(248,105,50,0.5)',
+					lineWidth: 3,
+					fillColor: 'rgba(248,105,50,0.1)'
+				}
 			}
-		}
-	);
-	// circle.draggable = true;
+		);
 
-	circle.addEventListener('pointerenter', function () {
-		document.body.style.cursor = 'pointer';
-	}, true);
 
-	circle.addEventListener('pointerleave', function () {
-		document.body.style.cursor = 'default';
-	}, true);
+		circle.addEventListener('pointerenter', function () {
+			document.body.style.cursor = 'pointer';
+		}, true);
 
-	// map.addEventListener('dragstart', function (event) {
-	// 	map.removeObjects([circle])
-	// }, true);
-	// map.addEventListener('dragend', function (event) {
-	// 	map.addObject(circle);
-	// }, true);
+		circle.addEventListener('pointerleave', function () {
+			document.body.style.cursor = 'default';
+		}, true);
+	}
 
 	return circle
 }

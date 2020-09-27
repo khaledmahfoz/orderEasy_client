@@ -38,6 +38,14 @@
    align-items: center;
 }
  
+.ErrorTitle{
+   margin-bottom: 0 !important;
+   padding: 1rem;
+   background-color: var(--danger);
+   color: var(--whiteColor);
+   font-weight: normal;
+}
+
 @media (max-width: 576px) { 
    .AddressTitle{
       font-size: 15px;

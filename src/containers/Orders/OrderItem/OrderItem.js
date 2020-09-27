@@ -19,13 +19,6 @@ class OrderItem extends Component {
       })
    }
 
-   // componentDidUpdate(prevProps, prevState) {
-   //    if (this.props.data.reviewed !== prevState.canReview) {
-   //       this.setState({canReview: this.props.data.reviewed})
-   //    }
-   // }
-
-
    alreadyReviewed = () => {
       this.setState({canReview: false})
    }
@@ -37,10 +30,6 @@ class OrderItem extends Component {
          }
       })
    }
-
-   // openReviewHandler = () => {
-   //    this.setState({addReview: true})
-   // }
 
    closeCanReviewHandler = () => {
       this.setState({addReview: false})
@@ -90,7 +79,6 @@ class OrderItem extends Component {
                         token={this.props.token}
                         orderItemId={elem._id}
                         alreadyReviewed={this.alreadyReviewed}
-                     // itemId={elem.itemId}
                      />
                   )
                }

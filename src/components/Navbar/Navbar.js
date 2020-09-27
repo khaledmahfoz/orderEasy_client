@@ -188,7 +188,6 @@ const mapStateToProps = state => {
 		isResturant: state.authReducer.isResturant,
 		title: state.authReducer.title,
 		id: state.authReducer.id,
-		// cart: state.cartReducer.cart
 	}
 }
 

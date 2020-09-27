@@ -25,7 +25,6 @@ class searchItem extends Component {
 		loading: false,
 		locateStatus: false,
 		locked: this.props.coords ? true : false,
-		// locked: false,
 		coords: null,
 		choosenCoords: null,
 		suggestedAddressesList: null,
@@ -79,17 +78,22 @@ class searchItem extends Component {
 
 	unlockInput = () => {
 		this.setState({locked: false, inputVal: '', coords: null})
-		// this.props.onSetCoords(null, '')
 		this.props.choosenCoordsHandler && this.props.choosenCoordsHandler(null, '')
 	}
 
 	changeInputHandler = value => {
+		this.props.onSetErrorOff()
 		if (this.state.locked) {
 			this.unlockInput()
 		}
 		this.setState({inputVal: value, inputLoading: true, invalid: false})
 		geocode(value, cb => {
-			this.setState({suggestedAddressesList: cb.items, inputLoading: false})
+			if (cb instanceof Error) {
+				this.setState({inputLoading: false})
+				this.props.onSetErrorOn('something went wrong')
+			} else {
+				this.setState({suggestedAddressesList: cb.items, inputLoading: false})
+			}
 		})
 	}
 
@@ -207,18 +211,11 @@ class searchItem extends Component {
 	}
 }
 
-// const mapStateToProps = state => {
-// 	return {
-// 		choosenCoords: state.coordsReducer.coords,
-// 		address: state.coordsReducer.address
-// 	}
-// }
+const mapDispatchToProps = dispatch => {
+	return {
+		onSetErrorOn: (msg) => dispatch({type: actionTypes.SET_ERROR_ON, msg}),
+		onSetErrorOff: () => dispatch({type: actionTypes.SET_ERROR_OFF})
+	}
+}
 
-// const mapDispatchToProps = dispatch => {
-// 	return {
-// 		onSetCoords: (coords, address) => dispatch({type: actionTypes.SET_COORDS, coords: coords, address: address})
-// 	}
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(withRouter(searchItem))
-export default withRouter(searchItem)
+export default connect(null, mapDispatchToProps)(withRouter(searchItem))

@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
-// import {connect} from 'react-redux'
+import {connect} from 'react-redux'
 
 import classes from './AccordionItem.module.css'
 
+import * as actionTypes from '../../../../store/actions/actionTypes'
 import FormInput from '../../FormInput/FormInput'
 import ErrorMessage from '../../../UI/ErrorMessage/ErrorMessage'
 import PlusCircle from '../../PlusCircle/PlusCircle'
@@ -111,6 +112,7 @@ class AccordionItem extends Component {
 	}
 
 	updateItemHandler = () => {
+		this.props.onSetErrorOff()
 		this.setState({itemEditLoading: true})
 		if (this.state.formValidity) {
 			let data = {
@@ -140,12 +142,14 @@ class AccordionItem extends Component {
 					this.setState({itemEditLoading: false})
 				})
 				.catch(err => {
-					console.log(err)
+					this.setState({itemEditLoading: false})
+					this.props.onSetErrorOn(err.message)
 				})
 		}
 	}
 
 	removeMenuItemHandler = (itemId) => {
+		this.props.onSetErrorOff()
 		this.setState({itemLoading: true})
 		let data = {
 			menuId: this.props.menuId,
@@ -171,7 +175,10 @@ class AccordionItem extends Component {
 				this.setState({itemLoading: false})
 				this.props.updatedFinishedHandler(res)
 			})
-			.catch(err => console.log(err))
+			.catch(err => {
+				this.setState({itemEditLoading: false})
+				this.onSetErrorOn(err.msg)
+			})
 	}
 
 
@@ -236,7 +243,6 @@ class AccordionItem extends Component {
 						this.state.loading
 							? (
 								<SmallLoading color="var(--primeColor)" />
-								// <span></span>
 							)
 							: (
 								<span onClick={() => this.toggleItem({...this.props.data, menuId: this.props.menuId})}>
@@ -331,13 +337,12 @@ class AccordionItem extends Component {
 	}
 }
 
-// const mapStateToProps = state => {
-// 	return {
-// 		formElem: state.menuFormItemReducer.formElem,
-// 		formValidatiy: state.menuFormItemReducer.formValidatiy
-// 	}
-// }
+const mapDispatchToProps = dispatch => {
+	return {
+		onSetErrorOn: (msg) => dispatch({type: actionTypes.SET_ERROR_ON, msg}),
+		onSetErrorOff: () => dispatch({type: actionTypes.SET_ERROR_OFF})
+	}
+}
 
-// export default connect(mapStateToProps)(AccordionItem)
 
-export default AccordionItem
+export default connect(null, mapDispatchToProps)(AccordionItem)

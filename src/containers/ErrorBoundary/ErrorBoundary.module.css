@@ -1,0 +1,18 @@
+.ErrorBoundary{
+   height: 100vh;
+   min-height: 500px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   background-color: var(--primeColor);
+   color: var(--whiteColor);
+   text-align: center;
+}
+.ErrorBoundary button{
+   color: var(--whiteColor);
+   font-size: 1.2rem;
+   background: none;
+   border: none;
+   text-decoration: underline;
+}

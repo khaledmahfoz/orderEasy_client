@@ -4,11 +4,13 @@ import StarRatings from 'react-star-ratings'
 
 import classes from '../Resturant/Resturant.module.css'
 
+import * as actionTypes from '../../store/actions/actionTypes'
+import Cash from '../../components/UI/Cash/Cash'
 import Hero from '../../components/Hero/Hero'
 import SectionSpinner from '../../components/UI/SectionSpinner/SectionSpinner'
 import ResturantReviews from '../../components/ResturantReviews/ResturantReviews'
 import Menu from '../../components/Menu/Menu'
-import {baseUrlAdmin} from '../../util/baseUrl'
+import {baseUrlAdmin, baseUrl} from '../../util/baseUrl'
 
 class MyResturant extends Component {
    state = {
@@ -30,6 +32,7 @@ class MyResturant extends Component {
    }
 
    componentDidMount() {
+      this.props.onSetErrorOff()
       fetch(baseUrlAdmin + 'my-resturant/' + this.props.match.params.id, {
          method: 'GET',
          headers: {
@@ -46,7 +49,10 @@ class MyResturant extends Component {
          .then(resturant => {
             this.setState({loading: false, resturant, menu: resturant.menu})
          })
-         .catch(err => console.log(err))
+         .catch(err => {
+            this.setState({loading: false})
+            this.props.onSetErrorOn(err.message)
+         })
    }
 
    menuSwapContentHandler = () => {
@@ -85,7 +91,7 @@ class MyResturant extends Component {
                   <Hero classes={classes.Hero_Config}></Hero>
                   <div className={`${classes.Lip_Section} ${this.state.menu && classes.Lip_Section_Config}`}>
                      <div className={`${classes.Lip_Content} ${!this.state.menu && classes.Lip_Content_Config}`}>
-                        <div className={classes.Resturant_Img} style={{backgroundImage: `url(${'http://localhost:8080/' + this.state.resturant.imgUrl})`}}>
+                        <div className={classes.Resturant_Img} style={{backgroundImage: `url(${baseUrl + this.state.resturant.imgUrl})`}}>
                         </div>
                         <h3 className={classes.Title}>{this.state.resturant.title}</h3>
                         <p className={classes.Desc}>{this.state.resturant.description}</p>
@@ -103,11 +109,11 @@ class MyResturant extends Component {
                         <p className={classes.Main}>{this.state.resturant.catagory}</p>
                         <div className={classes.Hours}>
                            <p>open hours</p>
-                           <p>{this.state.resturant.openHours}</p>
+                           <span>9AM - 5PM</span>
                         </div>
                         <div className={classes.Payment}>
                            <p>payment Methods</p>
-                           <div>{this.state.resturant.payment}</div>
+                           <span><Cash /></span>
                         </div>
                      </div>
 
@@ -134,5 +140,11 @@ const mapStateToProps = state => {
    }
 }
 
+const mapDispatchToProps = dispatch => {
+   return {
+      onSetErrorOn: (msg) => dispatch({type: actionTypes.SET_ERROR_ON, msg}),
+      onSetErrorOff: () => dispatch({type: actionTypes.SET_ERROR_OFF})
+   }
+}
 
-export default connect(mapStateToProps)(MyResturant)
+export default connect(mapStateToProps, mapDispatchToProps)(MyResturant)

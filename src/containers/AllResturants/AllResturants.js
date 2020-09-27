@@ -1,5 +1,7 @@
 import React from 'react'
+import {connect} from 'react-redux'
 
+import * as actionTypes from '../../store/actions/actionTypes'
 import {baseUrl} from '../../util/baseUrl'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import ResturantsItem from '../../components/ResturantsItem/ResturantsItem'
@@ -11,6 +13,7 @@ class AllResturants extends React.Component {
       loading: true,
    }
    componentDidMount() {
+      this.props.onSetErrorOff()
       fetch(baseUrl + 'all-resturants', {
          method: 'GET',
          headers: {
@@ -24,20 +27,22 @@ class AllResturants extends React.Component {
             return res.json()
          })
          .then(resturants => {
-            console.log(resturants)
             this.setState({resturants: resturants, loading: false})
          })
          .catch(err => {
-            console.log(err)
+            this.setState({loading: false})
+            this.props.onSetErrorOn(err.message)
          })
    }
    render() {
-      let resturantsResult = (
-         <div className={classes.Resturant}>
-            <Spinner />
-         </div>
-      )
-      if (this.state.resturants) {
+      let resturantsResult
+      if (this.state.loading) {
+         resturantsResult = (
+            <div className={classes.Resturant}>
+               <Spinner />
+            </div>
+         )
+      } else if (this.state.resturants) {
          let resturantsArr = this.state.resturants.map(elem => {
             return <ResturantsItem {...elem} key={elem._id} />
          })
@@ -46,9 +51,19 @@ class AllResturants extends React.Component {
                {resturantsArr}
             </div>
          )
+      } else {
+         resturantsResult = null
       }
+
       return resturantsResult
    }
 }
 
-export default AllResturants
+const mapDispatchToProps = dispatch => {
+   return {
+      onSetErrorOn: (msg) => dispatch({type: actionTypes.SET_ERROR_ON, msg}),
+      onSetErrorOff: () => dispatch({type: actionTypes.SET_ERROR_OFF})
+   }
+}
+
+export default connect(null, mapDispatchToProps)(AllResturants)

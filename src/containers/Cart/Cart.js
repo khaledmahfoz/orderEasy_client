@@ -12,7 +12,6 @@ import AuthButton from '../../components/UI/AuthButton/AuthButton'
 import ErrorMessage from '../../components/UI/ErrorMessage/ErrorMessage'
 import {baseUrl} from '../../util/baseUrl'
 import {toggleItemAsync, incItemAsync, decItemAsync} from '../../store/actions/cartCreators'
-// import errorMessage from '../../components/UI/ErrorMessage/ErrorMessage'
 
 class Cart extends Component {
 
@@ -21,11 +20,10 @@ class Cart extends Component {
    }
 
    clickHandler = () => {
-      // console.log(this.props.Authenticated)
       if (!this.props.Authenticated) {
          this.setState({valid: false})
       } else {
-         console.log(this.props.cart)
+         this.props.onSetErrorOff()
          fetch(baseUrl + 'post-order', {
             method: "POST",
             headers: {
@@ -35,6 +33,9 @@ class Cart extends Component {
             body: JSON.stringify({cart: this.props.cart})
          })
             .then(res => {
+               if (res.status !== 201) {
+                  throw new Error('something went wrong')
+               }
                return res.json()
             })
             .then(() => {
@@ -42,32 +43,12 @@ class Cart extends Component {
                this.props.onEmptyCart()
                this.props.history.push("/orders")
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+               this.props.closeModal()
+               this.props.onSetErrorOn(err.message)
+            })
       }
    }
-
-   // shouldComponentUpdate(nextProps, nextState) {
-   //    if (nextProps.showModal) {
-   //       console.log('will update')
-   //       return true;
-   //    }
-   //    return false;
-   // }
-
-
-   // componentDidMount() {
-   //    console.log(this.props.cart)
-   // }
-
-
-
-   // static getDerivedStateFromProps(nextProps, prevState) {
-   //    if (nextProps.showModal) {
-   //       return {
-   //          cart: nextProps.cart
-   //       }
-   //    }
-   // }
 
    render() {
       let content = (
@@ -149,7 +130,9 @@ const mapDispatchToProps = dispatch => {
       onToggleItem: (item, Authenticated, token, startLoading, stopLoading) => dispatch(toggleItemAsync(item, Authenticated, token, startLoading, stopLoading)),
       onIncItem: (_id, Authenticated, token, startLoading, stopLoading) => dispatch(incItemAsync(_id, Authenticated, token, startLoading, stopLoading)),
       onDecItem: (_id, Authenticated, token, startLoading, stopLoading) => dispatch(decItemAsync(_id, Authenticated, token, startLoading, stopLoading)),
-      onEmptyCart: () => dispatch({type: actionTypes.EMPTY_CART})
+      onEmptyCart: () => dispatch({type: actionTypes.EMPTY_CART}),
+      onSetErrorOn: (msg) => dispatch({type: actionTypes.SET_ERROR_ON, msg}),
+      onSetErrorOff: () => dispatch({type: actionTypes.SET_ERROR_OFF})
    }
 }
 

@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+
 import classes from './Accordion.module.css'
 
+import * as actionTypes from '../../../store/actions/actionTypes'
 import AccordionItem from './AccordionItem/AccordionItem'
 import FormInput from '../FormInput/FormInput'
 import MenuForm from '../../../containers/MenuForm/MenuForm'
@@ -111,6 +113,7 @@ class Accordion extends Component {
 	}
 
 	deleteMenu = () => {
+		this.props.onSetErrorOff()
 		this.setState({editLoading: true, editBool: false})
 		let data = {
 			menuId: this.props.menuId,
@@ -126,9 +129,7 @@ class Accordion extends Component {
 		})
 			.then(res => {
 				if (res.status !== 200) {
-					let err
-					err = new Error('something went wrong')
-					throw err
+					throw new Error('something went wrong')
 				}
 				return res.json()
 			})
@@ -136,11 +137,15 @@ class Accordion extends Component {
 				this.setState({editLoading: false})
 				this.props.updatedFinishedHandler(res)
 			})
-			.catch(err => console.log(err))
+			.catch(err => {
+				this.setState({editLoading: false})
+				this.props.onSetErrorOn(err.message)
+			})
 	}
 
 	updateTagHandler = () => {
 		if (this.state.formValidity) {
+			this.props.onSetErrorOff()
 			this.setState({editLoading: true, editBool: false})
 			let data = {
 				catageory: this.state.formElem.category.value,
@@ -167,7 +172,10 @@ class Accordion extends Component {
 					this.setState({editLoading: false})
 					this.props.updatedFinishedHandler(res)
 				})
-				.catch(err => console.log(err))
+				.catch(err => {
+					this.setState({editLoading: false})
+					this.props.onSetErrorOn(err.message)
+				})
 		}
 	}
 
@@ -271,7 +279,6 @@ class Accordion extends Component {
 							}
 
 							{this.props.value.map(data => {
-								console.log(data)
 								return (
 									<AccordionItem
 										key={data._id}
@@ -286,7 +293,6 @@ class Accordion extends Component {
 										removeMenuItemHandler={this.removeMenuItemHandler}
 										menuId={this.props.menuId}
 										Authenticated={this.props.Authenticated}
-									// cartLoading={this.props.cartLoading}
 									/>
 								)
 							})}
@@ -303,10 +309,15 @@ const mapStateToProps = state => {
 		formElem: state.menuFormItemReducer.formElem,
 		formValidity: state.menuFormItemReducer.formValidity,
 		Authenticated: state.authReducer.token !== null,
-		// cartLoading: state.cartReducer.loading
 	}
 }
 
-export default connect(mapStateToProps)(Accordion)
+const mapDispatchToProps = dispatch => {
+	return {
+		onSetErrorOn: (msg) => dispatch({type: actionTypes.SET_ERROR_ON, msg}),
+		onSetErrorOff: () => dispatch({type: actionTypes.SET_ERROR_OFF})
+	}
+}
 
-// export default Accordion
+export default connect(mapStateToProps, mapDispatchToProps)(Accordion)
+

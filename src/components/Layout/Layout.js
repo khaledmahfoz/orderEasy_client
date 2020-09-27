@@ -34,7 +34,7 @@ class Layout extends React.Component {
                logoutHandler={this.props.onLogout}
             />
             <main>{this.props.children}</main>
-            {/* <Footer /> */}
+            <Footer />
          </React.Fragment>
       )
    }

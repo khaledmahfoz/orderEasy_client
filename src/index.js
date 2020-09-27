@@ -7,6 +7,7 @@ import thunk from 'redux-thunk'
 
 import './index.css'
 
+import ErrorBoundary from './containers/ErrorBoundary/ErrorBoundary'
 import App from './App'
 import authReducer from './store/reducers/auth'
 import coordsReducer from './store/reducers/coords'
@@ -33,8 +34,10 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 ReactDOM.render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<BrowserRouter>
-				<App />
+			<BrowserRouter basename="/">
+				<ErrorBoundary>
+					<App />
+				</ErrorBoundary>
 			</BrowserRouter>
 		</Provider>
 	</React.StrictMode>,

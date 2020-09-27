@@ -15,9 +15,6 @@ const searchList = props => {
 				lat = elem.position.lat
 				lng = elem.position.lng
 			}
-			console.log(elem)
-			console.log(countryName, county, city)
-			// position: {lat: 30.78166, lng: 30.99566}
 			const coords = {
 				latitude: lat,
 				longitude: lng,

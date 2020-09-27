@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 
+import * as actionTypes from '../../store/actions/actionTypes'
 import {baseUrl} from '../../util/baseUrl'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import ResturantsItem from '../../components/ResturantsItem/ResturantsItem'
@@ -12,6 +13,7 @@ class Resturants extends React.Component {
 		loading: true,
 	}
 	componentDidMount() {
+		this.props.onSetErrorOff()
 		if (this.props.choosenCoords) {
 			let coords = this.props.choosenCoords
 			fetch(baseUrl + 'resturants', {
@@ -24,17 +26,18 @@ class Resturants extends React.Component {
 				})
 			})
 				.then(res => {
-					// if (res.status !== 200) {
-					// 	console.log(res)
-					// 	throw new Error('sda')
-					// }
+					if (res.status !== 200) {
+						throw new Error('something went wrong')
+					}
 					return res.json()
 				})
 				.then(resturants => {
-					console.log(resturants)
 					this.setState({resturants: resturants, loading: false})
 				})
-				.catch(err => console.log(err))
+				.catch(err => {
+					this.setState({loading: false})
+					this.props.onSetErrorOn(err.message)
+				})
 		} else {
 			this.props.history.replace('all-resturants')
 		}
@@ -56,5 +59,11 @@ const mapStateToProps = state => {
 	}
 }
 
+const mapDispatchToProps = dispatch => {
+	return {
+		onSetErrorOn: (msg) => dispatch({type: actionTypes.SET_ERROR_ON, msg}),
+		onSetErrorOff: () => dispatch({type: actionTypes.SET_ERROR_OFF})
+	}
+}
 
-export default connect(mapStateToProps)(Resturants)
+export default connect(mapStateToProps, mapDispatchToProps)(Resturants)

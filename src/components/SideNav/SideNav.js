@@ -12,9 +12,6 @@ const SideNav = (props) => {
       props.toggleSideNav()
    }
 
-   // const loginHandler = () => {
-   //    props.history.push('/')
-   // }
    return (
       <React.Fragment>
          <Backdrop show={props.sideNav} closeModal={props.toggleSideNav} />

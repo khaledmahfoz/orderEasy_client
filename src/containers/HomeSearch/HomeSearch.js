@@ -9,22 +9,15 @@ import * as actionTypes from '../../store/actions/actionTypes'
 import classes from './HomeSearch.module.css'
 
 class homeSearch extends React.Component {
-	// state = {
-	// 	coords: this.props.coords,
-	// 	address: this.props.address
-	// }
-
 	findBtnHandler = () => {
 		this.props.history.push('/resturants')
 	}
 
 	choosenCoordsHandler = (coords, address) => {
-		// this.setState({choosenCoords: coords, address: address})
 		this.props.onSetCoords(coords, address)
 	}
 
 	render() {
-		console.log(this.props.address, this.props.coords)
 		return (
 			<React.Fragment>
 				<Hero classes={classes.Hero_Config}>

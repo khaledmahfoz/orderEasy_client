@@ -28,9 +28,3 @@ export const GET_MENU_REVIEW_FORM = 'GET_MENU_REVIEW_FORM'
 
 export const SET_ERROR_ON = 'SET_ERROR_ON'
 export const SET_ERROR_OFF = 'SET_ERROR_OFF'
-
-// export const SET_MENU = 'SET_MENU'
-// export const ADD = 'ADD'
-// export const REMOVE = 'REMOVE'
-// export const ADD_ITEM = 'ADD_ITEM'
-// export const REMOVE_ITEM = 'REMOVE_ITEM'

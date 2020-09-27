@@ -4,6 +4,7 @@ import StarRatings from 'react-star-ratings'
 
 import classes from './MenuForm.module.css'
 
+import * as actionTypes from '../../store/actions/actionTypes'
 import {baseUrl} from '../../util/baseUrl'
 import {validateForm} from '../../util/validationSchema'
 import FormInput from '../../components/UI/FormInput/FormInput'
@@ -12,8 +13,6 @@ import {SmallLoading} from '../../components/UI/SmallLoading/SmallLoading'
 
 class MenuForm extends Component {
    state = {
-      // formElem: this.props.single ? this.props.formItemElem : this.props.formElem,
-      // formValidity: this.props.single ? this.props.formItemValidity : this.props.formValidity
       formElem: this.props.formElem,
       formValidity: this.props.formValidity,
       ratingValidity: false,
@@ -67,11 +66,11 @@ class MenuForm extends Component {
    }
 
    addMenuItem = (e) => {
-      console.log(this.props.review)
       e.preventDefault()
       this.props.menuLoadingHandler()
       if (this.props.single) {
          if (this.state.formValidity) {
+            this.props.onSetErrorOff()
             let meal = this.state.formElem.meal.value
             let price = this.state.formElem.price.value
             let description = this.state.formElem.description.value
@@ -89,22 +88,27 @@ class MenuForm extends Component {
                method: 'POST',
                body: JSON.stringify(menu)
             })
-               .then(res => res.json())
+               .then(res => {
+                  if (res.status !== 200) {
+                     throw new Error('something went wrong')
+                  }
+                  return res.json()
+               })
                .then(res => {
                   this.props.menuLoadingHandler()
                   this.props.updatedFinishedHandler(res)
                   this.clearFields()
                })
-               .catch(err => console.log(err))
+               .catch(err => {
+                  this.props.menuLoadingHandler()
+                  this.onSetErrorOn(err.message)
+               })
          }
       } else if (this.props.review) {
          if (this.state.formValidity && (this.state.rating > 0)) {
-            // let rate = this.state.formElem.rate.value
             let rate = this.state.rating
-            console.log(rate)
             let content = this.state.formElem.content.value
             let resturantId = this.props.resturantId
-            // let itemId = this.props.itemId
             let itemId = this.props.orderItemId
             let review = {
                rate,
@@ -112,6 +116,7 @@ class MenuForm extends Component {
                resturantId,
                itemId
             }
+            this.props.onSetErrorOff()
             fetch(baseUrl + 'post-review', {
                headers: {
                   'Content-Type': 'application/json',
@@ -127,14 +132,15 @@ class MenuForm extends Component {
                   return res.json()
                })
                .then(res => {
-                  console.log(res)
                   this.props.menuLoadingHandler()
-                  this.props.closeEditHandler() //added
+                  this.props.closeEditHandler()
                   this.props.alreadyReviewed()
-                  // this.props.updatedFinishedHandler(res)
                   this.clearFields()
                })
-               .catch(err => console.log(err))
+               .catch(err => {
+                  this.props.menuLoadingHandler()
+                  this.props.onSetErrorOn(err.message)
+               })
          }
       } else {
          if (this.state.formValidity) {
@@ -148,7 +154,7 @@ class MenuForm extends Component {
                price,
                description
             }
-            console.log(this.props.token)
+            this.props.onSetErrorOff()
             fetch(baseUrl + 'admin/add-menu', {
                headers: {
                   'Content-Type': 'application/json',
@@ -157,14 +163,21 @@ class MenuForm extends Component {
                method: 'POST',
                body: JSON.stringify(menu)
             })
-               .then(res => res.json())
                .then(res => {
-                  console.log(res)
-                  this.props.menuLoadingHandler() //added
+                  if (res.status !== 200) {
+                     throw new Error('something went wrong')
+                  }
+                  return res.json()
+               })
+               .then(res => {
+                  this.props.menuLoadingHandler()
                   this.props.updatedFinishedHandler(res)
                   this.clearFields()
                })
-               .catch(err => console.log(err))
+               .catch(err => {
+                  this.props.menuLoadingHandler()
+                  this.props.onSetErrorOn(err.message)
+               })
          }
       }
    }
@@ -206,15 +219,6 @@ class MenuForm extends Component {
                )
             })}
             <div className={classes.BtnsGroup}>
-               {/* <button disabled={!this.state.formValidity}>
-                  {
-                     !this.props.review
-                        ? 'Add item'
-                        : !this.props.addReviewLoading
-                           ? 'Add review'
-                           : <span className={classes.controllBtn}><SmallLoading color="var(--whiteColor)" /></span>
-                  }
-               </button> */}
                {
                   this.props.review ?
                      <button disabled={!this.state.formValidity || !this.state.ratingValidity}>
@@ -244,15 +248,12 @@ class MenuForm extends Component {
    }
 }
 
-// const mapStateToProps = state => {
-//    return {
-//       formElem: state.menuFormReducer.formElem,
-//       formValidity: state.menuFormReducer.formValidity,
-//       formItemElem: state.menuFormItemReducer.formElem,
-//       formItemValidity: state.menuFormItemReducer.formValidity,
-//    }
-// }
+const mapDispatchToProps = dispatch => {
+   return {
+      onSetErrorOn: (msg) => dispatch({type: actionTypes.SET_ERROR_ON, msg}),
+      onSetErrorOff: () => dispatch({type: actionTypes.SET_ERROR_OFF})
+   }
+}
 
-// export default connect(mapStateToProps)(MenuForm)
-export default MenuForm
 
+export default connect(null, mapDispatchToProps)(MenuForm)

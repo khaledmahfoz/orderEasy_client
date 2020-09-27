@@ -1,0 +1,21 @@
+.ErrorHandler{
+   width: 100%;
+   text-align: center;
+   background-color: var(--danger);
+}
+.ErrorHandler div{
+   width: 200px;
+   margin: 0 auto;
+   height: 60px;
+   color: var(--white);
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+.ErrorHandler span{
+   font-size: 1.5rem;
+   cursor: pointer;
+}
+.ErrorHandler p{
+   margin-bottom: 0 !important;
+}

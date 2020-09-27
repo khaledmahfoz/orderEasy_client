@@ -11,7 +11,7 @@ const reducer = (state = intialState, action) => {
          return {
             ...state,
             error: true,
-            msg: action.msg
+            msg: action.msg ? action.msg : 'sorry, something went wrong'
          }
       case actionTypes.SET_ERROR_OFF:
          return {

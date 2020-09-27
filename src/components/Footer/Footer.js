@@ -1,10 +1,10 @@
 import React from 'react'
 import classes from './Footer.module.css';
 
-const footer = props => {
-   return(
+const footer = () => {
+   return (
       <div className={classes.Footer}>
-         <h1>Footer</h1>
+         <p>Made with <span>&#9829;</span> by Khaled Mahfoz</p>
       </div>
    )
 }

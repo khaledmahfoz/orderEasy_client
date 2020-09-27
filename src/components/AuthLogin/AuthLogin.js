@@ -103,9 +103,7 @@ class AuthLogin extends Component {
 				password: this.state.formElem.password.value,
 				isResturant: this.state.isResturant,
 				cart: JSON.parse(localStorage.getItem('cart'))
-				// cart: this.props.cart 
 			}
-			// console.log(JSON.parse(localStorage.getItem('cart')))
 			this.props.onAuthStart()
 			fetch(baseUrl + 'login', {
 				headers: {'Content-Type': 'application/json'},
@@ -113,10 +111,12 @@ class AuthLogin extends Component {
 				body: JSON.stringify(data)
 			})
 				.then(res => {
+					// if (res.status !== 200) {
+					// 	throw new Error('something went wrong')
+					// }
 					return res.json()
 				})
 				.then(result => {
-					console.log(result.status)
 					if (result.status === 401) {
 						throw new Error(result.message)
 					}
@@ -124,7 +124,6 @@ class AuthLogin extends Component {
 						throw new Error('can\'t login right now please try again later')
 					}
 					let {token, id, isResturant, title, cart} = result
-					console.log(cart)
 					localStorage.setItem("token", token)
 					localStorage.setItem("id", id)
 					localStorage.setItem("isResturant", isResturant)
@@ -145,7 +144,6 @@ class AuthLogin extends Component {
 						if (isResturant) {
 							this.props.history.push('/my-resturant/' + id)
 						} else {
-							// this.props.showModalHandler()
 							this.props.swipeContent(true)
 							this.props.checkSwapHandler()
 							this.props.setCart(cart)
@@ -196,10 +194,6 @@ class AuthLogin extends Component {
 			this.clearFields()
 		}
 	}
-
-	// componentDidMount() {
-	// 	console.log(this.props.cart)
-	// }
 
 	render() {
 		return this.props.loading ?

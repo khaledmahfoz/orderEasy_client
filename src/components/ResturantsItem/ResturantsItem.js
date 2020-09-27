@@ -3,12 +3,12 @@ import {Link} from 'react-router-dom'
 
 import classes from './ResturantsItem.module.css'
 
+import {baseUrl} from '../../util/baseUrl'
 import StarRatings from 'react-star-ratings'
 import Cash from '../UI/Cash/Cash'
 
 const resturantsItem = props => {
-	let imageUrl = 'http://localhost:8080/' + props.imgUrl
-	console.log(props)
+	let imageUrl = baseUrl + props.imgUrl
 	return (
 		<div className={classes.Resturants_Item}>
 			<div
@@ -32,7 +32,7 @@ const resturantsItem = props => {
 			</div>
 			<div className={classes.Resturants_Hours}>
 				<p>open Hours</p>
-				<span>2 - 3</span>
+				<span>9AM - 5PM</span>
 			</div>
 			<div className={classes.Resturants_Payment}>
 				<p>Payment Methods</p>
