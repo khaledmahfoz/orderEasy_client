@@ -21,6 +21,7 @@ class AuthLogin extends Component {
 				config: {
 					type: 'email',
 					placeholder: 'Enter your email',
+					autoComplete: 'email'
 				},
 				valid: false,
 				message: null,
@@ -41,6 +42,7 @@ class AuthLogin extends Component {
 				config: {
 					type: 'password',
 					placeholder: 'Enter your password',
+					autoComplete: 'current-password'
 				},
 				valid: false,
 				message: null,
