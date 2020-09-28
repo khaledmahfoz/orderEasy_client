@@ -37,7 +37,10 @@ class Menu extends Component {
 	render() {
 		let menuContent = (
 			<div>
-				<h3>No Menu</h3>
+				<h3 style={{
+					textAlign: 'center',
+					padding: '2rem 0'
+				}}>No Menu</h3>
 			</div>
 		)
 		if (this.props.menu.length) {
@@ -75,13 +78,16 @@ class Menu extends Component {
 												<button className={classes.AddBtn} onClick={this.openEditMenuHandler}>
 													Add New
 												</button>
-											)}
+											)
+										}
+
 										{
-											this.props.menu.length && (
+											this.props.menu.length ? (
 												<button className={classes.EditBtn} onClick={this.toggleEditHandler}>
 													{this.state.edit ? 'cancel' : 'Edit Menu'}
 												</button>
 											)
+												: null
 										}
 									</div>
 								}

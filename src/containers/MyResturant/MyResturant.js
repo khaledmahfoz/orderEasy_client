@@ -82,7 +82,7 @@ class MyResturant extends Component {
          }
       }
       return !this.state.resturant ? (
-         <div style={{minHeight: 'calc(100vh - 358px)', position: 'relative'}}>
+         <div style={{minHeight: '500px', position: 'relative'}}>
             <SectionSpinner />
          </div>
       ) : (

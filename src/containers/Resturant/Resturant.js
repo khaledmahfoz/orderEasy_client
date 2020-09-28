@@ -116,7 +116,7 @@ class Resturant extends React.Component {
 			)
 		}
 		return this.state.loading ? (
-			<div style={{minHeight: 'calc(100vh - 358px)', position: 'relative'}}>
+			<div style={{minHeight: '500px', position: 'relative'}}>
 				<SectionSpinner />
 			</div>
 		) : (
