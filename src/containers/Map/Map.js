@@ -200,7 +200,6 @@ class Map extends React.Component {
 				btnContent = this.props.btnValue
 			}
 		}
-		console.log(this.state.addressTitle)
 		return (
 			<React.Fragment>
 				<div>
