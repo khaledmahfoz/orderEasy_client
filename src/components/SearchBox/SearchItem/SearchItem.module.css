@@ -6,7 +6,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	background-color: var(--primeColor);
+	background-color: var(--danger);
 	color: var(--whiteColor);
 	text-transform: capitalize;
 	padding: 0.5rem 1rem;
@@ -25,7 +25,6 @@
 	background-color: #ffffff;
 	border: none;
 	width: 100%;
-	/* max-width: 400px; */
 	padding: 0 1rem;
 }
 .AddressInputResturant{
@@ -71,7 +70,14 @@
 	.AddressInput{
 		margin-bottom: 0.5rem;
 	}
- 
+	.InvalidAddress{
+		top: 0;
+		width: 100%;
+		left: 0;
+		right: 0;
+		padding: 1rem;
+		z-index: 9;
+	}
 }
 
 @media (min-width: 991.98px) { 

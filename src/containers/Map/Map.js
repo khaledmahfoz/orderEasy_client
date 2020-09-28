@@ -143,9 +143,12 @@ class Map extends React.Component {
 		)
 		window.addEventListener('resize', () => map.getViewPort().resize());
 
-		let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
+		// let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
 
-		let ui = H.ui.UI.createDefault(map, defaultLayers)
+		new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
+		H.ui.UI.createDefault(map, defaultLayers)
+
+		// let ui = H.ui.UI.createDefault(map, defaultLayers)
 
 		let circleElem
 		if (this.props.isResturant) {

@@ -8,7 +8,6 @@
 }
 .Footer p{
 	margin-bottom: 0;
+	text-transform: capitalize;
 }
-.Footer span{
-	color: var(--danger);
-}
+

@@ -111,18 +111,22 @@ class AuthLogin extends Component {
 				body: JSON.stringify(data)
 			})
 				.then(res => {
-					// if (res.status !== 200) {
-					// 	throw new Error('something went wrong')
-					// }
+					if (res.status === 401) {
+						throw new Error(res.message)
+					}
+					if (res.status !== 200) {
+						throw new Error('can\'t login right now please try again later')
+						// throw new Error('something went wrong')
+					}
 					return res.json()
 				})
 				.then(result => {
-					if (result.status === 401) {
-						throw new Error(result.message)
-					}
-					if (result.status !== 200) {
-						throw new Error('can\'t login right now please try again later')
-					}
+					// if (result.status === 401) {
+					// 	throw new Error(result.message)
+					// }
+					// if (result.status !== 200) {
+					// 	throw new Error('can\'t login right now please try again later')
+					// }
 					let {token, id, isResturant, title, cart} = result
 					localStorage.setItem("token", token)
 					localStorage.setItem("id", id)

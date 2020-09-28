@@ -19,7 +19,9 @@ if (H) {
          defaultLayers = platform.createDefaultLayers();
       })
       .catch(err => {
-         return H, platform, defaultLayers
+         return {
+            H, platform, defaultLayers
+         }
       })
 
 }

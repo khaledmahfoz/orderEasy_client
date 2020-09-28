@@ -19,3 +19,12 @@
 .ErrorHandler p{
    margin-bottom: 0 !important;
 }
+
+@media(max-width: 575.85px){
+   .ErrorHandler{
+      padding: 0 1rem;
+   }
+   .ErrorHandler div{
+      width: 100%;
+   }
+}
