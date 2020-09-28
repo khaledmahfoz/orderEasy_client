@@ -2,20 +2,24 @@
    padding: 2rem 3rem;
    min-height: 200px;
    max-height: 400px;
-   overflow-y: auto;
-   /* max-width: 500px;
-   margin: auto; */
 }
 
-.Cart::-webkit-scrollbar {
-   width: 10px;
+.CartItemsWrapper{
+   overflow-y: auto;
+   min-height: 150px;
+   max-height: 250px;
+   padding-right: 1rem;
+}
+
+.CartItemsWrapper::-webkit-scrollbar {
+   width: 5px;
 }
  
-.Cart::-webkit-scrollbar-track {
+.CartItemsWrapper::-webkit-scrollbar-track {
    background: #f1f1f1; 
 }
 
-.Cart::-webkit-scrollbar-thumb {
+.CartItemsWrapper::-webkit-scrollbar-thumb {
    background: var(--primeColor); 
 }
 

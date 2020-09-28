@@ -52,7 +52,7 @@ const SideNav = (props) => {
                      <li>
                         <Link to='/orders' onClick={props.toggleSideNav}>Orders</Link>
                      </li>
-                     <li onClick={logoutHandler}>
+                     <li style={{cursor: 'pointer'}} onClick={logoutHandler}>
                         Logout
                      </li>
                   </React.Fragment>

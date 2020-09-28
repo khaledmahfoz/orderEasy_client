@@ -77,7 +77,9 @@ class Cart extends Component {
          let totalPrice = priceArr.reduce((acc, curr) => acc + curr, 0)
          content = (
             <React.Fragment>
-               {contentItems}
+               <div className={classes.CartItemsWrapper}>
+                  {contentItems}
+               </div>
                <div className={classes.CartInfo}>
                   <h5>Total Price: {totalPrice}$</h5>
                   <AuthButton

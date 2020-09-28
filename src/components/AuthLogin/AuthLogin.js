@@ -112,14 +112,11 @@ class AuthLogin extends Component {
 			})
 				.then(res => {
 					if (res.status === 401) {
-						console.log('this')
-						throw new Error(res.message)
+						throw new Error(res.statusText)
 					}
 					if (res.status !== 200) {
-						console.log('that')
 						throw new Error('can\'t login right now please try again later')
 					}
-					console.log(res.status)
 					return res.json()
 				})
 				.then(result => {
