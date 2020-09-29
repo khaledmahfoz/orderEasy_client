@@ -229,11 +229,12 @@ class MenuForm extends Component {
                               </span>
                         }
                      </button>
-                     : <button disabled={!this.state.formValidity}>
+                     :
+                     <button disabled={!this.state.formValidity}>
                         Add item
-                  </button>
+                     </button>
                }
-               <button disabled={this.props.loadingInd} onClick={this.props.closeEditHandler}>
+               <button type="button" disabled={this.props.loadingInd} onClick={this.props.closeEditHandler}>
                   cancel
                </button>
             </div>

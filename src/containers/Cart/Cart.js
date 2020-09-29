@@ -39,12 +39,12 @@ class Cart extends Component {
                return res.json()
             })
             .then(() => {
-               this.props.closeModal()
+               this.props.closeModal && this.props.closeModal()
                this.props.onEmptyCart()
                this.props.history.push("/orders")
             })
             .catch(err => {
-               this.props.closeModal()
+               this.props.closeModal && this.props.closeModal()
                this.props.onSetErrorOn(err.message)
             })
       }

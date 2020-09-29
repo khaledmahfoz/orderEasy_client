@@ -134,7 +134,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		// onToggleItem: item => dispatch({type: actionTypes.TOGGLE_ITEM, item})
 		onToggleItem: (item, Authenticated, token, startLoading, stopLoading) => dispatch(toggleItemAsync(item, Authenticated, token, startLoading, stopLoading))
 
 	}

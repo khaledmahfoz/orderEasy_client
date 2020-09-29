@@ -43,7 +43,7 @@ class Order extends Component {
 
    }
    render() {
-      let content = <div style={{height: '100vh', minHeight: '300px', fontSize: '2rem'}} className="w-100 d-flex justify-content-center align-items-center">No orders here</div>
+      let content = <div style={{height: '500px', minHeight: '300px', fontSize: '2rem'}} className="w-100 d-flex justify-content-center align-items-center">No orders here</div>
       if (this.state.orders && this.state.orders.length) {
          content = (
             <div className="container">

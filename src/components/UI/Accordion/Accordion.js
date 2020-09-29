@@ -278,24 +278,30 @@ class Accordion extends Component {
 								&& <Placeholder />
 							}
 
-							{this.props.value.map(data => {
-								return (
-									<AccordionItem
-										key={data._id}
-										token={this.props.token}
-										itemLoading={this.state.itemLoading}
-										data={{...data, itemId: data._id, resturantId: this.props.resturantId}}
-										onToggleItem={this.props.onToggleItem}
-										cart={this.props.cart}
-										isResturant={this.props.isResturant}
-										edit={this.props.edit}
-										updatedFinishedHandler={this.props.updatedFinishedHandler}
-										removeMenuItemHandler={this.removeMenuItemHandler}
-										menuId={this.props.menuId}
-										Authenticated={this.props.Authenticated}
-									/>
-								)
-							})}
+							{
+								this.props.value.length > 0
+									?
+									this.props.value.map(data => {
+										return (
+											<AccordionItem
+												key={data._id}
+												token={this.props.token}
+												itemLoading={this.state.itemLoading}
+												data={{...data, itemId: data._id, resturantId: this.props.resturantId}}
+												onToggleItem={this.props.onToggleItem}
+												cart={this.props.cart}
+												isResturant={this.props.isResturant}
+												edit={this.props.edit}
+												updatedFinishedHandler={this.props.updatedFinishedHandler}
+												removeMenuItemHandler={this.removeMenuItemHandler}
+												menuId={this.props.menuId}
+												Authenticated={this.props.Authenticated}
+											/>
+										)
+									})
+									:
+									<p style={{padding: '2rem 0', textAlign: 'center', color: '#555'}}>coming soon</p>
+							}
 						</ul>
 					) : null
 				}

@@ -21,7 +21,7 @@ class ResturantReviews extends Component {
 				)
 			})
 		) : (
-				<p>no reviews yet</p>
+				<h3 className="text-center py-4">No Reviews Yet</h3>
 			)
 		return (
 			<WrapperCard cardTitle='Reviews of this resturant'>
