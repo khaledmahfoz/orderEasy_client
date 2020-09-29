@@ -20,7 +20,7 @@ class Order extends Component {
    componentDidMount() {
       this.props.onSetErrorOff()
       this.setState({loading: true})
-      fetch(baseUrl + 'get-orders', {
+      fetch(baseUrl + `get-orders/?isResturant=${this.props.isResturant}`, {
          method: "GET",
          headers: {
             'Content-Type': 'application/json',
