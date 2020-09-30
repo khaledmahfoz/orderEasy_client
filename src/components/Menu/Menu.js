@@ -44,7 +44,7 @@ class Menu extends Component {
 			</div>
 		)
 		if (this.props.menu.length) {
-			menuContent = this.props.menu.reverse().map(elem => {
+			menuContent = this.props.menu.map(elem => {
 				return (
 					<div key={elem._id}>
 						<Accordion
