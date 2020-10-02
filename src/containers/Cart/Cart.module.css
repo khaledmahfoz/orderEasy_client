@@ -1,7 +1,6 @@
 .Cart, .CartEmpty{
    padding: 2rem 3rem;
    min-height: 200px;
-   max-height: 400px;
 }
 
 .CartItemsWrapper{
