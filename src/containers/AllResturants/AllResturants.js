@@ -30,7 +30,7 @@ class AllResturants extends React.Component {
             this.setState({resturants: resturants, loading: false})
          })
          .catch(err => {
-            this.setState({loading: false})
+            this.setState({resturants: null, loading: false})
             this.props.onSetErrorOn(err.message)
          })
    }
@@ -42,17 +42,18 @@ class AllResturants extends React.Component {
                <Spinner />
             </div>
          )
-      } else if (this.state.resturants) {
-         let resturantsArr = this.state.resturants.map(elem => {
-            return <ResturantsItem {...elem} key={elem._id} />
-         })
+      } else {
+         let resturantsArr = <h3 className="text-center mt-5">No Resturants was Found</h3>
+         if (this.state.resturants && this.state.resturants.length > 0) {
+            resturantsArr = this.state.resturants.map(elem => {
+               return <ResturantsItem {...elem} key={elem._id} />
+            })
+         }
          resturantsResult = (
             <div className="container">
                {resturantsArr}
             </div>
          )
-      } else {
-         resturantsResult = null
       }
 
       return resturantsResult
